@@ -39,4 +39,4 @@ out/
 ### Private Files ###
 
 .env
-src/**/applcation-*.yaml
+src/**/application-*.yaml
