@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
+import java.util.concurrent.TimeUnit;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RedisHash("jwt")
@@ -16,7 +18,7 @@ public class JwtRedisEntity {
     private String memberEmail;
     private String refreshToken;
 
-    @TimeToLive
+    @TimeToLive(unit = TimeUnit.MILLISECONDS)
     private Long expiration;
 
     @Builder
