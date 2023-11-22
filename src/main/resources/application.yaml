@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   application:
-    name: KDT-5
+    name: fc_mini
   ## 프로필 설정을 바꾸시려면 아래 주석을 해제해 주시면 됩니다.
   #profiles:
   #  active: dev
@@ -19,3 +19,9 @@ spring:
       dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: validate
+
+service:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    access-expiration: ${JWT_ACCESS_EXPIRATION}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION}
