@@ -36,3 +36,12 @@ services:
       - ${LOCAL_MYSQL_TEST_VOLUME_PATH}:/var/lib/mysql
     ports:
       - ${LOCAL_MYSQL_TEST_PORT}:3306
+
+  redis:
+    container_name: mini-redis
+    image: redis:7.2
+    command: redis-server --port 6379
+    volumes:
+      - ${LOCAL_REDIS_VOLUME_PATH}:/data
+    ports:
+      - ${LOCAL_REDIS_PORT}:6379

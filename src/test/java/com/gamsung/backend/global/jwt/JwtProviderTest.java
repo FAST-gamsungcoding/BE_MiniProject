@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.Instant;
 import java.util.Date;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class JwtProviderTest {
+
+    private static final String TEST_EMAIL = "test@test.com";
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -27,14 +30,11 @@ class JwtProviderTest {
     @DisplayName("Jwt 토큰 발급")
     @Nested
     class CreateJwtToken {
-
-        private static final String TEST_EMAIL = "test@test.com";
-
         @DisplayName("createToken 호출에 성공한다.")
         @Test
         void successToCreateJwtToken() {
             // given
-            Date issuedAt = new Date(System.currentTimeMillis());
+            Date issuedAt = Date.from(Instant.now());
             JwtPayload jwtPayload = JwtPayload.builder()
                     .email(TEST_EMAIL)
                     .issuedAt(issuedAt)
@@ -55,7 +55,6 @@ class JwtProviderTest {
     class VerifyJwtToken {
 
         private static final String WRONG_SECRET_KEY = "Zjk1MDQzY2RhNmE5MTc1ZjA0ZDQwYjhjNTQ1YWQyMjZiZTEwOTQ2N2ExNDk1NWQ1Y2Q0NGI5ZmQyNzMyZjgyNg==";
-        private static final String TEST_EMAIL = "test@test.com";
 
         @DisplayName("만료된 토큰을 검증할 때 JwtTokenExpiredException 발생")
         @Test

@@ -3,7 +3,6 @@ package com.gamsung.backend.global.jwt.dto;
 import lombok.*;
 
 import java.util.Date;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
