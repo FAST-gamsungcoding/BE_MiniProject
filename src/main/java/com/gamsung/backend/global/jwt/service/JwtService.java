@@ -36,4 +36,8 @@ public class JwtService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    public JwtPayload verifyToken(String jwtToken) {
+        return jwtProvider.verifyToken(jwtToken);
+    }
 }
