@@ -19,6 +19,10 @@ spring:
       dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: validate
+  data:
+    redis:
+      host: localhost
+      port: ${LOCAL_REDIS_PORT}
 
 service:
   jwt:
