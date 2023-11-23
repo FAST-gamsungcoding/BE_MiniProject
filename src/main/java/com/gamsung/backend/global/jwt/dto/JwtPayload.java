@@ -1,7 +1,11 @@
 package com.gamsung.backend.global.jwt.dto;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Getter
@@ -14,5 +18,12 @@ public class JwtPayload {
     private JwtPayload(String email, Date issuedAt) {
         this.email = email;
         this.issuedAt = issuedAt;
+    }
+
+    public static JwtPayload from(String email) {
+        return JwtPayload.builder()
+                .email(email)
+                .issuedAt(Date.from(Instant.now()))
+                .build();
     }
 }

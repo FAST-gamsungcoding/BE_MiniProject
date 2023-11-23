@@ -1,69 +1,63 @@
 package com.gamsung.backend.domain.member.controller;
 
+import com.gamsung.backend.domain.member.controller.request.MemberControllerLoginRequest;
+import com.gamsung.backend.domain.member.controller.request.MemberControllerRegisterEmailCheckRequest;
+import com.gamsung.backend.domain.member.controller.request.MemberControllerRegisterRequest;
+import com.gamsung.backend.domain.member.dto.request.MemberLoginRequest;
+import com.gamsung.backend.domain.member.dto.request.MemberRegisterRequest;
+import com.gamsung.backend.domain.member.service.MemberService;
+import com.gamsung.backend.global.common.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/v1/member")
 @RequiredArgsConstructor
 public class MemberController {
 
-    @PostMapping("/login")
-    public ResponseEntity<String> memberLogin() {
-        return ResponseEntity.ok(
-                """
-                                {
-                                	"code" : 1000,
-                                	"data" : {
-                                	  "accessToken" : "access-token값",
-                                	  "refreshToken" : "refresh-token값"
-                                	}
-                                }
-                        """);
-    }
+    private final MemberService memberService;
 
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse> memberLogin(
+            @Valid @RequestBody MemberControllerLoginRequest loginRequest
+    ) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .code(1000)
+                .data(memberService.login(MemberLoginRequest.from(loginRequest)))
+                .build());
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<String> memberRegister() {
-        return ResponseEntity.ok(
-                """
-                                {
-                                	"code" : 1003,
-                                	"data" : {
-                                	  "message" : "회원가입에 성공했습니다."
-                                	}
-                                }
-                        """);
+    public ResponseEntity<ApiResponse> memberRegister(
+            @Valid @RequestBody MemberControllerRegisterRequest registerRequest
+    ) {
+        return ResponseEntity.created(URI.create("/")).body(ApiResponse.builder()
+                .code(1003)
+                .data(memberService.register(MemberRegisterRequest.from(registerRequest)))
+                .build());
     }
 
-
     @GetMapping("/register/check")
-    public ResponseEntity<String> memberRegisterEmailCheck() {
-        return ResponseEntity.ok(
-                """
-                                {
-                                	"code" : 1006,
-                                	"data" : {
-                                	  "message" : "회원가입이 가능한 이메일입니다."
-                                	}
-                                }
-                        """);
+    public ResponseEntity<ApiResponse> memberRegisterEmailCheck(
+            @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
+    ) {
+        return ResponseEntity.ok(ApiResponse.builder()
+                .code(1006)
+                .data(memberService.emailCheck(emailCheckRequest.email()))
+                .build());
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> memberLogout() {
-        return ResponseEntity.ok(
-                """
-                                {
-                                	"code" : 1011,
-                                	"data" : {
-                                	  "message" : "로그아웃에 성공했습니다."
-                                	}
-                                }
-                        """);
+    public ResponseEntity<ApiResponse> memberLogout() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(ApiResponse.builder()
+                .code(1011)
+                .data(memberService.logout(email))
+                .build());
     }
 }
