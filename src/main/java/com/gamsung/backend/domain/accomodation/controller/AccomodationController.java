@@ -1,13 +1,11 @@
 package com.gamsung.backend.domain.accomodation.controller;
 
-import com.gamsung.backend.domain.member.dto.request.MemberLoginRequest;
-import com.gamsung.backend.global.common.ApiResponse;
-import com.gamsung.backend.global.config.SwaggerDescriptionConfig;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ALL_ENTRY_DESCRIPTION;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ENTRY_DESCRIPTION;

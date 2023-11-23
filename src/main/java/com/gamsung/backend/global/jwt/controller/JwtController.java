@@ -1,6 +1,6 @@
 package com.gamsung.backend.global.jwt.controller;
 
-import com.gamsung.backend.global.common.ApiResponse;
+import com.gamsung.backend.global.common.ControllerResponse;
 import com.gamsung.backend.global.jwt.controller.request.RefreshAccessTokenRequest;
 import com.gamsung.backend.global.jwt.service.JwtService;
 import jakarta.validation.Valid;
@@ -19,10 +19,10 @@ public class JwtController {
     private final JwtService jwtService;
 
     @PostMapping("/refresh")
-    public ResponseEntity<ApiResponse> refreshAccessToken(
+    public ResponseEntity<ControllerResponse> refreshAccessToken(
             @Valid @RequestBody RefreshAccessTokenRequest request
     ) {
-        return ResponseEntity.ok(ApiResponse.builder()
+        return ResponseEntity.ok(ControllerResponse.builder()
                 .code(1008)
                 .data(jwtService.refreshAccessToken(request))
                 .build());
