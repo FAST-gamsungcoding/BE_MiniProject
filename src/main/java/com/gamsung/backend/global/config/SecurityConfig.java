@@ -1,5 +1,6 @@
 package com.gamsung.backend.global.config;
 
+import com.gamsung.backend.global.jwt.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,4 +26,10 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    @Bean
+    JwtFilter jwtFilter() throws Exception {
+        return new JwtFilter(authenticationManager());
+    }
+
 }

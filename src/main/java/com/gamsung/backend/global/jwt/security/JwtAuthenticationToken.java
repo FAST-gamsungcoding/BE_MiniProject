@@ -18,7 +18,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     private JwtAuthenticationToken(String principal, boolean isAuthenticated) {
         super(AuthorityUtils.createAuthorityList("ROLE_USER"));
         this.principal = principal;
-        super.setAuthenticated(isAuthenticated);
+        setAuthenticated(isAuthenticated);
     }
 
     public static JwtAuthenticationToken unauthenticated(String accessToken) {
