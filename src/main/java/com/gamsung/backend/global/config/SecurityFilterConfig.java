@@ -1,6 +1,6 @@
 package com.gamsung.backend.global.config;
 
-import com.gamsung.backend.global.security.jwt.JwtFilter;
+import com.gamsung.backend.global.jwt.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

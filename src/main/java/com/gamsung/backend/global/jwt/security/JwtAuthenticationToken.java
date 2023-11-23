@@ -1,10 +1,7 @@
-package com.gamsung.backend.global.security.jwt;
+package com.gamsung.backend.global.jwt.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-
-import java.util.Collection;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
@@ -24,11 +21,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(isAuthenticated);
     }
 
-    private JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities, String principal) {
-        super(authorities);
-        this.principal = principal;
-    }
-
     public static JwtAuthenticationToken unauthenticated(String accessToken) {
         return new JwtAuthenticationToken(null, accessToken, false);
     }
@@ -45,11 +37,5 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
     @Override
     public Object getPrincipal() {
         return this.principal;
-    }
-
-    @Override
-    public void eraseCredentials() {
-        super.eraseCredentials();
-        this.credentials = null;
     }
 }

@@ -1,4 +1,4 @@
-package com.gamsung.backend.global.security.jwt;
+package com.gamsung.backend.global.jwt.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

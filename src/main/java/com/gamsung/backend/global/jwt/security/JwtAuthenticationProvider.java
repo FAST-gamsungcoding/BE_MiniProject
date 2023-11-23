@@ -1,4 +1,4 @@
-package com.gamsung.backend.global.security.jwt;
+package com.gamsung.backend.global.jwt.security;
 
 import com.gamsung.backend.global.jwt.JwtProvider;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
