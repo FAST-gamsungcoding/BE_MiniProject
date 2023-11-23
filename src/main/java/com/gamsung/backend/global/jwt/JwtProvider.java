@@ -3,7 +3,10 @@ package com.gamsung.backend.global.jwt;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtTokenExpiredException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,9 +50,9 @@ public class JwtProvider {
                     .issuedAt(claims.getIssuedAt())
                     .build();
         } catch (ExpiredJwtException e) {
-            throw new JwtTokenExpiredException(e.getMessage());
+            throw new JwtTokenExpiredException("엑세스 토큰이 만료되었습니다.");
         } catch (JwtException e) {
-            throw new JwtInvalidTokenException(e.getMessage());
+            throw new JwtInvalidTokenException("유효하지 않은 엑세스 토큰입니다.");
         }
     }
 }
