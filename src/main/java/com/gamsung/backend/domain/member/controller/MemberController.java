@@ -7,6 +7,7 @@ import com.gamsung.backend.domain.member.dto.request.MemberLoginRequest;
 import com.gamsung.backend.domain.member.dto.request.MemberRegisterRequest;
 import com.gamsung.backend.domain.member.service.MemberService;
 import com.gamsung.backend.global.common.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+
+import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.*;
 
 @RestController
 @RequestMapping("/v1/member")
@@ -23,6 +26,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
+    @Operation(summary = "로그인 API", description = MEMBER_LOGIN)
     public ResponseEntity<ApiResponse> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
@@ -33,6 +37,7 @@ public class MemberController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "회원가입 API", description = MEMBER_RIGISTER)
     public ResponseEntity<ApiResponse> memberRegister(
             @Valid @RequestBody MemberControllerRegisterRequest registerRequest
     ) {
@@ -43,6 +48,7 @@ public class MemberController {
     }
 
     @GetMapping("/register/check")
+    @Operation(summary = "이메일 중복체크 API", description = MEMBER_REGISTER_EMAIL_CHECK)
     public ResponseEntity<ApiResponse> memberRegisterEmailCheck(
             @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
     ) {
@@ -53,6 +59,7 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
     public ResponseEntity<ApiResponse> memberLogout() {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity.ok(ApiResponse.builder()
