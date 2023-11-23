@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,18 +26,13 @@ public class SecurityFilterConfig {
 
 		http
 			.authorizeHttpRequests(request ->
-			request.anyRequest().permitAll()
+					request
+							.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+							.anyRequest().permitAll()
 		);
 
 		http.addFilterAfter(jwtFilter, LogoutFilter.class);
 
 		return http.build();
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return web ->
-			web.ignoring()
-				.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 }
