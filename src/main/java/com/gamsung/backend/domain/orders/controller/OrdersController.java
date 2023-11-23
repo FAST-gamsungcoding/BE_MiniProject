@@ -69,28 +69,12 @@ public class OrdersController {
 
         return ResponseEntity.ok(
                 """
-                            {
-                                     	"data" : [
-                                     		{
-                                     			"product_id" : 3,
-                                     			"people_number" : 2,
-                                     		  "start_date" : "2023-11-23",
-                                     			"end_date" : "2023-11-24",
-                                     			"representative_name" : "박건우",
-                                     			"representative_phone_number" : "010-2547-2222",
-                                     			"order_price" : 90000
-                                     		},
-                                     		{
-                                     			"product_id" : 3,
-                                     			"people_number" : 2,
-                                     		  "start_date" : "2023-11-24",
-                                     			"end_date" : "2023-11-25",
-                                     			"representative_name" : "한상우",
-                                     			"representative_phone_number" : "010-2234-2222",
-                                     			"order_price" : 180000
-                                     		}
-                                     	]
-                                     }
+                          {
+                          	"code" : 2004,
+                          	"data" : {
+                          	  "message" : "결제가 성공하였습니다." 
+                          	}
+                          }
                         """
         );
     }
