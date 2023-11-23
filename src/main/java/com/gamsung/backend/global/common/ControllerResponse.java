@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ApiResponse {
+public class ControllerResponse {
     private int code;
     private Object data;
 
     @Builder
-    private ApiResponse(int code, Object data) {
+    private ControllerResponse(int code, Object data) {
         this.code = code;
         this.data = data;
     }
