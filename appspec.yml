@@ -13,7 +13,10 @@ permissions:
     group: ubuntu
 
 hooks:
+  AfterInstall:
+    - location: mv /home/ubuntu/*.jar /home/ubuntu/server
+      runas: ubuntu
   ApplicationStart:
-    - location: start_server.sh
+    - location: /home/ubuntu/server/start_server.sh
       timeout: 60 # 스크립트 실행 60초 이상 수행되면 실패가 됩니다.
       runas: ubuntu

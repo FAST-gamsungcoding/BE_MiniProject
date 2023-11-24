@@ -35,7 +35,7 @@ jobs:
         shell: bash
 
       - name: Spring boot jar 생성
-        run: ./gradlew bootjar
+        run: ./gradlew build -x test
         shell: bash
 
       - name: zip file 생성
