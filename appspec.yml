@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/server
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+hooks:
+  ApplicationStart:
+    - location: start_server.sh
+      timeout: 60 # 스크립트 실행 60초 이상 수행되면 실패가 됩니다.
+      runas: ubuntu
