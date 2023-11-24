@@ -25,6 +25,15 @@ public class AccomodationController {
     @GetMapping("/all-entry")
     @Operation(summary = "메인 페이지 숙소 정보 가져오는 API", description = ALL_ENTRY_DESCRIPTION)
     public ResponseEntity<String> accomodationsAllEntry() {
+        /**
+         * 테스트 데이터가 아닌 경우 이 응답 방식을 사용하면 됩니다.
+         return ResponseEntity.ok(
+         ApiResponse.builder()
+         .code(HttpStatus.OK.value())
+         .data(tripService.getAllTripsPaging(pageable))
+         .build()
+         );
+         **/
 
         return ResponseEntity.ok(
                 """

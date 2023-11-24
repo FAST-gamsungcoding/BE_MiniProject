@@ -2,6 +2,7 @@ package com.gamsung.backend.domain.orders.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,15 @@ public class OrdersController {
     @GetMapping("/me")
     @Operation(summary = "예약 내역 조회 API", description = MY_ORDER)
     public ResponseEntity<String> myOrder() {
+        /**
+         * 테스트 데이터가 아닌 경우 이 응답 방식을 사용하면 됩니다.
+        return ResponseEntity.ok(
+                ApiResponse.builder()
+                        .code(HttpStatus.OK.value())
+                        .data(tripService.getAllTripsPaging(pageable))
+                        .build()
+        );
+         **/
 
         return ResponseEntity.ok("""
                         {

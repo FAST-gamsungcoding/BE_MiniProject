@@ -30,6 +30,15 @@ public class MemberController {
     public ResponseEntity<ControllerResponse> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
+        /**
+         * 테스트 데이터가 아닌 경우 이 응답 방식을 사용하면 됩니다.
+         return ResponseEntity.ok(
+         ApiResponse.builder()
+         .code(HttpStatus.OK.value())
+         .data(tripService.getAllTripsPaging(pageable))
+         .build()
+         );
+         **/
         return ResponseEntity.ok(ControllerResponse.builder()
                 .code(1000)
                 .data(memberService.login(MemberLoginRequest.from(loginRequest)))

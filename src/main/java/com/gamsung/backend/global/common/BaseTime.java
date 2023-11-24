@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SuperBuilder
 @Getter
+//모든 Entity는 BaseTime을 상속받으면 됩니다.
+//@EntityListeners(AuditingEntityListener.class) 상속받는 엔티티에 해당 어노테이션 고정으로 박아두시면 됩니다.
 public class BaseTime {
 
     @NotNull(message ="시작 시간이  필요합니다.")

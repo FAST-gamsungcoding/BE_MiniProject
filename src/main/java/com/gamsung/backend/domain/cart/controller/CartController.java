@@ -16,6 +16,15 @@ public class CartController {
     @GetMapping
     @Operation(summary = "장바구니 목록 확인 API", description = FIND_MY_CART)
     public ResponseEntity<String> findMyCart() {
+        /**
+         * 테스트 데이터가 아닌 경우 이 응답 방식을 사용하면 됩니다.
+         return ResponseEntity.ok(
+         ApiResponse.builder()
+         .code(HttpStatus.OK.value())
+         .data(tripService.getAllTripsPaging(pageable))
+         .build()
+         );
+         **/
 
         return ResponseEntity.ok("""
                     {
@@ -51,6 +60,7 @@ public class CartController {
     @PostMapping
     @Operation(summary = "장바구니에 상품 추가 API", description = ENTRY_MY_CART)
     public ResponseEntity<String> entryMyCart() {
+
 
         return ResponseEntity.ok("""
                    {
