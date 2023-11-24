@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 env:
-  S3_BUKET_NAME: gamsung-s3
+  S3_BUCKET_NAME: gamsung-s3
 
 jobs:
   build:
