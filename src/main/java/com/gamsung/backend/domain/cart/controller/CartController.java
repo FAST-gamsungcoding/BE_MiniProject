@@ -54,7 +54,7 @@ public class CartController {
 
         return ResponseEntity.ok("""
                    {
-                     	"code" : 4003,
+                     	"code" : 4001,
                      	"data" : {
                      	  "message" : "장바구니에 추가되었습니다."
                      	}
