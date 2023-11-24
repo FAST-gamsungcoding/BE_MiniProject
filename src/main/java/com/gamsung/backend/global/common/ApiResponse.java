@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class ApiResponse<T> {
-    private final String code;        // 사용자 정의 코드
+    private final Integer code;        // 사용자 정의 코드
     private final T data;           // API에서 반환되는 데이터
 
 }
