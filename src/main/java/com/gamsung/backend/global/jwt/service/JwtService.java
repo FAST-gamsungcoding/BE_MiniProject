@@ -46,9 +46,9 @@ public class JwtService {
     public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
         JwtPayload jwtPayload = verifyToken(request.refreshToken());
 
-        jwtRedisRepository.findById(jwtPayload.getEmail())
-                .ifPresentOrElse(jwtRedisEntity -> {
-                    if (!request.refreshToken().equals(jwtRedisEntity.getRefreshToken())) {
+        jwtRedisRepository.findByKey(jwtPayload.getEmail())
+                .ifPresentOrElse(refreshToken -> {
+                    if (!request.refreshToken().equals(refreshToken)) {
                         throw new JwtInvalidTokenException("리프레시 토큰이 유효하지 않습니다.");
                     }
                 }, () -> {

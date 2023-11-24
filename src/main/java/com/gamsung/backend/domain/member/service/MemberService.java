@@ -66,7 +66,7 @@ public class MemberService {
 
     @Transactional
     public MemberLogoutResponse logout(String email) {
-        jwtRedisRepository.deleteById(email);
+        jwtRedisRepository.deleteByKey(email);
         return MemberLogoutResponse.create();
     }
 
