@@ -11,6 +11,10 @@ ext {
 	JJWT_VERSION = "0.12.3"
 }
 
+jar {
+	enabled = false
+}
+
 java {
 	sourceCompatibility = '17'
 }
