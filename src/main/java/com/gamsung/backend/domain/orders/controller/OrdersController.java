@@ -31,7 +31,8 @@ public class OrdersController {
                  				"people_number" : 1,
                  				"start_date" : "2023-11-23",
                  				"end_date" : "2023-11-24",
-                 				"representative_name" : "박건우"
+                 				"representative_name" : "박건우",
+                 				"order_price" : 50000
                  		},
                  	  {
                  				"order_date" : "2023-11-24",
@@ -41,14 +42,15 @@ public class OrdersController {
                  				"people_number" : 2,
                  				"start_date" : "2023-11-24",
                  				"end_date" : "2023-11-27",
-                 				"representative_name" : "한상우"
+                 				"representative_name" : "한상우",
+                 				"order_price" : 100000
                  		}
                  	]
                  }
                 """);
     }
 
-    @GetMapping
+    @GetMapping("/check")
     @Operation(summary = "예약 가능 조회 API", description = CALENDAR_CHECK)
     public ResponseEntity<String> calendarCheck() {
 

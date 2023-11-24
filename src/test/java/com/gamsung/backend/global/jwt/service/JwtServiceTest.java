@@ -2,14 +2,12 @@ package com.gamsung.backend.global.jwt.service;
 
 import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
-import com.gamsung.backend.global.jwt.entity.JwtRedisEntity;
 import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -21,9 +19,6 @@ import java.util.Date;
 @ActiveProfiles("test")
 class JwtServiceTest {
     private static final String TEST_EMAIL = "test@test.com";
-
-    @Value("${service.jwt.refresh-expiration}")
-    private Long refreshExpiration;
 
     @Autowired
     private JwtService jwtService;
@@ -47,7 +42,7 @@ class JwtServiceTest {
 
             // when
             JwtPair jwtPair = jwtService.createTokenPair(jwtPayload);
-            JwtRedisEntity jwtRedisEntity = jwtRedisRepository.findById(TEST_EMAIL)
+            String storedRefreshToken = jwtRedisRepository.findByKey(TEST_EMAIL)
                     .orElse(null);
 
             // then
@@ -63,10 +58,8 @@ class JwtServiceTest {
             Assertions.assertEquals(issuedAt.getTime() / 1000, verifiedJwtRefreshTokenPayload.getIssuedAt().getTime() / 1000);
 
             // Redis Save Check
-            Assertions.assertNotNull(jwtRedisEntity);
-            Assertions.assertEquals(TEST_EMAIL, jwtRedisEntity.getMemberEmail());
-            Assertions.assertEquals(jwtPair.getRefreshToken(), jwtRedisEntity.getRefreshToken());
-            Assertions.assertTrue(Math.abs(refreshExpiration - jwtRedisEntity.getExpiration()) <= 1000);
+            Assertions.assertEquals(jwtPair.getRefreshToken(), storedRefreshToken);
+            Assertions.assertTrue(jwtRedisRepository.getExpire(TEST_EMAIL) > -1);
         }
     }
 }

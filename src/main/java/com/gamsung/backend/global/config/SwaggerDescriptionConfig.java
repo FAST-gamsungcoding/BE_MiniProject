@@ -13,15 +13,38 @@ public class SwaggerDescriptionConfig {
             "\n" +
             "| 타입 | 필드명 | 설명 | 필수여부 |\n" +
             "| --- | --- | --- | --- |\n" +
-            "| String | location | 검색을 원하는 지역 | Y |\n" +
+            "| Number | location | 검색을 원하는 지역 번호 | Y |\n" +
             "| Number | page | 결과 페이지 번호\n" +
             "(기본값 1) | X |\n" +
             "| Number | size | 한 페이지에 보여질 상품 개수\n" +
             "(기본값 16) | X |\n" +
             "\n" +
             "```json\n" +
-            "/v1/accommodations?location=\"서울\"\n" +
+            "/v1/accommodations?location=34\n" +
             "```\n" +
+            "\n" +
+            "- 지역 번호\n" +
+            "    \n" +
+            "    \n" +
+            "    | 번호 | 지역 |\n" +
+            "    | --- | --- |\n" +
+            "    | 1 | 서울 |\n" +
+            "    | 2 | 인천 |\n" +
+            "    | 3 | 대전 |\n" +
+            "    | 4 | 대구 |\n" +
+            "    | 5 | 광주 |\n" +
+            "    | 6 | 부산 |\n" +
+            "    | 7 | 울산 |\n" +
+            "    | 8 | 세종특별자치시 |\n" +
+            "    | 31 | 경기도 |\n" +
+            "    | 32 | 강원특별자치도 |\n" +
+            "    | 33 | 충청북도 |\n" +
+            "    | 34 | 충청남도 |\n" +
+            "    | 35 | 경상북도 |\n" +
+            "    | 36 | 경상남도 |\n" +
+            "    | 37 | 전라북도 |\n" +
+            "    | 38 | 전라남도 |\n" +
+            "    | 39 | 제주도 |\n" +
             "\n" +
             "# 응답\n" +
             "\n" +
@@ -49,7 +72,7 @@ public class SwaggerDescriptionConfig {
             "| String | accomodation_img | 숙박 외부 사진 |\n" +
             "\n" +
             "```json\n" +
-            "\"code\" : 3000,\n" +
+            "{\"code\" : 3000,\n" +
             "\"data\" : [\n" +
             "\t\t{\n" +
             "\t\t\t\"accommodation_id\" : 1,\n" +
@@ -70,10 +93,10 @@ public class SwaggerDescriptionConfig {
             "\t\t\t\"accommodation_name\" : \"리거 로얄 라구니 괌 리조트\",\n" +
             "\t\t\t\"short_address\" : \"경기도 수원시\",\t\t\n" +
             "\t\t\t\"accommodation_price\" : 40000,\n" +
-            "      \"accomodation_img\" : \"https://cdn.discordapp.com/attachments/1174993798766546984/1176059765785370624/image.png?ex=656d7e02&is=655b0902&hm=9653d7a75fae6974278eff3ae6ac4e2379b9c62794934460b311af64138048e2&\",\n" +
+            "      \"paccomodation_img\" : \"https://cdn.discordapp.com/attachments/1174993798766546984/1176059765785370624/image.png?ex=656d7e02&is=655b0902&hm=9653d7a75fae6974278eff3ae6ac4e2379b9c62794934460b311af64138048e2&\",\n" +
             "\t\t},\n" +
-            "\t\t...\t\t\n" +
-            "]\n" +
+            "\t\t\t\n" +
+            "]}\n" +
             "```" ;
     public static final String ENTRY_DESCRIPTION = "# 요청\n" +
             "\n" +
@@ -163,7 +186,7 @@ public class SwaggerDescriptionConfig {
             "\t  \"message\" : \"해당하는 숙소를 찾을 수 없습니다.\"\n" +
             "\t}\n" +
             "}\n" +
-            "``` ";
+            "```";
 
     public static final String FIND_MY_CART = "# 요청\n" +
             "\n" +
@@ -299,9 +322,35 @@ public class SwaggerDescriptionConfig {
             "```json\n" +
             "\n" +
             "{\n" +
-            "\t\"code\" : 4003,\n" +
+            "\t\"code\" : 4001,\n" +
             "\t\"data\" : {\n" +
             "\t  \"message\" : \"장바구니에 추가되었습니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## 장바구니 등록 요청 실패 - 장바구니 내용이 10개 초과인 경우\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 오류 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 4002,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\" : \"장바구니가 최대 개수인 10개를 초과했습니다.\"\n" +
             "\t}\n" +
             "}\n" +
             "```";
@@ -438,6 +487,7 @@ public class SwaggerDescriptionConfig {
             "| DATE | start_date | 예약시작일 |\n" +
             "| DATE | end_date | 예약종료일 |\n" +
             "| String | representative_name | 대표자명 |\n" +
+            "| Number | order_price | 주문금액 |\n" +
             "\n" +
             "```json\n" +
             "{\n" +
@@ -452,6 +502,7 @@ public class SwaggerDescriptionConfig {
             "\t\t\t\t\"start_date\" : \"2023-08-20\",\n" +
             "\t\t\t\t\"end_date\" : \"2023-08-21\",\n" +
             "\t\t\t\t\"representative_name\" : \"이상혁\"\n" +
+            "\t\t\t\t\"order_price\" : 50000\n" +
             "\t\t},\n" +
             "\t  {\n" +
             "\t\t\t\t\"order_date\" : \"2023-8-13\",\n" +
@@ -462,6 +513,7 @@ public class SwaggerDescriptionConfig {
             "\t\t\t\t\"start_date\" : \"2023-08-25\",\n" +
             "\t\t\t\t\"end_date\" : \"2023-08-27\",\n" +
             "\t\t\t\t\"representative_name\" : \"이상혁\"\n" +
+            "\t\t\t\t\"order_price\" : 50000\n" +
             "\t\t}\n" +
             "\t]\n" +
             "}\n" +
@@ -479,7 +531,7 @@ public class SwaggerDescriptionConfig {
             "| Date | end_date | 예약 종료날짜 | Y |\n" +
             "\n" +
             "```jsx\n" +
-            "/v1/order?accommodation_id=3&start_date=\"2023-11-01\"&end_date=\"2023-11-02\"\n" +
+            "/v1/order/check?accommodation_id=3&start_date=2023-11-01&end_date=2023-11-02\n" +
             "```\n" +
             "\n" +
             "# 응답\n" +
@@ -568,63 +620,23 @@ public class SwaggerDescriptionConfig {
             "\n" +
             "---\n" +
             "\n" +
-            "## 헤더\n" +
-            "\n" +
-            "| 키 | 값 |\n" +
-            "| --- | --- |\n" +
-            "| authorization | “Bearer access토큰값” |\n" +
-            "\n" +
-            "## 바디\n" +
-            "\n" +
-            "### 본문\n" +
-            "\n" +
-            "| 타입 | 필드명 | 설명 |\n" +
-            "| --- | --- | --- |\n" +
-            "| Number | code | 서비스 코드 규약 |\n" +
-            "| Content[] | data | 요청 내용 |\n" +
-            "\n" +
-            "### Content\n" +
+            "### 쿼리 파라미터\n" +
             "\n" +
             "| 타입 | 필드명 | 설명 | 필수여부 |\n" +
             "| --- | --- | --- | --- |\n" +
-            "| Number | accommodation_id | 숙소 id | Y |\n" +
-            "| Number | people_number | 예약인원 | Y |\n" +
-            "| DATE | start_date | 예약시작일 | Y |\n" +
-            "| DATE | end_date | 예약종료일 | Y |\n" +
-            "| String | representative_name | 대표자명 | Y |\n" +
-            "| String | representative_email | 대표자 이메일 | Y |\n" +
-            "| Number | order_price | 금액 | Y |\n" +
+            "| Number | accommodation_id | 숙소id | Y |\n" +
+            "| Date | start_date | 예약 시작날짜 | Y |\n" +
+            "| Date | end_date | 예약 종료날짜 | Y |\n" +
             "\n" +
-            "```json\n" +
-            "{\n" +
-            "\t\"data\" : [\n" +
-            "\t\t{\n" +
-            "\t\t\t\"accommodation_id\" : 3,\n" +
-            "\t\t\t\"people_number\" : 2,\n" +
-            "\t\t  \"start_date\" : \"2023-08-20\",\n" +
-            "\t\t\t\"end_date\" : \"2023-08-21\",\n" +
-            "\t\t\t\"representative_name\" : \"이상혁\",\n" +
-            "\t\t\t\"representative_email\" : \"house1583@naver.com\",\n" +
-            "\t\t\t\"order_price\" : 90000\n" +
-            "\t\t},\n" +
-            "\t\t{\n" +
-            "\t\t\t\"accommodation_id\" : 3,\n" +
-            "\t\t\t\"people_number\" : 2,\n" +
-            "\t\t  \"start_date\" : \"2023-08-25\",\n" +
-            "\t\t\t\"end_date\" : \"2023-08-27\",\n" +
-            "\t\t\t\"representative_name\" : \"이상혁\",\n" +
-            "\t\t\t\"representative_email\" : \"house1583@naver.com\",\n" +
-            "\t\t\t\"order_price\" : 180000\n" +
-            "\t\t}\n" +
-            "\t]\n" +
-            "}\n" +
+            "```jsx\n" +
+            "/v1/order?accommodation_id=3&start_date=2023-11-01&end_date=2023-11-02\n" +
             "```\n" +
             "\n" +
             "# 응답\n" +
             "\n" +
             "---\n" +
             "\n" +
-            "## 결제 성공 - 장바구니에 동일 항목이 없음\n" +
+            "## 예약여부 확인 - 예약이 가능한 날짜\n" +
             "\n" +
             "## 바디\n" +
             "\n" +
@@ -639,18 +651,18 @@ public class SwaggerDescriptionConfig {
             "\n" +
             "| 타입 | 필드명 | 설명 |\n" +
             "| --- | --- | --- |\n" +
-            "| String  | message | 성공 메시지 |\n" +
+            "| String | message | 실패 메시지 |\n" +
             "\n" +
             "```json\n" +
             "{\n" +
-            "\t\"code\" : 2004,\n" +
+            "\t\"code\" : 2001,\n" +
             "\t\"data\" : {\n" +
-            "\t  \"message\" : \"결제가 성공하였습니다.\"          \n" +
+            "\t  \"message\": \"해당 날짜는 예약 가능합니다.\"\n" +
             "\t}\n" +
             "}\n" +
             "```\n" +
             "\n" +
-            "## 결제 성공\n" +
+            "## 예약여부 확인 - 예약이 불가능한 날짜\n" +
             "\n" +
             "## 바디\n" +
             "\n" +
@@ -665,13 +677,39 @@ public class SwaggerDescriptionConfig {
             "\n" +
             "| 타입 | 필드명 | 설명 |\n" +
             "| --- | --- | --- |\n" +
-            "| String  | message | 성공 메시지 |\n" +
+            "| String | message | 실패 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 2002,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\": \"예약이 불가능한 날짜입니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## 예약여부 확인 - 해당 id의 숙소를 찾을 수 없음\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 실패 메시지 |\n" +
             "\n" +
             "```json\n" +
             "{\n" +
             "\t\"code\" : 2004,\n" +
             "\t\"data\" : {\n" +
-            "\t  \"message\" : \"결제가 성공하였습니다.\"          \n" +
+            "\t  \"message\": \"해당하는 숙소가 없습니다.\"\n" +
             "\t}\n" +
             "}\n" +
             "```";
@@ -963,6 +1001,197 @@ public class SwaggerDescriptionConfig {
             "\t\"code\" : 1011,\n" +
             "\t\"data\" : {\n" +
             "\t  \"message\" : \"로그아웃에 성공했습니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```";
+
+    public static final String ACCESS_TOKEN = "# 요청\n" +
+            "\n" +
+            "---\n" +
+            "\n" +
+            "## 헤더\n" +
+            "\n" +
+            "| 키 | 값 |\n" +
+            "| --- | --- |\n" +
+            "| authorization | “Bearer access토큰값” |\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 | 필수여부 |\n" +
+            "| --- | --- | --- | --- |\n" +
+            "| String  | refreshToken | JWT 리프레시 토큰 | Y |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"refreshToken\" : \"refresh-token값\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "# 응답\n" +
+            "\n" +
+            "---\n" +
+            "\n" +
+            "## 토큰 리프레시 성공\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String  | accessToken | JWT 액세스 토큰 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 1008,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"accessToken\" : \"access-token값\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## 토큰 리프레시 실패 - 리프레시 토큰이 만료된 경우\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 오류 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "<만료된 리프레시 토큰을 받았을 경우>\n" +
+            "{\n" +
+            "\t\"code\" : 1009,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\" : \"리프레시 토큰이 만료되었습니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## 토큰 리프레시 실패 - 리프레시 토큰이 유효하지 않은 경우\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 오류 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "<유효하지 않은 리프레시 토큰을 받았을 경우>\n" +
+            "{\n" +
+            "\t\"code\" : 1010,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\" : \"리프레시 토큰이 유효하지 않습니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```";
+
+    public static final String GLOBAL_ACCESSTOKEN_ERROR = "# 공통 오류\n" +
+            "\n" +
+            "## 유효하지 않은 엑세스 토큰\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 오류 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 5000,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\" : \"유효하지 않은 엑세스 토큰입니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```";
+
+    public static final String EXPIREDACCESSTOKEN = "## 엑세스 토큰 만료\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 오류 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 5001,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\" : \"엑세스 토큰이 만료되었습니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```";
+
+    public static final String SERVICEERROR = "## 서비스 오류\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 오류 메시지 |\n" +
+            "\n" +
+            "```java\n" +
+            "<서비스 오류(DB연결, 트랜잭션 오류 등)>\n" +
+            "{\n" +
+            "\t\"code\" : 5002,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\" : \"서비스 오류입니다.\"\n" +
             "\t}\n" +
             "}\n" +
             "```";
