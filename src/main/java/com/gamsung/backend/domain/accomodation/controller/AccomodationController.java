@@ -28,8 +28,7 @@ public class AccomodationController {
 
         return ResponseEntity.ok(
                 """
-                            {
-                            	"code" : 3000,
+                               {"code" : 3000,
                             	"data" : [
                              		{
                              			"accommodation_id" : 1,
@@ -53,8 +52,10 @@ public class AccomodationController {
                                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157751462428672/91ccfa75c5b3872b.PNG?ex=65717c96&is=655f0796&hm=3de6d85fa5e4e28164727ba4075917f3fc8964d46f20e393b7f9c9c4a547d5d9&",
                              		}
                              			
-                             ]
-                            }
+                             ] }  
+                            
+                            
+                  
                     """);
 
     }

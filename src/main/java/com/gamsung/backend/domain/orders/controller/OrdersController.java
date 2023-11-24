@@ -50,7 +50,7 @@ public class OrdersController {
                 """);
     }
 
-    @GetMapping
+    @GetMapping("/check")
     @Operation(summary = "예약 가능 조회 API", description = CALENDAR_CHECK)
     public ResponseEntity<String> calendarCheck() {
 

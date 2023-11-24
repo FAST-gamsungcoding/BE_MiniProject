@@ -72,7 +72,7 @@ public class SwaggerDescriptionConfig {
             "| String | accomodation_img | 숙박 외부 사진 |\n" +
             "\n" +
             "```json\n" +
-            "\"code\" : 3000,\n" +
+            "{\"code\" : 3000,\n" +
             "\"data\" : [\n" +
             "\t\t{\n" +
             "\t\t\t\"accommodation_id\" : 1,\n" +
@@ -96,7 +96,7 @@ public class SwaggerDescriptionConfig {
             "      \"paccomodation_img\" : \"https://cdn.discordapp.com/attachments/1174993798766546984/1176059765785370624/image.png?ex=656d7e02&is=655b0902&hm=9653d7a75fae6974278eff3ae6ac4e2379b9c62794934460b311af64138048e2&\",\n" +
             "\t\t},\n" +
             "\t\t\t\n" +
-            "]\n" +
+            "]}\n" +
             "```" ;
     public static final String ENTRY_DESCRIPTION = "# 요청\n" +
             "\n" +
@@ -531,7 +531,7 @@ public class SwaggerDescriptionConfig {
             "| Date | end_date | 예약 종료날짜 | Y |\n" +
             "\n" +
             "```jsx\n" +
-            "/v1/order?accommodation_id=3&start_date=\"2023-11-01\"&end_date=\"2023-11-02\"\n" +
+            "/v1/order/check?accommodation_id=3&start_date=2023-11-01&end_date=2023-11-02\n" +
             "```\n" +
             "\n" +
             "# 응답\n" +
@@ -620,63 +620,23 @@ public class SwaggerDescriptionConfig {
             "\n" +
             "---\n" +
             "\n" +
-            "## 헤더\n" +
-            "\n" +
-            "| 키 | 값 |\n" +
-            "| --- | --- |\n" +
-            "| authorization | “Bearer access토큰값” |\n" +
-            "\n" +
-            "## 바디\n" +
-            "\n" +
-            "### 본문\n" +
-            "\n" +
-            "| 타입 | 필드명 | 설명 |\n" +
-            "| --- | --- | --- |\n" +
-            "| Number | code | 서비스 코드 규약 |\n" +
-            "| Content[] | data | 요청 내용 |\n" +
-            "\n" +
-            "### Content\n" +
+            "### 쿼리 파라미터\n" +
             "\n" +
             "| 타입 | 필드명 | 설명 | 필수여부 |\n" +
             "| --- | --- | --- | --- |\n" +
-            "| Number | accommodation_id | 숙소 id | Y |\n" +
-            "| Number | people_number | 예약인원 | Y |\n" +
-            "| DATE | start_date | 예약시작일 | Y |\n" +
-            "| DATE | end_date | 예약종료일 | Y |\n" +
-            "| String | representative_name | 대표자명 | Y |\n" +
-            "| String | representative_email | 대표자 이메일 | Y |\n" +
-            "| Number | order_price | 금액 | Y |\n" +
+            "| Number | accommodation_id | 숙소id | Y |\n" +
+            "| Date | start_date | 예약 시작날짜 | Y |\n" +
+            "| Date | end_date | 예약 종료날짜 | Y |\n" +
             "\n" +
-            "```json\n" +
-            "{\n" +
-            "\t\"data\" : [\n" +
-            "\t\t{\n" +
-            "\t\t\t\"accommodation_id\" : 3,\n" +
-            "\t\t\t\"people_number\" : 2,\n" +
-            "\t\t  \"start_date\" : \"2023-08-20\",\n" +
-            "\t\t\t\"end_date\" : \"2023-08-21\",\n" +
-            "\t\t\t\"representative_name\" : \"이상혁\",\n" +
-            "\t\t\t\"representative_email\" : \"house1583@naver.com\",\n" +
-            "\t\t\t\"order_price\" : 90000\n" +
-            "\t\t},\n" +
-            "\t\t{\n" +
-            "\t\t\t\"accommodation_id\" : 3,\n" +
-            "\t\t\t\"people_number\" : 2,\n" +
-            "\t\t  \"start_date\" : \"2023-08-25\",\n" +
-            "\t\t\t\"end_date\" : \"2023-08-27\",\n" +
-            "\t\t\t\"representative_name\" : \"이상혁\",\n" +
-            "\t\t\t\"representative_email\" : \"house1583@naver.com\",\n" +
-            "\t\t\t\"order_price\" : 180000\n" +
-            "\t\t}\n" +
-            "\t]\n" +
-            "}\n" +
+            "```jsx\n" +
+            "/v1/order?accommodation_id=3&start_date=2023-11-01&end_date=2023-11-02\n" +
             "```\n" +
             "\n" +
             "# 응답\n" +
             "\n" +
             "---\n" +
             "\n" +
-            "## 결제 성공\n" +
+            "## 예약여부 확인 - 예약이 가능한 날짜\n" +
             "\n" +
             "## 바디\n" +
             "\n" +
@@ -691,13 +651,65 @@ public class SwaggerDescriptionConfig {
             "\n" +
             "| 타입 | 필드명 | 설명 |\n" +
             "| --- | --- | --- |\n" +
-            "| String  | message | 성공 메시지 |\n" +
+            "| String | message | 실패 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 2001,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\": \"해당 날짜는 예약 가능합니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## 예약여부 확인 - 예약이 불가능한 날짜\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 실패 메시지 |\n" +
+            "\n" +
+            "```json\n" +
+            "{\n" +
+            "\t\"code\" : 2002,\n" +
+            "\t\"data\" : {\n" +
+            "\t  \"message\": \"예약이 불가능한 날짜입니다.\"\n" +
+            "\t}\n" +
+            "}\n" +
+            "```\n" +
+            "\n" +
+            "## 예약여부 확인 - 해당 id의 숙소를 찾을 수 없음\n" +
+            "\n" +
+            "## 바디\n" +
+            "\n" +
+            "### 본문\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| Number | code | 규약 코드 |\n" +
+            "| Data | data | 응답 내용 |\n" +
+            "\n" +
+            "### Data\n" +
+            "\n" +
+            "| 타입 | 필드명 | 설명 |\n" +
+            "| --- | --- | --- |\n" +
+            "| String | message | 실패 메시지 |\n" +
             "\n" +
             "```json\n" +
             "{\n" +
             "\t\"code\" : 2004,\n" +
             "\t\"data\" : {\n" +
-            "\t  \"message\" : \"결제가 성공하였습니다.\"          \n" +
+            "\t  \"message\": \"해당하는 숙소가 없습니다.\"\n" +
             "\t}\n" +
             "}\n" +
             "```";
