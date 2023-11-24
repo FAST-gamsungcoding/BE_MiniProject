@@ -12,27 +12,33 @@ import java.util.concurrent.TimeUnit;
 @Repository
 public class JwtRedisRepository implements RedisRepository<JwtRedisEntity> {
 
+    private final static String JWT_KEY_PREFIX = "jwt:refresh:";
+
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void save(JwtRedisEntity entity) {
-        redisTemplate.opsForValue()
-                .set(entity.getMemberEmail(), entity.getRefreshToken(),
-                        entity.getExpiration(), TimeUnit.MILLISECONDS);
+        String key = JWT_KEY_PREFIX + entity.getMemberEmail();
+        String value = entity.getRefreshToken();
+        long expire = entity.getExpiration();
+        if (redisTemplate.opsForValue().get(key) != null) {
+            redisTemplate.delete(key);
+        }
+        redisTemplate.opsForValue().set(key, value, expire, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public Optional<String> findByKey(String key) {
-        return Optional.ofNullable(redisTemplate.opsForValue().get(key));
+        return Optional.ofNullable(redisTemplate.opsForValue().get(JWT_KEY_PREFIX + key));
     }
 
     @Override
     public Long getExpire(String key) {
-        return redisTemplate.getExpire(key);
+        return redisTemplate.getExpire(JWT_KEY_PREFIX + key);
     }
 
     @Override
     public Boolean deleteByKey(String key) {
-        return redisTemplate.delete(key);
+        return redisTemplate.delete(JWT_KEY_PREFIX + key);
     }
 }
