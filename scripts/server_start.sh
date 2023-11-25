@@ -5,7 +5,7 @@ LOG=/dev/null
 #LOG=gamsung-console.log
 export spring_profiles_active=prod
 
-./home/ubuntu/server/server_stop.sh
+./home/ubuntu/server/scripts/server_stop.sh
 
 cd ~/server
 nohup java -jar $JAR > $LOG 2>&1 &
