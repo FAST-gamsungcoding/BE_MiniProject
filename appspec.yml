@@ -14,7 +14,7 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: mv /home/ubuntu/*.jar /home/ubuntu/server
+    - location: mv /home/ubuntu/server/build/lib/*.jar /home/ubuntu/server
       runas: ubuntu
   ApplicationStart:
     - location: /home/ubuntu/server/start_server.sh
