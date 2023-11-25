@@ -1,6 +1,9 @@
 #!/bin/bash
 
-./home/ubuntu/server/server_stop.sh
+chmod +x ./scripts/server_stop.sh
+chmod +x ./scripts/server_start.sh
+
+./home/ubuntu/server/scripts/server_stop.sh
 
 rm /home/ubuntu/server/*.jar
 
