@@ -8,8 +8,6 @@ logging:
     name: gamsung-backend.log
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
-    console: %d{yyyy-MM-dd HH:mm:ss} - %msg%n
-    file: %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
   logback:
     rollingpolicy:
       max-file-size: 100MB
