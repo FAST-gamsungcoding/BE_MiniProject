@@ -1,5 +1,6 @@
 package com.gamsung.backend.domain.accomodation.entity;
 
+import com.gamsung.backend.domain.image.Image;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,6 +25,7 @@ public class Accomodation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @Column(nullable = false)
     String name;
 
     @Lob
@@ -31,7 +33,7 @@ public class Accomodation {
     String description;
 
     @Column(nullable = false)
-    String location;
+    Location location;
 
     @Column(nullable = false)
     String address;
@@ -43,13 +45,13 @@ public class Accomodation {
     String price;
 
     @OneToMany(
-        fetch = FetchType.LAZY, mappedBy = "product",
+        fetch = FetchType.LAZY, mappedBy = "accomodation",
         cascade = CascadeType.PERSIST, orphanRemoval = true
     )
     List<Image> images = new ArrayList<>();
 
     @Builder
-    private Product(
+    private Accomodation(
         String name,
         String description,
         String location,
