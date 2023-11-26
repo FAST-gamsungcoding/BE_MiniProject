@@ -5,13 +5,18 @@ import com.gamsung.backend.domain.member.controller.request.MemberControllerRegi
 import com.gamsung.backend.domain.member.controller.request.MemberControllerRegisterRequest;
 import com.gamsung.backend.domain.member.dto.request.MemberLoginRequest;
 import com.gamsung.backend.domain.member.dto.request.MemberRegisterRequest;
+import com.gamsung.backend.domain.member.dto.response.MemberLoginResponse;
+import com.gamsung.backend.domain.member.dto.response.MemberLogoutResponse;
+import com.gamsung.backend.domain.member.dto.response.MemberRegisterEmailCheckResponse;
+import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.service.MemberService;
 import com.gamsung.backend.global.common.ControllerResponse;
+import com.gamsung.backend.global.resolver.AuthContext;
+import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -30,18 +35,10 @@ public class MemberController {
     public ResponseEntity<ControllerResponse> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
-        /**
-         * 테스트 데이터가 아닌 경우 이 응답 방식을 사용하면 됩니다.
-         return ResponseEntity.ok(
-         ApiResponse.builder()
-         .code(HttpStatus.OK.value())
-         .data(tripService.getAllTripsPaging(pageable))
-         .build()
-         );
-         **/
+        MemberLoginResponse response = memberService.login(MemberLoginRequest.from(loginRequest));
         return ResponseEntity.ok(ControllerResponse.builder()
                 .code(1000)
-                .data(memberService.login(MemberLoginRequest.from(loginRequest)))
+                .data(response)
                 .build());
     }
 
@@ -50,9 +47,10 @@ public class MemberController {
     public ResponseEntity<ControllerResponse> memberRegister(
             @Valid @RequestBody MemberControllerRegisterRequest registerRequest
     ) {
+        MemberRegisterResponse response = memberService.register(MemberRegisterRequest.from(registerRequest));
         return ResponseEntity.created(URI.create("/")).body(ControllerResponse.builder()
                 .code(1003)
-                .data(memberService.register(MemberRegisterRequest.from(registerRequest)))
+                .data(response)
                 .build());
     }
 
@@ -61,19 +59,22 @@ public class MemberController {
     public ResponseEntity<ControllerResponse> memberRegisterEmailCheck(
             @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
     ) {
+        MemberRegisterEmailCheckResponse response = memberService.emailCheck(emailCheckRequest.email());
         return ResponseEntity.ok(ControllerResponse.builder()
                 .code(1006)
-                .data(memberService.emailCheck(emailCheckRequest.email()))
+                .data(response)
                 .build());
     }
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
-    public ResponseEntity<ControllerResponse> memberLogout() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public ResponseEntity<ControllerResponse> memberLogout(
+            @MemberAuth AuthContext authContext
+    ) {
+        MemberLogoutResponse response = memberService.logout(authContext.email());
         return ResponseEntity.ok(ControllerResponse.builder()
                 .code(1011)
-                .data(memberService.logout(email))
+                .data(response)
                 .build());
     }
 }
