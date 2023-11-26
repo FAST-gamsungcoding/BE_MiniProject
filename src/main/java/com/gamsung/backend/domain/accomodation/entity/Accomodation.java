@@ -54,7 +54,7 @@ public class Accomodation {
     private Accomodation(
         String name,
         String description,
-        String location,
+        Location location,
         String address,
         String limitPeople,
         String price
