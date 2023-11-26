@@ -39,10 +39,10 @@ public class Accomodation {
     String address;
 
     @Column(nullable = false)
-    String limitPeople;
+    Long limitPeople;
 
     @Column(nullable = false)
-    String price;
+    Long price;
 
     @OneToMany(
         fetch = FetchType.LAZY, mappedBy = "accomodation",
@@ -56,8 +56,8 @@ public class Accomodation {
         String description,
         Location location,
         String address,
-        String limitPeople,
-        String price
+        Long limitPeople,
+        Long price
     ) {
         this.name = name;
         this.description = description;
