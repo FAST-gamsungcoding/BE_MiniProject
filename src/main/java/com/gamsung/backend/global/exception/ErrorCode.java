@@ -1,4 +1,4 @@
-package com.gamsung.backend.global.common;
+package com.gamsung.backend.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

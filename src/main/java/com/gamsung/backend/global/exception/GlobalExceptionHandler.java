@@ -1,5 +1,6 @@
-package com.gamsung.backend.global.common;
+package com.gamsung.backend.global.exception;
 
+import com.gamsung.backend.global.common.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
