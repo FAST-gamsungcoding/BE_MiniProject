@@ -1,7 +1,10 @@
 package com.gamsung.backend.domain.member.exception;
 
-public class MemberLoginWrongPasswordException extends IllegalArgumentException {
+import com.gamsung.backend.global.exception.BaseException;
+import com.gamsung.backend.global.exception.ErrorCode;
+
+public class MemberLoginWrongPasswordException extends BaseException {
     public MemberLoginWrongPasswordException() {
-        super("비밀번호가 올바르지 않습니다.");
+        super(ErrorCode.MEMBER_LOGIN_WRONG_PASSWORD);
     }
 }

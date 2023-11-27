@@ -10,7 +10,7 @@ import com.gamsung.backend.domain.member.dto.response.MemberLogoutResponse;
 import com.gamsung.backend.domain.member.dto.response.MemberRegisterEmailCheckResponse;
 import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.service.MemberService;
-import com.gamsung.backend.global.common.ControllerResponse;
+import com.gamsung.backend.global.common.ApiResponse;
 import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,11 +32,11 @@ public class MemberController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = MEMBER_LOGIN)
-    public ResponseEntity<ControllerResponse> memberLogin(
+    public ResponseEntity<ApiResponse> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
         MemberLoginResponse response = memberService.login(MemberLoginRequest.from(loginRequest));
-        return ResponseEntity.ok(ControllerResponse.builder()
+        return ResponseEntity.ok(ApiResponse.builder()
                 .code(1000)
                 .data(response)
                 .build());
@@ -44,11 +44,11 @@ public class MemberController {
 
     @PostMapping("/register")
     @Operation(summary = "회원가입 API", description = MEMBER_RIGISTER)
-    public ResponseEntity<ControllerResponse> memberRegister(
+    public ResponseEntity<ApiResponse> memberRegister(
             @Valid @RequestBody MemberControllerRegisterRequest registerRequest
     ) {
         MemberRegisterResponse response = memberService.register(MemberRegisterRequest.from(registerRequest));
-        return ResponseEntity.created(URI.create("/")).body(ControllerResponse.builder()
+        return ResponseEntity.created(URI.create("/")).body(ApiResponse.builder()
                 .code(1003)
                 .data(response)
                 .build());
@@ -56,11 +56,11 @@ public class MemberController {
 
     @GetMapping("/register/check")
     @Operation(summary = "이메일 중복체크 API", description = MEMBER_REGISTER_EMAIL_CHECK)
-    public ResponseEntity<ControllerResponse> memberRegisterEmailCheck(
+    public ResponseEntity<ApiResponse> memberRegisterEmailCheck(
             @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
     ) {
         MemberRegisterEmailCheckResponse response = memberService.emailCheck(emailCheckRequest.email());
-        return ResponseEntity.ok(ControllerResponse.builder()
+        return ResponseEntity.ok(ApiResponse.builder()
                 .code(1006)
                 .data(response)
                 .build());
@@ -68,11 +68,11 @@ public class MemberController {
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
-    public ResponseEntity<ControllerResponse> memberLogout(
+    public ResponseEntity<ApiResponse> memberLogout(
             @MemberAuth AuthContext authContext
     ) {
         MemberLogoutResponse response = memberService.logout(authContext.email());
-        return ResponseEntity.ok(ControllerResponse.builder()
+        return ResponseEntity.ok(ApiResponse.builder()
                 .code(1011)
                 .data(response)
                 .build());
