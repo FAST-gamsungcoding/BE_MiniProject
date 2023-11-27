@@ -1,4 +1,4 @@
-package com.gamsung.backend.domain.image;
+package com.gamsung.backend.domain.image.entity;
 
 import com.gamsung.backend.domain.accomodation.entity.Accomodation;
 import jakarta.persistence.Column;
@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "accomodation_image")
 @Getter
 public class Image {
 

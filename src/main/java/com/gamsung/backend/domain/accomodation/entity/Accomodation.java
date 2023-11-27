@@ -1,6 +1,6 @@
 package com.gamsung.backend.domain.accomodation.entity;
 
-import com.gamsung.backend.domain.image.Image;
+import com.gamsung.backend.domain.image.entity.Image;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class Accomodation {
     String description;
 
     @Column(nullable = false)
-    Location location;
+    Long location;
 
     @Column(nullable = false)
     String address;
@@ -54,7 +54,7 @@ public class Accomodation {
     private Accomodation(
         String name,
         String description,
-        Location location,
+        Long location,
         String address,
         Long limitPeople,
         Long price
