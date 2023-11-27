@@ -5,12 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponse> handleBaseException(BaseException e) {
@@ -30,6 +32,17 @@ public class GlobalExceptionHandler {
                 ApiResponse.builder()
                         .code(Integer.parseInt(e.getCode()))
                         .data(e.getMessage())
+                        .build()
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ApiResponse> handleBindValidationError(BindException e) {
+        logger.error(e.getMessage());
+        return ResponseEntity.badRequest().body(
+                ApiResponse.builder()
+                        .code(5003)
+                        .data("데이터 형식이 올바르지 않습니다.")
                         .build()
         );
     }
