@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(BaseException.class)
+    @ExceptionHandler(UnAuthException.class)
     public ResponseEntity<ApiResponse> handleUnAuthException(UnAuthException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 ApiResponse.builder()
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(BindException.class)
     public ResponseEntity<ApiResponse> handleBindValidationError(BindException e) {
         logger.error(e.getMessage());
         return ResponseEntity.badRequest().body(
