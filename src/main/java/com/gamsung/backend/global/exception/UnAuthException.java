@@ -4,11 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class UnAuthException extends RuntimeException {
-    private ErrorCode errorCode;
-
-    public UnAuthException() {
-    }
-
+    private final ErrorCode errorCode;
+    
     public UnAuthException(ErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
