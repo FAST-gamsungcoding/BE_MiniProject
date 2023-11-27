@@ -1,7 +1,10 @@
 package com.gamsung.backend.domain.member.exception;
 
-public class MemberNotFoundException extends IllegalArgumentException {
+import com.gamsung.backend.global.exception.ErrorCode;
+import com.gamsung.backend.global.exception.UnAuthException;
+
+public class MemberNotFoundException extends UnAuthException {
     public MemberNotFoundException() {
-        super("회원 아이디가 존재하지 않습니다.");
+        super(ErrorCode.MEMBER_NOT_FOUND);
     }
 }
