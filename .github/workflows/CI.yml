@@ -41,7 +41,7 @@ jobs:
         shell: bash
       # gradle 빌드 및 테스트 실행
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -Dspring.profiles.active=test
         shell: bash
       # .env 파일 제거
       - name: Move .env to .env.example
