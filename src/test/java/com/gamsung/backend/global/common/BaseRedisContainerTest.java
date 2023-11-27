@@ -6,7 +6,7 @@ import org.testcontainers.containers.GenericContainer;
 
 public abstract class BaseRedisContainerTest extends BaseIntegrationTest {
     static final String REDIS_IMAGE = "redis:7.2";
-    static final GenericContainer REDIS_CONTAINER;
+    static final GenericContainer<?> REDIS_CONTAINER;
 
     static {
         REDIS_CONTAINER = new GenericContainer<>(REDIS_IMAGE)

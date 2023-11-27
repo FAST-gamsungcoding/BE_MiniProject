@@ -6,7 +6,7 @@ import com.gamsung.backend.domain.member.dto.response.MemberLoginResponse;
 import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.domain.member.service.MemberService;
-import com.gamsung.backend.global.common.BaseIntegrationTest;
+import com.gamsung.backend.global.common.BaseRedisContainerTest;
 import com.gamsung.backend.global.factory.MemberTestFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MemberIntegrationTest extends BaseIntegrationTest {
+public class MemberIntegrationTest extends BaseRedisContainerTest {
     private final static String BASE_URL = "/v1/member";
     private static final String JWT_TOKEN_PREFIX = "Bearer ";
 
