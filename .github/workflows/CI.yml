@@ -19,26 +19,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-      # java 다운로드
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      # Redis 다운로드
+      - name: Setup Redis
+        uses: zhulik/redis-action@1.1.0
+        with:
+          redis version: 7.2
+      - uses: actions/checkout@v3
+        # java 다운로드
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
       # .env 파일 복사
-    - name: Copy .env.example to .env
-      run: cp .env.example .env
-      shell: bash
+      - name: Move .env.example to .env
+        run: mv .env.example .env
+        shell: bash
       # gradlew에 실행권한 부여
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-      shell: bash
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+        shell: bash
       # gradle 빌드 및 테스트 실행
-    - name: Build with Gradle
-      run: ./gradlew build
-      shell: bash
+      - name: Build with Gradle
+        run: ./gradlew build
+        shell: bash
       # .env 파일 제거
-    - name: Remove .env
-      run: rm .env
-      shell: bash
+      - name: Move .env to .env.example
+        run: mv .env .env.example
+        shell: bash
