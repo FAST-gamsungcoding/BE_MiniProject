@@ -25,8 +25,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.UnknownContentTypeException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
@@ -44,11 +44,14 @@ public class OpenApiService {
     }
 
     private Optional<JsonNode> makeApiCall(String url) {
-        System.out.println(url);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<JsonNode> responseEntity =
-            restTemplate.exchange(url, HttpMethod.GET, null, JsonNode.class);
-        return Optional.ofNullable(responseEntity.getBody());
+        try {
+            ResponseEntity<JsonNode> responseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, null, JsonNode.class);
+            return Optional.ofNullable(responseEntity.getBody());
+        } catch (UnknownContentTypeException e) {
+            return Optional.empty();
+        }
     }
 
     private String buildApiUrl(String baseUrl, String... queryParams) {
@@ -86,7 +89,7 @@ public class OpenApiService {
                     String name = item.path("title").asText();
 
                     if (location.isEmpty() || address.isEmpty() || contentId.isEmpty()
-                        || firstImage.isEmpty() || name.isEmpty() || endsWithJpgOrJpeg(
+                        || firstImage.isEmpty() || name.isEmpty() || !endsWithJpgOrJpeg(
                         firstImage)) {
                         continue;
                     }
@@ -166,7 +169,7 @@ public class OpenApiService {
                         List<Image> roomImages = new ArrayList<>();
                         for (int i = 1; i <= 5; i++) {
                             String imageUrl = itemList.get(0).path("roomimg" + i).asText();
-                            if (!imageUrl.isEmpty() || endsWithJpgOrJpeg(imageUrl)) {
+                            if (!imageUrl.isEmpty() || !endsWithJpgOrJpeg(imageUrl)) {
                                 Image roomImage = Image.builder().imgType(2).url(imageUrl).build();
                                 roomImages.add(roomImage);
                             }
