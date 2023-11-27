@@ -39,8 +39,6 @@ public class OpenApiService {
     @Value("${open-api.key}")
     private String decodeApiKey;
 
-
-    @Transactional
     public void getAccomodationInfo() {
         processAccomodationInfo();
     }
@@ -213,22 +211,15 @@ public class OpenApiService {
             accomodation.addImage(roomImage);
         }
 
-        printProductInfo(accomodation);
+//        printProductInfo(accomodation);
     }
 
     private boolean endsWithJpgOrJpeg(String url) {
-        // 파일 이름에서 마지막으로 등장하는 "."의 위치를 찾음
         int lastDotIndex = url.lastIndexOf(".");
-
-        // "."이 없는 경우 또는 "."이 파일 이름의 끝에 위치한 경우 확장자가 없다고 간주
         if (lastDotIndex == -1 || lastDotIndex == url.length() - 1) {
             return false;
         }
-
-        // "." 이후의 값 추출
         String extension = url.substring(lastDotIndex + 1).toLowerCase();
-
-        // 확장자가 "jpg" 또는 "jpeg"이면 true 반환
         return extension.equals("jpg") || extension.equals("jpeg");
     }
 

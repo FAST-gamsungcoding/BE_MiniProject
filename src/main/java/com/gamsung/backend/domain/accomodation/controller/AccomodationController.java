@@ -21,7 +21,7 @@ public class AccomodationController {
     private final AccomodationService accomodationService;
     private final OpenApiService openApiService;
 
-    @GetMapping
+    @GetMapping("/data")
     @Operation(summary = " open api를 활용하여 숙박 정보를 저장시키는 API")
     public ResponseEntity<Void> registerAccommodationInfo() {
         openApiService.getAccomodationInfo();
