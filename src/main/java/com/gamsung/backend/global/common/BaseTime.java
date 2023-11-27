@@ -1,25 +1,25 @@
 package com.gamsung.backend.global.common;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder
+
 @Getter
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 //모든 Entity는 BaseTime을 상속받으면 됩니다.
-//@EntityListeners(AuditingEntityListener.class) 상속받는 엔티티에 해당 어노테이션 고정으로 박아두시면 됩니다.
-public class BaseTime {
+public abstract class BaseTime {
 
-    @NotNull(message ="시작 시간이  필요합니다.")
-    private LocalDateTime startTime;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
-    @NotNull(message ="종료 시간이 필요합니다.")
-    private LocalDateTime endTime;
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
 
 }
