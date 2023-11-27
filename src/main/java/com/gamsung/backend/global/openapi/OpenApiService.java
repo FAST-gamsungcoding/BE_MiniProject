@@ -169,7 +169,7 @@ public class OpenApiService {
                         List<Image> roomImages = new ArrayList<>();
                         for (int i = 1; i <= 5; i++) {
                             String imageUrl = itemList.get(0).path("roomimg" + i).asText();
-                            if (!imageUrl.isEmpty() || !endsWithJpgOrJpeg(imageUrl)) {
+                            if (!imageUrl.isEmpty() && endsWithJpgOrJpeg(imageUrl)) {
                                 Image roomImage = Image.builder().imgType(2).url(imageUrl).build();
                                 roomImages.add(roomImage);
                             }

@@ -3,7 +3,6 @@ package com.gamsung.backend.domain.accomodation.controller;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ALL_ENTRY_DESCRIPTION;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ENTRY_DESCRIPTION;
 
-import com.gamsung.backend.domain.accomodation.service.AccomodationService;
 import com.gamsung.backend.global.openapi.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccomodationController {
 
-    private final AccomodationService accomodationService;
+//    private final AccomodationService accomodationService;
     private final OpenApiService openApiService;
 
     @GetMapping("/data")
