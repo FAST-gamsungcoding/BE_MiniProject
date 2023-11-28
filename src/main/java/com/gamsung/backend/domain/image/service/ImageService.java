@@ -16,14 +16,14 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    public String getAccomodationImageWithAccomdoationId(Long accomodationId) {
-        return imageRepository.findFirstByAccomodationIdAndImgType(accomodationId, 1)
+    public String getAccommodationImageWithAccommodationId(Long accommodationId) {
+        return imageRepository.findFirstByAccommodationIdAndImgType(accommodationId, 1)
             .map(Image::getUrl)
             .orElseThrow(ImageNotFoundException::new);
     }
 
-    public List<String> getRoomImagesWithAccomodationId(Long accomodationId) {
-        return imageRepository.findByAccomodationIdAndImgType(accomodationId, 2)
+    public List<String> getRoomImagesWithAccommodationId(Long accommodationId) {
+        return imageRepository.findByAccommodationIdAndImgType(accommodationId, 2)
             .stream()
             .map(Image::getUrl)
             .collect(Collectors.toList());
