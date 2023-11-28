@@ -32,11 +32,11 @@ public class Cart extends BaseTime {
     private Long id;
 
     @JoinColumn(name = "accomodation_id")
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Accomodation accomodation;
 
     @JoinColumn(name = "member_id")
-    @ManyToOne(cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
     @Column(name = "reservation_people")

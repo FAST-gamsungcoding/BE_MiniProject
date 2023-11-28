@@ -1,5 +1,6 @@
 package com.gamsung.backend.domain.cart.controller;
 
+import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.cart.service.CartService;
@@ -48,11 +49,12 @@ public class CartController {
 
     @DeleteMapping
     @Operation(summary = "장바구니 삭제 API", description = DELETE_MY_CART)
-    public ResponseEntity<ApiResponse<String>> deleteMyCart(@RequestParam long[] deleteId,
-                                                            @MemberAuth AuthContext authContext ) {
+    public ResponseEntity<ApiResponse<String>> deleteMyCart(@RequestBody CartDeleteRequest cartDeleteRequest,
+                                                            @MemberAuth AuthContext authContext) {
         Long memberId = authContext.id();
+        System.out.println(cartDeleteRequest.getDeleteId());
 
-        cartService.deleteMyCart(deleteId,memberId);
+        cartService.deleteMyCart(cartDeleteRequest,memberId);
 
 
         return ResponseEntity.ok(ApiResponse.create(4003,"선택한 항목들이 삭제되었습니다."));

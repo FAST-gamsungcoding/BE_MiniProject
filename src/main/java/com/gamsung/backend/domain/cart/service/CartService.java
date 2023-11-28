@@ -2,6 +2,7 @@ package com.gamsung.backend.domain.cart.service;
 
 import com.gamsung.backend.domain.accomodation.entity.Accomodation;
 import com.gamsung.backend.domain.accomodation.repository.AccomodationRepository;
+import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.cart.entity.Cart;
@@ -74,8 +75,6 @@ public class CartService {
     @Transactional(readOnly = true)
     public List<CartFindResponse> findMyCart(Long memberId) {
 
-
-
         List<Cart> myCartList = cartRepository.findAllByMemberId(memberId);
 
         for (Cart cart : myCartList) {
@@ -90,7 +89,9 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteMyCart(long[] deleteId,Long memberId) {
+    public void deleteMyCart(CartDeleteRequest cartDeleteRequest, Long memberId) {
+        List<Long> deleteId = cartDeleteRequest.getDeleteId();
+
 
         for (long id : deleteId) {
             Optional<Cart> cartOptional = cartRepository.findById(id);
