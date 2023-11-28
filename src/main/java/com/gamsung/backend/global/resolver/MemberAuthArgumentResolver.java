@@ -22,9 +22,8 @@ public class MemberAuthArgumentResolver implements HandlerMethodArgumentResolver
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated()) {
-            String email = (String) authentication.getPrincipal();
-            return AuthContext.from(email);
+            return authentication.getPrincipal();
         }
-        return AuthContext.from(null);
+        return AuthContext.from("0", null);
     }
 }

@@ -37,7 +37,7 @@ public class OrdersController {
                  				"order_date" : "2023-11-23",
                  				"accommodation_id" : 3,
                  				"accommodation_name" : "로터스모텔",
-                 				"accommodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177161123817066518/5b82230c9374c02c.PNG?ex=65717fba&is=655f0aba&hm=d3ac9e70d92c95c4968d7d8bdc6e4e1708c091155030215fe79cce44f5d0d8ca&",
+                 				"accommodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177161123817066518/5b82230c9374c02c.PNG?ex=65717fba&is=655f0aba&hm=d3ac9e70d92c95c4968d7d8bdc6e4e1708c091155030215fe79cce44f5d0d8ca&"
                  				"people_number" : 1,
                  				"start_date" : "2023-11-23",
                  				"end_date" : "2023-11-24",
@@ -48,7 +48,7 @@ public class OrdersController {
                  				"order_date" : "2023-11-24",
                  				"accommodation_id" : 3,
                  				"accommodation_name" : "신라호텔",
-                 				"accommodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177159849205841960/62e03f6768aa5eb9.PNG?ex=65717e8a&is=655f098a&hm=7f02b43628e84e19b3326c476251441ef796fd125d5b0e730f8b00bf38458287&",
+                 				"accommodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177159849205841960/62e03f6768aa5eb9.PNG?ex=65717e8a&is=655f098a&hm=7f02b43628e84e19b3326c476251441ef796fd125d5b0e730f8b00bf38458287&"
                  				"people_number" : 2,
                  				"start_date" : "2023-11-24",
                  				"end_date" : "2023-11-27",

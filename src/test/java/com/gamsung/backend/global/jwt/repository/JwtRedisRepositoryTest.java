@@ -24,8 +24,9 @@ class JwtRedisRepositoryTest {
     @Test
     public void notFoundRedisKeyWhenExpiredKeyTest() throws InterruptedException {
         // given
+        Long id = 1234L;
         String email = "test@test.com";
-        JwtPayload jwtPayload = JwtPayload.from(email);
+        JwtPayload jwtPayload = JwtPayload.from(id, email);
         JwtRedisEntity jwtRedisEntity = JwtRedisEntity.builder()
                 .memberEmail(email)
                 .refreshToken(jwtProvider.createToken(jwtPayload, 1))
@@ -44,8 +45,9 @@ class JwtRedisRepositoryTest {
     @Test
     public void deleteKeyWhenFindingSavedValueTest() {
         // given
+        Long id = 1234L;
         String email = "test2@test.com";
-        JwtPayload jwtPayload = JwtPayload.from(email);
+        JwtPayload jwtPayload = JwtPayload.from(id, email);
         JwtRedisEntity jwtRedisEntity = JwtRedisEntity.builder()
                 .memberEmail(email)
                 .refreshToken(jwtProvider.createToken(jwtPayload, 10000))

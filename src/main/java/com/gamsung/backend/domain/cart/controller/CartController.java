@@ -39,7 +39,7 @@ public class CartController {
                     			"end_date" : "2023-01-30",
                     			"people_number" : 2,
                     			"cart_price" : 150000,
-                          "accomodation_img" :"https://cdn.discordapp.com/attachments/1177157251836948490/1177159849205841960/62e03f6768aa5eb9.PNG?ex=65717e8a&is=655f098a&hm=7f02b43628e84e19b3326c476251441ef796fd125d5b0e730f8b00bf38458287&",
+                          "accomodation_img" :"https://cdn.discordapp.com/attachments/1177157251836948490/1177159849205841960/62e03f6768aa5eb9.PNG?ex=65717e8a&is=655f098a&hm=7f02b43628e84e19b3326c476251441ef796fd125d5b0e730f8b00bf38458287&"
                         },
                     		{
                           "cart_id" : 1,
@@ -50,7 +50,7 @@ public class CartController {
                     			"end_date" : "2023-01-30",
                     			"people_number" : 2,
                     			"cart_price" : 70000,
-                          "accomodation_img" :"https://cdn.discordapp.com/attachments/1177157251836948490/1177161123817066518/5b82230c9374c02c.PNG?ex=65717fba&is=655f0aba&hm=d3ac9e70d92c95c4968d7d8bdc6e4e1708c091155030215fe79cce44f5d0d8ca&",
+                          "accomodation_img" :"https://cdn.discordapp.com/attachments/1177157251836948490/1177161123817066518/5b82230c9374c02c.PNG?ex=65717fba&is=655f0aba&hm=d3ac9e70d92c95c4968d7d8bdc6e4e1708c091155030215fe79cce44f5d0d8ca&"
                         }
                       ]
                     }
