@@ -1,7 +1,7 @@
 package com.gamsung.backend.domain.accomodation.service;
 
 import com.gamsung.backend.domain.accomodation.dto.response.AccomodationDetailResponse;
-import com.gamsung.backend.domain.accomodation.entity.Accomodation;
+import com.gamsung.backend.domain.accomodation.entity.Accommodation;
 import com.gamsung.backend.domain.accomodation.exception.AccomodationNotFoundException;
 import com.gamsung.backend.domain.accomodation.repository.AccomodationRepository;
 import com.gamsung.backend.domain.image.service.ImageService;
@@ -19,14 +19,14 @@ public class AccomodationService {
 
     @Transactional(readOnly = true)
     public AccomodationDetailResponse findAccomodationDetailById(Long id) {
-        Accomodation accomodation = findById(id);
+        Accommodation accommodation = findById(id);
         String accomodationImage = imageService.getAccomodationImageWithAccomdoationId(id);
         List<String> roomImages = imageService.getRoomImagesWithAccomodationId(id);
-        return AccomodationDetailResponse.from(accomodation, accomodationImage, roomImages);
+        return AccomodationDetailResponse.from(accommodation, accomodationImage, roomImages);
     }
 
     @Transactional(readOnly = true)
-    public Accomodation findById(Long id) {
+    public Accommodation findById(Long id) {
         return accomodationRepository.findById(id)
             .orElseThrow(AccomodationNotFoundException::new);
     }

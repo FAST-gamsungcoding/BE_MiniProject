@@ -21,16 +21,14 @@ public class Order extends BaseTime {
     @JoinColumn(name = "member_id", insertable = false, updatable = false)
     private Member member;
 
-    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @Column(name = "member_id")
     private Long memberId;
 
     @ManyToOne(targetEntity = Accommodation.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", insertable = false, updatable = false)
     private Accommodation accommodation;
 
-    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id")
+    @Column(name = "accommodation_id")
     private Long accommodationId;
 
     @Column(name = "people_number",nullable = false)

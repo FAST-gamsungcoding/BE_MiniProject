@@ -13,7 +13,7 @@ import static com.gamsung.backend.global.openapi.UrlConstants.TYPE;
 import static com.gamsung.backend.global.openapi.UrlConstants.YES;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.gamsung.backend.domain.accomodation.entity.Accomodation;
+import com.gamsung.backend.domain.accomodation.entity.Accommodation;
 import com.gamsung.backend.domain.accomodation.repository.AccomodationRepository;
 import com.gamsung.backend.domain.image.entity.Image;
 import com.gamsung.backend.domain.image.repository.ImageRepository;
@@ -194,7 +194,7 @@ public class OpenApiService {
         String limitPeople, String contentId
     ) {
 
-        Accomodation accomodation = Accomodation.builder()
+        Accommodation accommodation = Accommodation.builder()
             .name(name)
             .description(description)
             .address(address)
@@ -205,18 +205,18 @@ public class OpenApiService {
             .build();
 
         // Accomodation Info 저장
-        accomodationRepository.save(accomodation);
+        accomodationRepository.save(accommodation);
 
         // Accomodation Image 저장
-        accomodationImage.setAccomodation(accomodation);
+        accomodationImage.setAccommodation(accommodation);
         imageRepository.save(accomodationImage);
-        accomodation.addImage(accomodationImage);
+        accommodation.addImage(accomodationImage);
 
         // Room Images 저장
         for (Image roomImage : roomImages) {
-            roomImage.setAccomodation(accomodation);
+            roomImage.setAccommodation(accommodation);
             imageRepository.save(roomImage);
-            accomodation.addImage(roomImage);
+            accommodation.addImage(roomImage);
         }
 
 //        printProductInfo(accomodation);
@@ -231,15 +231,15 @@ public class OpenApiService {
         return extension.equals("jpg") || extension.equals("jpeg");
     }
 
-    private void printProductInfo(Accomodation accomodation) {
-        System.out.println("Address: " + accomodation.getAddress());
-        System.out.println("AreaCode: " + accomodation.getLocation());
-        System.out.println("Title: " + accomodation.getName());
-        System.out.println("RoomFee: " + accomodation.getPrice());
-        System.out.println("MaxCount: " + accomodation.getLimitPeople());
-        System.out.println("description: " + accomodation.getDescription());
+    private void printProductInfo(Accommodation accommodation) {
+        System.out.println("Address: " + accommodation.getAddress());
+        System.out.println("AreaCode: " + accommodation.getLocation());
+        System.out.println("Title: " + accommodation.getName());
+        System.out.println("RoomFee: " + accommodation.getPrice());
+        System.out.println("MaxCount: " + accommodation.getLimitPeople());
+        System.out.println("description: " + accommodation.getDescription());
         System.out.println("Image: ");
-        accomodation.getImages().stream()
+        accommodation.getImages().stream()
             .forEach(image1 -> System.out.println(
                 "Type: " + image1.getImgType() + ", URL: "
                     + image1.getUrl()));

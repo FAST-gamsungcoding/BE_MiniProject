@@ -17,6 +17,10 @@ public enum ErrorCode {
     JWT_EXPIRED_REFRESH_TOKEN("1009", "리프레시 토큰이 만료되었습니다."),
     JWT_INVALID_REFRESH_TOKEN("1010", "리프레시 토큰이 유효하지 않습니다."),
 
+    // 주문
+    BOOK_DATE_UNAVAILABLE("2002", "예약이 불가능한 날짜입니다."),
+    ORDER_SOLD_OUT("2005", "결제가 실패했습니다. 예약이 불가능한 날짜가 있습니다."),
+
     // 숙박
     ACCOMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
 

@@ -1,8 +1,9 @@
 package com.gamsung.backend.domain.accomodation.dto.response;
 
-import com.gamsung.backend.domain.accomodation.entity.Accomodation;
-import java.util.List;
+import com.gamsung.backend.domain.accomodation.entity.Accommodation;
 import lombok.Builder;
+
+import java.util.List;
 
 @Builder
 public record AccomodationDetailResponse(
@@ -16,7 +17,7 @@ public record AccomodationDetailResponse(
 ) {
 
     public static AccomodationDetailResponse from(
-        Accomodation accomodation,
+        Accommodation accomodation,
         String accomodationImg,
         List<String> roomImages
     ) {
