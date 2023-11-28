@@ -6,7 +6,9 @@ import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.exception.AccommodationNotFoundException;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
 import com.gamsung.backend.domain.image.service.ImageService;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,11 +31,18 @@ public class AccommodationService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AccommodationSummaryResponse> getAccommodationInfoByLocation(Long location, Pageable pageable) {
-        Page<Accommodation> accommodationPage = accommodationRepository.findAccommodationByLocation(location, pageable);
-        return accommodationPage.map(accommodation ->
-            AccommodationSummaryResponse.from(accommodation, imageService.getAccommodationImageWithAccommodationId(accommodation.getId()))
-        );
+    public List<AccommodationSummaryResponse> getAccommodationInfoByLocation(Long location,
+        Pageable pageable) {
+        Page<Accommodation> accommodationPage =
+            accommodationRepository.findAccommodationByLocation(location, pageable);
+
+        return accommodationPage.getContent().stream()
+            .map(accommodation -> AccommodationSummaryResponse.from(
+                    accommodation,
+                    imageService.getAccommodationImageWithAccommodationId(accommodation.getId())
+                )
+            )
+            .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

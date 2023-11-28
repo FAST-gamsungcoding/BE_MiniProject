@@ -9,6 +9,7 @@ import com.gamsung.backend.domain.accommodation.service.AccommodationService;
 import com.gamsung.backend.global.common.ApiResponse;
 import com.gamsung.backend.global.openapi.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,9 +39,9 @@ public class AccommodationController {
 
     @GetMapping
     @Operation(summary = "메인 페이지 숙소 정보 가져오는 API", description = ALL_ENTRY_DESCRIPTION)
-    public ResponseEntity<ApiResponse<Page<AccommodationSummaryResponse>>> accommodationsAllEntry(
+    public ResponseEntity<ApiResponse<List<AccommodationSummaryResponse>>> accommodationsAllEntry(
         @RequestParam Long location,
-        @PageableDefault(page = 1, size = 16) Pageable pageable
+        @PageableDefault(page = 0, size = 16) Pageable pageable
     ) {
         return ResponseEntity.ok(ApiResponse.create(
                 3000
