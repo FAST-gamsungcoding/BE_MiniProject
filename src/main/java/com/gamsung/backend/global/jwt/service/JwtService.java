@@ -56,7 +56,7 @@ public class JwtService {
                     throw new JwtExpiredRefreshTokenException();
                 });
 
-        JwtPayload newJwtPayload = JwtPayload.from(jwtPayload.getEmail());
+        JwtPayload newJwtPayload = JwtPayload.from(Long.parseLong(jwtPayload.getId()), jwtPayload.getEmail());
 
         String newAccessToken = jwtProvider.createToken(newJwtPayload, accessExpiration);
 

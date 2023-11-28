@@ -38,7 +38,7 @@ public class MemberService {
         }
 
         return MemberLoginResponse.from(jwtService.createTokenPair(
-                JwtPayload.from(memberLoginRequest.email())
+                JwtPayload.from(storedMember.getId(), storedMember.getEmail())
         ));
     }
 

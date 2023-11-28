@@ -18,7 +18,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String accessToken = (String) authentication.getCredentials();
         JwtPayload jwtPayload = jwtProvider.verifyToken(accessToken);
-        return JwtAuthenticationToken.authenticated(jwtPayload.getEmail());
+        return JwtAuthenticationToken.authenticated(jwtPayload.getId(), jwtPayload.getEmail());
     }
 
     @Override
