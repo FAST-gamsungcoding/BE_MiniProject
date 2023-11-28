@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,8 +32,16 @@ public class SecurityFilterConfig {
                         request
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                                .requestMatchers("/v1/member/logout", "/v1/member/refresh").authenticated()
-                                .requestMatchers("/v1/member/**").permitAll()
+
+                                .requestMatchers(HttpMethod.POST, "/v1/member/logout", "/v1/member/refresh").authenticated()
+
+                                .requestMatchers(HttpMethod.GET, "/v1/order/me").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/v1/order").authenticated()
+
+                                .requestMatchers(HttpMethod.GET, "/v1/cart").authenticated()
+                                .requestMatchers(HttpMethod.POST, "/v1/cart").authenticated()
+                                .requestMatchers(HttpMethod.DELETE, "/v1/cart").authenticated()
+
                                 .anyRequest().permitAll()
                 );
 
