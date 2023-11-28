@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.UnknownContentTypeException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -50,6 +51,8 @@ public class OpenApiService {
                 restTemplate.exchange(url, HttpMethod.GET, null, JsonNode.class);
             return Optional.ofNullable(responseEntity.getBody());
         } catch (UnknownContentTypeException e) {
+            System.out.println(url);
+            System.out.println("응답이 xml타입 입니다.");
             return Optional.empty();
         }
     }
@@ -177,17 +180,18 @@ public class OpenApiService {
 
                         saveAccomodationAndImages(accomodationImage,
                             roomImages, name,
-                            address, location, description, accomodationPrice, limitPeople);
+                            address, location, description, accomodationPrice, limitPeople,contentId);
                     }
                 }
             }
         }
     }
 
+    @Transactional
     public void saveAccomodationAndImages(Image accomodationImage,
         List<Image> roomImages, String name,
         String address, String location, String description, String accomodationPrice,
-        String limitPeople
+        String limitPeople, String contentId
     ) {
 
         Accomodation accomodation = Accomodation.builder()
@@ -197,6 +201,7 @@ public class OpenApiService {
             .location(Long.valueOf(location))
             .limitPeople(Long.valueOf(limitPeople))
             .price(Long.valueOf(accomodationPrice))
+            .contentId(contentId)
             .build();
 
         // Accomodation Info 저장
