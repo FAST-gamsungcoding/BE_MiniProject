@@ -45,8 +45,6 @@ public class Accommodation extends BaseTime {
     @Column(nullable = false)
     Long price;
 
-    String contentId;
-
     @OneToMany(
         fetch = FetchType.LAZY, mappedBy = "accommodation",
         cascade = CascadeType.REMOVE, orphanRemoval = true
@@ -60,8 +58,7 @@ public class Accommodation extends BaseTime {
         Long location,
         String address,
         Long limitPeople,
-        Long price,
-        String contentId
+        Long price
     ) {
         this.name = name;
         this.description = description;
@@ -69,7 +66,6 @@ public class Accommodation extends BaseTime {
         this.address = address;
         this.limitPeople = limitPeople;
         this.price = price;
-        this.contentId = contentId;
     }
 
     public void addImage(Image image) {

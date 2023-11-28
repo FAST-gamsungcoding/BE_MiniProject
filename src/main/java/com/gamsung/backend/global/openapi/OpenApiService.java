@@ -168,20 +168,18 @@ public class OpenApiService {
                         return;
                     }
 
-                    if (!itemList.get(0).path("roomimg1").asText().isEmpty()) {
-                        List<Image> roomImages = new ArrayList<>();
-                        for (int i = 1; i <= 5; i++) {
-                            String imageUrl = itemList.get(0).path("roomimg" + i).asText();
-                            if (!imageUrl.isEmpty() && endsWithJpgOrJpeg(imageUrl)) {
-                                Image roomImage = Image.builder().imgType(2).url(imageUrl).build();
-                                roomImages.add(roomImage);
-                            }
+                    List<Image> roomImages = new ArrayList<>();
+                    for (int i = 1; i <= 5; i++) {
+                        String imageUrl = itemList.get(0).path("roomimg" + i).asText();
+                        if (!imageUrl.isEmpty() && endsWithJpgOrJpeg(imageUrl)) {
+                            Image roomImage = Image.builder().imgType(2).url(imageUrl).build();
+                            roomImages.add(roomImage);
                         }
-
-                        saveAccommodationAndImages(accommodationImage,
-                            roomImages, name,
-                            address, location, description, accommodationPrice, limitPeople,contentId);
                     }
+
+                    saveAccommodationAndImages(accommodationImage,
+                        roomImages, name,
+                        address, location, description, accommodationPrice, limitPeople);
                 }
             }
         }
@@ -190,8 +188,8 @@ public class OpenApiService {
     @Transactional
     public void saveAccommodationAndImages(Image accomodationImage,
         List<Image> roomImages, String name,
-        String address, String location, String description, String accomodationPrice,
-        String limitPeople, String contentId
+        String address, String location, String description, String accommodationPrice,
+        String limitPeople
     ) {
 
         Accommodation accommodation = Accommodation.builder()
@@ -200,8 +198,7 @@ public class OpenApiService {
             .address(address)
             .location(Long.valueOf(location))
             .limitPeople(Long.valueOf(limitPeople))
-            .price(Long.valueOf(accomodationPrice))
-            .contentId(contentId)
+            .price(Long.valueOf(accommodationPrice))
             .build();
 
         // Accomodation Info 저장
@@ -219,7 +216,7 @@ public class OpenApiService {
             accommodation.addImage(roomImage);
         }
 
-//        printProductInfo(accommodation);
+//        printSaveAccommodationInfo(accommodation);
     }
 
     private boolean endsWithJpgOrJpeg(String url) {
@@ -231,15 +228,15 @@ public class OpenApiService {
         return extension.equals("jpg") || extension.equals("jpeg");
     }
 
-    private void printProductInfo(Accommodation accomodation) {
-        System.out.println("Address: " + accomodation.getAddress());
-        System.out.println("AreaCode: " + accomodation.getLocation());
-        System.out.println("Title: " + accomodation.getName());
-        System.out.println("RoomFee: " + accomodation.getPrice());
-        System.out.println("MaxCount: " + accomodation.getLimitPeople());
-        System.out.println("description: " + accomodation.getDescription());
+    private void printSaveAccommodationInfo(Accommodation accommodation) {
+        System.out.println("Address: " + accommodation.getAddress());
+        System.out.println("AreaCode: " + accommodation.getLocation());
+        System.out.println("Title: " + accommodation.getName());
+        System.out.println("RoomFee: " + accommodation.getPrice());
+        System.out.println("MaxCount: " + accommodation.getLimitPeople());
+        System.out.println("description: " + accommodation.getDescription());
         System.out.println("Image: ");
-        accomodation.getImages().stream()
+        accommodation.getImages().stream()
             .forEach(image1 -> System.out.println(
                 "Type: " + image1.getImgType() + ", URL: "
                     + image1.getUrl()));
