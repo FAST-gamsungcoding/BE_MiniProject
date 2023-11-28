@@ -5,6 +5,8 @@ import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.cart.service.CartService;
 import com.gamsung.backend.global.common.ApiResponse;
 import com.gamsung.backend.global.config.UserDetailsConfig;
+import com.gamsung.backend.global.resolver.AuthContext;
+import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -24,28 +26,33 @@ public class CartController {
 
     private final CartService cartService;
 
-    @GetMapping
-    @Operation(summary = "장바구니 목록 확인 API", description = FIND_MY_CART)
-    public ResponseEntity<ApiResponse<List<CartFindResponse>>> findMyCart() {
-
-        List<CartFindResponse> myCartList = cartService.findMyCart();
-        return ResponseEntity.ok(ApiResponse.create(4000,myCartList));
-
-
-    }
-
     @PostMapping
     @Operation(summary = "장바구니에 상품 추가 API", description = ENTRY_MY_CART)
-    public ResponseEntity<ApiResponse<String>> entryMyCart(@RequestBody CartEntryRequest cartEntryRequest) {
-        cartService.entryMyCart(cartEntryRequest);
+    public ResponseEntity<ApiResponse<String>> entryMyCart(@RequestBody CartEntryRequest cartEntryRequest
+    ,@MemberAuth AuthContext authContext) {
+        Long memberId = authContext.id();
+
+
+        cartService.entryMyCart(cartEntryRequest,memberId);
         return ResponseEntity.ok(ApiResponse.create(4001,"장바구니에 추가되었습니다."));
+    }
+
+
+    @GetMapping
+    @Operation(summary = "장바구니 목록 확인 API", description = FIND_MY_CART)
+    public ResponseEntity<ApiResponse<List<CartFindResponse>>> findMyCart(@MemberAuth AuthContext authContext) {
+        Long memberId = authContext.id();
+        List<CartFindResponse> myCartList = cartService.findMyCart(memberId);
+        return ResponseEntity.ok(ApiResponse.create(4000,myCartList));
     }
 
     @DeleteMapping
     @Operation(summary = "장바구니 삭제 API", description = DELETE_MY_CART)
-    public ResponseEntity<ApiResponse<String>> deleteMyCart(@PathVariable long[] deleteId) {
+    public ResponseEntity<ApiResponse<String>> deleteMyCart(@RequestParam long[] deleteId,
+                                                            @MemberAuth AuthContext authContext ) {
+        Long memberId = authContext.id();
 
-        cartService.deleteMyCart(deleteId);
+        cartService.deleteMyCart(deleteId,memberId);
 
 
         return ResponseEntity.ok(ApiResponse.create(4003,"선택한 항목들이 삭제되었습니다."));

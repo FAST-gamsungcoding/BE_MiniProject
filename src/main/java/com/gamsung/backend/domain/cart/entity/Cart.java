@@ -1,5 +1,11 @@
 package com.gamsung.backend.domain.cart.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.gamsung.backend.domain.accomodation.entity.Accomodation;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.member.entity.Member;
@@ -18,6 +24,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Cart extends BaseTime {
 
     @Id
@@ -25,11 +32,11 @@ public class Cart extends BaseTime {
     private Long id;
 
     @JoinColumn(name = "accomodation_id")
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Accomodation accomodation;
 
     @JoinColumn(name = "member_id")
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private Member member;
 
     @Column(name = "reservation_people")

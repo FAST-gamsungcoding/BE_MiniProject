@@ -15,14 +15,6 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByMemberIdOrderByCreatedAtDesc(long memberId, Pageable pageable);
 
-    @Query("SELECT o FROM Order o WHERE o.accommodationId = :accommodationId " +
-            "AND o.endDate > :startDate " +
-            "AND o.startDate < :endDate " +
-            "ORDER BY o.startDate ASC")
-    Optional<Order> findFirstByAccommodationIdAndEndDateGreaterThanAndStartDateLessThanOrderByStartDateAsc(
-            @Param("accommodationId") Long accommodationId,
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
     boolean existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
             long accommodationId, LocalDate endDate, LocalDate startDate);
 

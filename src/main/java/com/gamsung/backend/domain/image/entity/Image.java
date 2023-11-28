@@ -1,5 +1,6 @@
 package com.gamsung.backend.domain.image.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gamsung.backend.domain.accomodation.entity.Accomodation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,6 +31,7 @@ public class Image {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accomodation_id")
+    @JsonIgnore
     Accomodation accomodation;
 
     @Column(nullable = false)

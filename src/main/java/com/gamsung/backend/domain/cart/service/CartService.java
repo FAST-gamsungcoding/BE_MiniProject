@@ -11,10 +11,12 @@ import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.repository.OrderRepository;
+import com.gamsung.backend.domain.order.repository.OrderRepositorySupport;
 import com.gamsung.backend.global.config.UserDetailsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -34,17 +36,14 @@ public class CartService {
     private final CartRepository cartRepository;
     private final AccomodationRepository accomodationRepository;
     private final MemberRepository memberRepository;
-    private final OrderRepository orderRepository;
+    private final OrderRepositorySupport orderRepositorySupport;
 
     @Transactional
-    public void entryMyCart(CartEntryRequest cartEntryRequest){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsConfig userDetailsConfig = (UserDetailsConfig) authentication.getPrincipal();
-        Long memberId = userDetailsConfig.getUserId();
-
+    public void entryMyCart(CartEntryRequest cartEntryRequest,Long memberId){
 
         Optional<Member> findMember = memberRepository.findById(memberId);
         Member member = findMember.get();
+
         Accomodation accommodation = accomodationRepository.findById(cartEntryRequest.getAccommodationId())
                 .orElseThrow(() -> new CartException(ACCOMODATION_NO_EXIST));
 
@@ -73,14 +72,11 @@ public class CartService {
     }
 
     @Transactional(readOnly = true)
-    public List<CartFindResponse> findMyCart() {
+    public List<CartFindResponse> findMyCart(Long memberId) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsConfig userDetailsConfig = (UserDetailsConfig) authentication.getPrincipal();
-        Long memberId = userDetailsConfig.getUserId();
 
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CartException(MEMBER_NOT_FOUND));
-        List<Cart> myCartList = cartRepository.findByMember(member);
+
+        List<Cart> myCartList = cartRepository.findAllByMemberId(memberId);
 
         for (Cart cart : myCartList) {
             boolean isSoldOut = isItemSoldOut(cart);
@@ -94,15 +90,7 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteMyCart(long[] deleteId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsConfig userDetailsConfig = (UserDetailsConfig) authentication.getPrincipal();
-        String memberId = userDetailsConfig.getUserEmail();
-
-        if (StringUtils.isBlank(memberId)) {
-            // memberId를 찾을 수 없는 경우 예외 던지기
-            throw new CartException(MEMBER_NOT_FOUND);
-        }
+    public void deleteMyCart(long[] deleteId,Long memberId) {
 
         for (long id : deleteId) {
             Optional<Cart> cartOptional = cartRepository.findById(id);
@@ -123,12 +111,12 @@ public class CartService {
         Long accommodationId = cart.getAccomodation().getId();
 
         // 주문 테이블에서 해당 숙소에 대한 예약이 있는지 확인
-        Optional<Order> order = orderRepository.findFirstByAccommodationIdAndEndDateGreaterThanAndStartDateLessThanOrderByStartDateAsc(
+        Optional<Order> order = orderRepositorySupport.findFirstByAccommodationIdAndEndDateGreaterThanAndStartDateLessThanOrderByStartDateAsc(
                 accommodationId, startDate, endDate);
 
 
 
-        return false;
+        return order.isPresent();
     }
 
 }
