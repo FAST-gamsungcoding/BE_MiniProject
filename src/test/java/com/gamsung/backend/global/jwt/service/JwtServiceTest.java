@@ -18,6 +18,7 @@ import java.util.Date;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class JwtServiceTest {
+    private static final Long TEST_ID = 1234L;
     private static final String TEST_EMAIL = "test@test.com";
 
     @Autowired
@@ -36,6 +37,7 @@ class JwtServiceTest {
             // given
             Date issuedAt = Date.from(Instant.now());
             JwtPayload jwtPayload = JwtPayload.builder()
+                    .id(String.valueOf(TEST_ID))
                     .email(TEST_EMAIL)
                     .issuedAt(issuedAt)
                     .build();
