@@ -62,8 +62,8 @@ public class MemberIntegrationTest extends BaseRedisContainerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1000))
                     .andExpect(jsonPath("$.data").exists())
-                    .andExpect(jsonPath("$.data.accessToken").exists())
-                    .andExpect(jsonPath("$.data.refreshToken").exists())
+                    .andExpect(jsonPath("$.data.access_token").exists())
+                    .andExpect(jsonPath("$.data.refresh_token").exists())
                     .andDo(print());
         }
 
