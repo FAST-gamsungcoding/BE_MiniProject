@@ -1,0 +1,135 @@
+package com.gamsung.backend.domain.cart.service;
+
+import com.gamsung.backend.domain.accomodation.entity.Accomodation;
+import com.gamsung.backend.domain.accomodation.repository.AccomodationRepository;
+import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
+import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
+import com.gamsung.backend.domain.cart.entity.Cart;
+import com.gamsung.backend.domain.cart.exception.CartException;
+import com.gamsung.backend.domain.cart.repository.CartRepository;
+import com.gamsung.backend.domain.member.entity.Member;
+import com.gamsung.backend.domain.member.repository.MemberRepository;
+import com.gamsung.backend.domain.order.entity.Order;
+import com.gamsung.backend.domain.order.repository.OrderRepository;
+import com.gamsung.backend.global.config.UserDetailsConfig;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.gamsung.backend.global.exception.ErrorCode.*;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class CartService {
+    private final CartRepository cartRepository;
+    private final AccomodationRepository accomodationRepository;
+    private final MemberRepository memberRepository;
+    private final OrderRepository orderRepository;
+
+    @Transactional
+    public void entryMyCart(CartEntryRequest cartEntryRequest){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsConfig userDetailsConfig = (UserDetailsConfig) authentication.getPrincipal();
+        Long memberId = userDetailsConfig.getUserId();
+
+
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        Member member = findMember.get();
+        Accomodation accommodation = accomodationRepository.findById(cartEntryRequest.getAccommodationId())
+                .orElseThrow(() -> new CartException(ACCOMODATION_NO_EXIST));
+
+        int currentCartCount = cartRepository.countByMember(member);
+        int newCartCount = currentCartCount + 1;
+
+        if (newCartCount > 10) {
+            throw new CartException(CART_LIMIT_OVER);
+        }
+
+        Cart cart = Cart.builder()
+                .accomodation(accommodation)
+                .member(member)
+                .startDate(cartEntryRequest.getStartDate())
+                .endDate(cartEntryRequest.getEndDate())
+                .reservationPeople(cartEntryRequest.getPeople())
+                .price(cartEntryRequest.getCartPrice())
+                .isDeleted(false)
+                .build();
+
+
+        cartRepository.save(cart);
+
+
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<CartFindResponse> findMyCart() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsConfig userDetailsConfig = (UserDetailsConfig) authentication.getPrincipal();
+        Long memberId = userDetailsConfig.getUserId();
+
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CartException(MEMBER_NOT_FOUND));
+        List<Cart> myCartList = cartRepository.findByMember(member);
+
+        for (Cart cart : myCartList) {
+            boolean isSoldOut = isItemSoldOut(cart);
+            cart.setIsDeleted(isSoldOut);
+            // 만약 해당 상품이 품절이면 isDeleted를 true로 설정하고, 그렇지 않으면 false로 설정
+        }
+
+        return myCartList.stream()
+                .map(CartFindResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteMyCart(long[] deleteId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsConfig userDetailsConfig = (UserDetailsConfig) authentication.getPrincipal();
+        String memberId = userDetailsConfig.getUserEmail();
+
+        if (StringUtils.isBlank(memberId)) {
+            // memberId를 찾을 수 없는 경우 예외 던지기
+            throw new CartException(MEMBER_NOT_FOUND);
+        }
+
+        for (long id : deleteId) {
+            Optional<Cart> cartOptional = cartRepository.findById(id);
+            if (cartOptional.isPresent()) {
+                cartRepository.delete(cartOptional.get());
+            } else {
+                // 해당 id에 대한 Cart 아이템이 존재하지 않는 경우 예외 던지기
+                throw new CartException(CART_ID_NO_EXIST);
+            }
+
+        }
+
+    }
+    private boolean isItemSoldOut(Cart cart) {
+        LocalDate startDate = cart.getStartDate();
+        LocalDate endDate = cart.getEndDate();
+
+        Long accommodationId = cart.getAccomodation().getId();
+
+        // 주문 테이블에서 해당 숙소에 대한 예약이 있는지 확인
+        Optional<Order> order = orderRepository.findFirstByAccommodationIdAndEndDateGreaterThanAndStartDateLessThanOrderByStartDateAsc(
+                accommodationId, startDate, endDate);
+
+
+
+        return false;
+    }
+
+}
+
