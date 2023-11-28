@@ -29,3 +29,6 @@ service:
     secret-key: ${JWT_SECRET_KEY}
     access-expiration: ${JWT_ACCESS_EXPIRATION}
     refresh-expiration: ${JWT_REFRESH_EXPIRATION}
+
+open-api:
+  key: ${PORTAL_API_KEY}

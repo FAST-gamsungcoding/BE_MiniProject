@@ -3,6 +3,7 @@ package com.gamsung.backend.domain.accomodation.controller;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ALL_ENTRY_DESCRIPTION;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ENTRY_DESCRIPTION;
 
+
 import com.gamsung.backend.domain.accomodation.dto.response.AccomodationDetailResponse;
 import com.gamsung.backend.domain.accomodation.service.AccomodationService;
 import com.gamsung.backend.global.common.ApiResponse;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/accomodations")
 @RequiredArgsConstructor
 public class AccomodationController {
+
 
     private final AccomodationService accomodationService;
     private final OpenApiService openApiService;
@@ -105,13 +107,10 @@ public class AccomodationController {
 //                }
 //                   }
 //                """);
-        return ResponseEntity.ok(
             ApiResponse.create(
                 3001
                 ,accomodationService.findAccomodationDetailById(accomodation_id)
             )
         );
     }
-
-
 }
