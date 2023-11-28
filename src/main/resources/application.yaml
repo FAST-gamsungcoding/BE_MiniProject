@@ -3,6 +3,8 @@ spring:
     import: optional:file:.env[.properties]
   application:
     name: fc_mini
+  jackson:
+    property-naming-strategy: SNAKE_CASE
   ## 프로필 설정을 바꾸시려면 아래 주석을 해제해 주시면 됩니다.
   #profiles:
   #  active: dev
