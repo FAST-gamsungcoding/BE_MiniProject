@@ -30,6 +30,4 @@ public class AccomodationService {
         return accomodationRepository.findById(id)
             .orElseThrow(AccomodationNotFoundException::new);
     }
-
 }
-
