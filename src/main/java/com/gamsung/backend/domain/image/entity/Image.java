@@ -1,6 +1,7 @@
 package com.gamsung.backend.domain.image.entity;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
+import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "accommodation_image")
 @Getter
-public class Image {
+public class Image extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
