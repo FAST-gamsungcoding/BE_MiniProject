@@ -32,49 +32,37 @@ public class MemberController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = MEMBER_LOGIN)
-    public ResponseEntity<ApiResponse> memberLogin(
+    public ResponseEntity<ApiResponse<MemberLoginResponse>> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
         MemberLoginResponse response = memberService.login(MemberLoginRequest.from(loginRequest));
-        return ResponseEntity.ok(ApiResponse.builder()
-                .code(1000)
-                .data(response)
-                .build());
+        return ResponseEntity.ok(ApiResponse.create(1000, response));
     }
 
     @PostMapping("/register")
     @Operation(summary = "회원가입 API", description = MEMBER_RIGISTER)
-    public ResponseEntity<ApiResponse> memberRegister(
+    public ResponseEntity<ApiResponse<MemberRegisterResponse>> memberRegister(
             @Valid @RequestBody MemberControllerRegisterRequest registerRequest
     ) {
         MemberRegisterResponse response = memberService.register(MemberRegisterRequest.from(registerRequest));
-        return ResponseEntity.created(URI.create("/")).body(ApiResponse.builder()
-                .code(1003)
-                .data(response)
-                .build());
+        return ResponseEntity.created(URI.create("/")).body(ApiResponse.create(1003, response));
     }
 
     @GetMapping("/register/check")
     @Operation(summary = "이메일 중복체크 API", description = MEMBER_REGISTER_EMAIL_CHECK)
-    public ResponseEntity<ApiResponse> memberRegisterEmailCheck(
+    public ResponseEntity<ApiResponse<MemberRegisterEmailCheckResponse>> memberRegisterEmailCheck(
             @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
     ) {
         MemberRegisterEmailCheckResponse response = memberService.emailCheck(emailCheckRequest.email());
-        return ResponseEntity.ok(ApiResponse.builder()
-                .code(1006)
-                .data(response)
-                .build());
+        return ResponseEntity.ok(ApiResponse.create(1006, response));
     }
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
-    public ResponseEntity<ApiResponse> memberLogout(
+    public ResponseEntity<ApiResponse<MemberLogoutResponse>> memberLogout(
             @MemberAuth AuthContext authContext
     ) {
         MemberLogoutResponse response = memberService.logout(authContext.email());
-        return ResponseEntity.ok(ApiResponse.builder()
-                .code(1011)
-                .data(response)
-                .build());
+        return ResponseEntity.ok(ApiResponse.create(1011, response));
     }
 }

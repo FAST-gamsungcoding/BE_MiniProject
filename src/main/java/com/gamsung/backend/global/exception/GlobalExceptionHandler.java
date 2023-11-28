@@ -22,33 +22,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UnAuthException.class)
-    public ResponseEntity<ApiResponse> handleUnAuthException(UnAuthException e) {
+    public ResponseEntity<ApiResponse<String>> handleUnAuthException(UnAuthException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                ApiResponse.builder()
-                        .code(Integer.parseInt(e.getCode()))
-                        .data(e.getMessage())
-                        .build()
+                ApiResponse.create(Integer.parseInt(e.getCode()), e.getMessage())
         );
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ApiResponse> handleForbiddenException(ForbiddenException e) {
+    public ResponseEntity<ApiResponse<String>> handleForbiddenException(ForbiddenException e) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                ApiResponse.builder()
-                        .code(Integer.parseInt(e.getCode()))
-                        .data(e.getMessage())
-                        .build()
+                ApiResponse.create(Integer.parseInt(e.getCode()), e.getMessage())
         );
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ApiResponse> handleBindValidationError(BindException e) {
+    public ResponseEntity<ApiResponse<String>> handleBindValidationError(BindException e) {
         ErrorCode validationError = ErrorCode.VALIDATION_ERROR;
         return ResponseEntity.badRequest().body(
-                ApiResponse.builder()
-                        .code(Integer.parseInt(validationError.getCode()))
-                        .data(validationError.getMessage())
-                        .build()
+                ApiResponse.create(Integer.parseInt(validationError.getCode()), validationError.getMessage())
         );
     }
 }
