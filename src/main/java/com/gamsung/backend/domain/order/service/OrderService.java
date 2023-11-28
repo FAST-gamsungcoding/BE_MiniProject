@@ -2,17 +2,16 @@ package com.gamsung.backend.domain.order.service;
 
 import com.gamsung.backend.domain.order.dto.request.OrderAccommodationRequest;
 import com.gamsung.backend.domain.order.dto.response.BookDateAvailableResponse;
-import com.gamsung.backend.domain.order.dto.response.SoldOutOrder;
-import com.gamsung.backend.domain.order.exception.BookDateUnavailableException;
 import com.gamsung.backend.domain.order.dto.response.OrderAccommodationResponse;
 import com.gamsung.backend.domain.order.dto.response.OrderResponse;
+import com.gamsung.backend.domain.order.dto.response.SoldOutOrder;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.List;
 @Service
 public class OrderService {
 
+    private static final int NO_ID_VALUE = 1;
     OrderRepository orderRepository;
 
     @Transactional
@@ -28,7 +28,7 @@ public class OrderService {
 //      List<Orders> ordersList = orderRequestListToOrdersList(orderAccommodationRequestList);
         List<Order> orderList = new ArrayList<>();
         List<Long> cartIdList = new ArrayList<>();
-        List<SoldOutOrder> outOrders = new ArrayList<>();
+        List<SoldOutOrder> soleOutOrders = new ArrayList<>();
 
         for (OrderAccommodationRequest orderAccommodationRequest : orderAccommodationRequestList) {
             Order order = Order.of(
@@ -41,19 +41,18 @@ public class OrderService {
                     orderAccommodationRequest.getRepresentativeEmail(),
                     orderAccommodationRequest.getOrderPrice()
             );
-            //결제 가능한지 품절 확인
+
+//            결제 가능한지 품절 확인
 //            if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
-//                    order.getAccommodationId(), order.getEndDate(), order.getStartDate())) {
-//                outOrders.add(SoldOutOrder.builder()
-//                        .accommodationId(order.getAccommodationId())
-//                        .startDate(order.getStartDate())
-//                        .endDate(order.getEndDate())
-//                        .build());
+//                    order.getAccommodationId(), order.getEndDate(), order.getStartDate())
+//            ) {
+//                soleOutOrders.add(SoldOutOrder.from(order.getAccommodationId(),
+//                        order.getStartDate(), order.getEndDate()));
 //                continue;
 //            }
 
             orderList.add(order);
-            if(orderAccommodationRequest.getCartId() == 0) continue;
+            if(orderAccommodationRequest.getCartId() == NO_ID_VALUE) continue;
             cartIdList.add(orderAccommodationRequest.getCartId());
         }
 
@@ -73,25 +72,20 @@ public class OrderService {
     }
 
     public List<OrderResponse> getMemberOrdersList(Pageable pageable, long id) {
-        Page<Order> orderPages = orderRepository.findByMemberIdOrderByCreatedAtDesc(id, pageable);
+        List<Order> orderList = orderRepository.findByMemberIdOrderByCreatedAtDesc(id, pageable);
 
         List<OrderResponse> orderResponses = new ArrayList<>();
-        for (Order order : orderPages) {
-//            long accommodationId = order.getMemberId();
-//            Accommodation accommodation = accommodationRepository.findById(accommodationId);
-//            AccommodationImage accommodationImage = accommodationImageRepository.findByAccommodationIdAndImgType(accommodationId, 1);
-            //빌더 from으로 바꾸기
-            OrderResponse orderResponse = OrderResponse.builder()
-                    .orderDate(order.getCreatedAt())
-                    .accommodationId(order.getAccommodationId())
-//                    .accommodationName(accommodation.getName())
-//                    .accommodationImg(accommodationImage.getUrl)
-                    .peopleNumber(order.getPeopleNumber())
-                    .startDate(order.getStartDate())
-                    .endDate(order.getEndDate())
-                    .representativeName(order.getRepresentativeName())
-                    .orderPrice(order.getOrderPrice())
-                    .build();
+        for (Order order : orderList) {
+            OrderResponse orderResponse = OrderResponse.from(
+                    order.getCreatedAt(),
+                    order.getAccommodationId(),
+                    order.getAccommodation().getName(),
+                    order.getAccommodation().getImages().get(0).getUrl(),
+                    order.getPeopleNumber(),
+                    order.getStartDate(),
+                    order.getEndDate(),
+                    order.getRepresentativeName(),
+                    order.getOrderPrice());
             orderResponses.add(orderResponse);
         }
         return orderResponses;
