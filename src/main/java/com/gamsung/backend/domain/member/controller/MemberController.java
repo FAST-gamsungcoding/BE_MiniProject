@@ -5,13 +5,18 @@ import com.gamsung.backend.domain.member.controller.request.MemberControllerRegi
 import com.gamsung.backend.domain.member.controller.request.MemberControllerRegisterRequest;
 import com.gamsung.backend.domain.member.dto.request.MemberLoginRequest;
 import com.gamsung.backend.domain.member.dto.request.MemberRegisterRequest;
+import com.gamsung.backend.domain.member.dto.response.MemberLoginResponse;
+import com.gamsung.backend.domain.member.dto.response.MemberLogoutResponse;
+import com.gamsung.backend.domain.member.dto.response.MemberRegisterEmailCheckResponse;
+import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.service.MemberService;
-import com.gamsung.backend.global.common.ControllerResponse;
+import com.gamsung.backend.global.common.ApiResponse;
+import com.gamsung.backend.global.resolver.AuthContext;
+import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -27,44 +32,49 @@ public class MemberController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인 API", description = MEMBER_LOGIN)
-    public ResponseEntity<ControllerResponse> memberLogin(
+    public ResponseEntity<ApiResponse> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
-        return ResponseEntity.ok(ControllerResponse.builder()
+        MemberLoginResponse response = memberService.login(MemberLoginRequest.from(loginRequest));
+        return ResponseEntity.ok(ApiResponse.builder()
                 .code(1000)
-                .data(memberService.login(MemberLoginRequest.from(loginRequest)))
+                .data(response)
                 .build());
     }
 
     @PostMapping("/register")
     @Operation(summary = "회원가입 API", description = MEMBER_RIGISTER)
-    public ResponseEntity<ControllerResponse> memberRegister(
+    public ResponseEntity<ApiResponse> memberRegister(
             @Valid @RequestBody MemberControllerRegisterRequest registerRequest
     ) {
-        return ResponseEntity.created(URI.create("/")).body(ControllerResponse.builder()
+        MemberRegisterResponse response = memberService.register(MemberRegisterRequest.from(registerRequest));
+        return ResponseEntity.created(URI.create("/")).body(ApiResponse.builder()
                 .code(1003)
-                .data(memberService.register(MemberRegisterRequest.from(registerRequest)))
+                .data(response)
                 .build());
     }
 
     @GetMapping("/register/check")
     @Operation(summary = "이메일 중복체크 API", description = MEMBER_REGISTER_EMAIL_CHECK)
-    public ResponseEntity<ControllerResponse> memberRegisterEmailCheck(
+    public ResponseEntity<ApiResponse> memberRegisterEmailCheck(
             @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
     ) {
-        return ResponseEntity.ok(ControllerResponse.builder()
+        MemberRegisterEmailCheckResponse response = memberService.emailCheck(emailCheckRequest.email());
+        return ResponseEntity.ok(ApiResponse.builder()
                 .code(1006)
-                .data(memberService.emailCheck(emailCheckRequest.email()))
+                .data(response)
                 .build());
     }
 
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
-    public ResponseEntity<ControllerResponse> memberLogout() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(ControllerResponse.builder()
+    public ResponseEntity<ApiResponse> memberLogout(
+            @MemberAuth AuthContext authContext
+    ) {
+        MemberLogoutResponse response = memberService.logout(authContext.email());
+        return ResponseEntity.ok(ApiResponse.builder()
                 .code(1011)
-                .data(memberService.logout(email))
+                .data(response)
                 .build());
     }
 }

@@ -1,8 +1,8 @@
 package com.gamsung.backend.global.jwt;
 
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
-import com.gamsung.backend.global.jwt.exception.JwtInvalidTokenException;
-import com.gamsung.backend.global.jwt.exception.JwtTokenExpiredException;
+import com.gamsung.backend.global.jwt.exception.JwtExpiredAccessTokenException;
+import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -50,9 +50,9 @@ public class JwtProvider {
                     .issuedAt(claims.getIssuedAt())
                     .build();
         } catch (ExpiredJwtException e) {
-            throw new JwtTokenExpiredException("엑세스 토큰이 만료되었습니다.");
+            throw new JwtExpiredAccessTokenException();
         } catch (JwtException e) {
-            throw new JwtInvalidTokenException("유효하지 않은 엑세스 토큰입니다.");
+            throw new JwtInvalidAccessTokenException();
         }
     }
 }
