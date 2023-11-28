@@ -42,15 +42,15 @@ public class OrderService {
                     orderAccommodationRequest.getOrderPrice()
             );
             //결제 가능한지 품절 확인
-            if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
-                    order.getAccommodationId(), order.getEndDate(), order.getStartDate())) {
-                outOrders.add(SoldOutOrder.builder()
-                        .accommodationId(order.getAccommodationId())
-                        .startDate(order.getStartDate())
-                        .endDate(order.getEndDate())
-                        .build());
-                continue;
-            }
+//            if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
+//                    order.getAccommodationId(), order.getEndDate(), order.getStartDate())) {
+//                outOrders.add(SoldOutOrder.builder()
+//                        .accommodationId(order.getAccommodationId())
+//                        .startDate(order.getStartDate())
+//                        .endDate(order.getEndDate())
+//                        .build());
+//                continue;
+//            }
 
             orderList.add(order);
             if(orderAccommodationRequest.getCartId() == 0) continue;
@@ -77,14 +77,15 @@ public class OrderService {
 
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Order order : orderPages) {
-            long accommodationId = order.getMemberId();
-            Accommodation accommodation = accommodationRepository.findById(accommodationId);
-            AccommodationImage accommodationImage = accommodationImageRepository.findByAccommodationIdAndImgType(accommodationId, 1);
+//            long accommodationId = order.getMemberId();
+//            Accommodation accommodation = accommodationRepository.findById(accommodationId);
+//            AccommodationImage accommodationImage = accommodationImageRepository.findByAccommodationIdAndImgType(accommodationId, 1);
+            //빌더 from으로 바꾸기
             OrderResponse orderResponse = OrderResponse.builder()
                     .orderDate(order.getCreatedAt())
                     .accommodationId(order.getAccommodationId())
-                    .accommodationName(accommodation.getName())
-                    .accommodationImg(accommodationImage.getUrl)
+//                    .accommodationName(accommodation.getName())
+//                    .accommodationImg(accommodationImage.getUrl)
                     .peopleNumber(order.getPeopleNumber())
                     .startDate(order.getStartDate())
                     .endDate(order.getEndDate())
