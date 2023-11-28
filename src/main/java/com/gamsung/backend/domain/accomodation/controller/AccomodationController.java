@@ -56,21 +56,21 @@ public class AccomodationController {
                          			"accomodation_name" : "리거 로얄 라구니 괌 리조트,"
                          			"short_address" : "경기도 경기시",		
                          			"accomodation_price" : 240000,
-                                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157255473410108/4eada5e5bdbebe05.PNG?ex=65717c20&is=655f0720&hm=826344f5152a26e46b094369569d9fdab3ef387fe117f7686fbf28ded898254c&",
+                                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157255473410108/4eada5e5bdbebe05.PNG?ex=65717c20&is=655f0720&hm=826344f5152a26e46b094369569d9fdab3ef387fe117f7686fbf28ded898254c&"
                          		},
                          		{
                          			"accommodation_id" : 6,
                          			"accomodation_name" : "리거 로얄 라구니 괌 리조트",
                          			"short_address" : "경기도 고양시",		
                          			"accomodation_price" : 360000,
-                                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157471291330560/3176fe417dfaf6b9.PNG?ex=65717c53&is=655f0753&hm=dca5f9ad96de35617077640708c533bc4016a3d55493d6822670c23bbd353761&",
+                                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157471291330560/3176fe417dfaf6b9.PNG?ex=65717c53&is=655f0753&hm=dca5f9ad96de35617077640708c533bc4016a3d55493d6822670c23bbd353761&"
                          		},
                          		{
                          			"accommodation_id" : 7,
                          			"accomodation_name" : "리거 로얄 라구니 괌 리조트",
                          			"short_address" : "경기도 수원시",		
                          			"accomodation_price" : 40000,
-                               "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157751462428672/91ccfa75c5b3872b.PNG?ex=65717c96&is=655f0796&hm=3de6d85fa5e4e28164727ba4075917f3fc8964d46f20e393b7f9c9c4a547d5d9&",
+                               "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177157751462428672/91ccfa75c5b3872b.PNG?ex=65717c96&is=655f0796&hm=3de6d85fa5e4e28164727ba4075917f3fc8964d46f20e393b7f9c9c4a547d5d9&"
                          		}
                          			
                          ] }  
