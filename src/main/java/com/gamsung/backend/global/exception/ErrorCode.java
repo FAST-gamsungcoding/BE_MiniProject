@@ -20,6 +20,9 @@ public enum ErrorCode {
     // 숙박
     ACCOMMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
 
+    // 이미지
+    IMAGE_NO_EXIST("6001","해당 숙소의 이미지 정보가 없습니다."),
+
     // 공통
     JWT_INVALID_ACCESS_TOKEN("5000", "액세스 토큰이 유효하지 않습니다."),
     JWT_EXPIRED_ACCESS_TOKEN("5001", "액세스 토큰이 만료되었습니다."),
