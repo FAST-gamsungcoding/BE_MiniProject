@@ -49,6 +49,7 @@ public class AccommodationController {
         );
     }
 
+    // 작업중
     @GetMapping("/{accommodationId}")
     @Operation(summary = "상세 페이지 숙소 정보 가져오는 API", description = ENTRY_DESCRIPTION)
     public ResponseEntity<ApiResponse<AccommodationDetailResponse>> accommodationsEntry(
