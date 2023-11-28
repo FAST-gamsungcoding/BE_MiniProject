@@ -1,8 +1,9 @@
-package com.gamsung.backend.domain.accomodation.entity;
+package com.gamsung.backend.domain.accommodation.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gamsung.backend.domain.image.entity.Image;
+import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Accomodation {
+public class Accommodation extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,13 +50,13 @@ public class Accomodation {
     String contentId;
 
     @OneToMany(
-        fetch = FetchType.LAZY, mappedBy = "accomodation",
-        cascade = CascadeType.PERSIST, orphanRemoval = true
+        fetch = FetchType.LAZY, mappedBy = "accommodation",
+        cascade = CascadeType.REMOVE, orphanRemoval = true
     )
     List<Image> images = new ArrayList<>();
 
     @Builder
-    private Accomodation(
+    private Accommodation(
         String name,
         String description,
         Long location,

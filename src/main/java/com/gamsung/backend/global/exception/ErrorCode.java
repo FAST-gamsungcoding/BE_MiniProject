@@ -18,7 +18,10 @@ public enum ErrorCode {
     JWT_INVALID_REFRESH_TOKEN("1010", "리프레시 토큰이 유효하지 않습니다."),
 
     // 숙박
-    ACCOMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
+    ACCOMMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
+
+    // 이미지
+    IMAGE_NO_EXIST("6001","해당 숙소의 이미지 정보가 없습니다."),
 
     //장바구니
     CART_LIMIT_OVER("4002","장바구니가 최대 개수인 10개를 초과했습니다."),

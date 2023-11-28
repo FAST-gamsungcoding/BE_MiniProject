@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ImageRepository extends JpaRepository<Image,Long> {
 
-    Optional<Image> findFirstByAccomodationIdAndImgType(Long accomodationId, int imgType);
+    Optional<Image> findFirstByAccommodationIdAndImgType(Long accommodationId, int imgType);
 
-    List<Image> findByAccomodationIdAndImgType(Long accomodationId, int imgType);
+    List<Image> findByAccommodationIdAndImgType(Long accommodationId, int imgType);
 }
