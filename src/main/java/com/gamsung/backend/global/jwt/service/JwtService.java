@@ -5,7 +5,8 @@ import com.gamsung.backend.global.jwt.JwtProvider;
 import com.gamsung.backend.global.jwt.controller.request.RefreshAccessTokenRequest;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.entity.JwtRedisEntity;
-import com.gamsung.backend.global.jwt.exception.JwtInvalidTokenException;
+import com.gamsung.backend.global.jwt.exception.JwtExpiredRefreshTokenException;
+import com.gamsung.backend.global.jwt.exception.JwtInvalidRefreshTokenException;
 import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,10 +50,10 @@ public class JwtService {
         jwtRedisRepository.findByKey(jwtPayload.getEmail())
                 .ifPresentOrElse(refreshToken -> {
                     if (!request.refreshToken().equals(refreshToken)) {
-                        throw new JwtInvalidTokenException("리프레시 토큰이 유효하지 않습니다.");
+                        throw new JwtInvalidRefreshTokenException();
                     }
                 }, () -> {
-                    throw new JwtInvalidTokenException("리프레시 토큰이 존재하지 않습니다. 다시 로그인해 주세요.");
+                    throw new JwtExpiredRefreshTokenException();
                 });
 
         JwtPayload newJwtPayload = JwtPayload.from(jwtPayload.getEmail());

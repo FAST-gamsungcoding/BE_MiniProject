@@ -1,8 +1,8 @@
 package com.gamsung.backend.global.jwt;
 
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
-import com.gamsung.backend.global.jwt.exception.JwtInvalidTokenException;
-import com.gamsung.backend.global.jwt.exception.JwtTokenExpiredException;
+import com.gamsung.backend.global.jwt.exception.JwtExpiredAccessTokenException;
+import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -71,7 +71,7 @@ class JwtProviderTest {
             String jwtToken = jwtProvider.createToken(jwtPayload, shortExpirationTime);
 
             // then
-            Assertions.assertThrows(JwtTokenExpiredException.class, () -> jwtProvider.verifyToken(jwtToken));
+            Assertions.assertThrows(JwtExpiredAccessTokenException.class, () -> jwtProvider.verifyToken(jwtToken));
         }
 
         @DisplayName("다른 Secret Key로 검증할 때 JwtInvalidTokenException 발생")
@@ -89,7 +89,7 @@ class JwtProviderTest {
             String wrongToken = otherJwtProvider.createToken(jwtPayload, accessTokenExpiration);
 
             // then
-            Assertions.assertThrows(JwtInvalidTokenException.class, () -> jwtProvider.verifyToken(wrongToken));
+            Assertions.assertThrows(JwtInvalidAccessTokenException.class, () -> jwtProvider.verifyToken(wrongToken));
         }
     }
 }

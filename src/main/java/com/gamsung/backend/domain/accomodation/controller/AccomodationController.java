@@ -3,11 +3,17 @@ package com.gamsung.backend.domain.accomodation.controller;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ALL_ENTRY_DESCRIPTION;
 import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ENTRY_DESCRIPTION;
 
+
+import com.gamsung.backend.domain.accomodation.dto.response.AccomodationDetailResponse;
+import com.gamsung.backend.domain.accomodation.service.AccomodationService;
+import com.gamsung.backend.global.common.ApiResponse;
+import com.gamsung.backend.global.common.ControllerResponse;
 import com.gamsung.backend.global.openapi.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccomodationController {
 
-//    private final AccomodationService accomodationService;
+
+    private final AccomodationService accomodationService;
     private final OpenApiService openApiService;
 
     @GetMapping("/data")
@@ -76,31 +83,34 @@ public class AccomodationController {
     }
 
 
-    @GetMapping
+    @GetMapping("/{accomodation_id}")
     @Operation(summary = "상세 페이지 숙소 정보 가져오는 API", description = ENTRY_DESCRIPTION)
-    public ResponseEntity<String> accomodationsEntry(
+    public ResponseEntity<ApiResponse<AccomodationDetailResponse>> accomodationsEntry(
+        @PathVariable Long accomodation_id
     ) {
-
-        return ResponseEntity.ok(
-            """
-                {"code" : 3001,
-                "data" : {
-                	"accomodation_name" : "신라 호텔",
-                	"description" : "신라 호텔 입니다.",
-                	"address" : "상세주소",
-                	"limit_people" : 4,
-                	"accomodation_price" : 100000,
-                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177159849205841960/62e03f6768aa5eb9.PNG?ex=65717e8a&is=655f098a&hm=7f02b43628e84e19b3326c476251441ef796fd125d5b0e730f8b00bf38458287&",
-                	 "room_img" : [
-                			"https://cdn.discordapp.com/attachments/1177157251836948490/1177159187957030912/0172c2c57ca8bae5.PNG?ex=65717dec&is=655f08ec&hm=a2ff87c70eeb940cb849e6a81f5e57ca51e2b63eec936555e14937ad56793479&",
-                			"https://cdn.discordapp.com/attachments/1177157251836948490/1177159269460746280/a36bf3578a9fe8d0.PNG?ex=65717e00&is=655f0900&hm=d78cc3c34489ae6e761d2d5610e659e7f4286f46ce7e2d0e99010f97fd69b286&",
-                			"https://cdn.discordapp.com/attachments/1177157251836948490/1177159352612831303/4444d6a3208a5111.PNG?ex=65717e14&is=655f0914&hm=327f6eeb6bf94c9d7b22ca4cc70c155f4ef5417ef3dc88cd52556130465939f9&"
-                          
-                	]
-                }
-                   }   
-                """);
+//        return ResponseEntity.ok(
+//            """
+//                {"code" : 3001,
+//                "data" : {
+//                	"accomodation_name" : "신라 호텔",
+//                	"description" : "신라 호텔 입니다.",
+//                	"address" : "상세주소",
+//                	"limit_people" : 4,
+//                	"accomodation_price" : 100000,
+//                    "accomodation_img" : "https://cdn.discordapp.com/attachments/1177157251836948490/1177159849205841960/62e03f6768aa5eb9.PNG?ex=65717e8a&is=655f098a&hm=7f02b43628e84e19b3326c476251441ef796fd125d5b0e730f8b00bf38458287&",
+//                	 "room_img" : [
+//                			"https://cdn.discordapp.com/attachments/1177157251836948490/1177159187957030912/0172c2c57ca8bae5.PNG?ex=65717dec&is=655f08ec&hm=a2ff87c70eeb940cb849e6a81f5e57ca51e2b63eec936555e14937ad56793479&",
+//                			"https://cdn.discordapp.com/attachments/1177157251836948490/1177159269460746280/a36bf3578a9fe8d0.PNG?ex=65717e00&is=655f0900&hm=d78cc3c34489ae6e761d2d5610e659e7f4286f46ce7e2d0e99010f97fd69b286&",
+//                			"https://cdn.discordapp.com/attachments/1177157251836948490/1177159352612831303/4444d6a3208a5111.PNG?ex=65717e14&is=655f0914&hm=327f6eeb6bf94c9d7b22ca4cc70c155f4ef5417ef3dc88cd52556130465939f9&"
+//
+//                	]
+//                }
+//                   }
+//                """);
+            ApiResponse.create(
+                3001
+                ,accomodationService.findAccomodationDetailById(accomodation_id)
+            )
+        );
     }
-
-
 }

@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
         //실패 헤더에 담기는 코드는 부분은 badRequest가 아닌 경우 다르게 기본 http 상태코드를 확인 후 수정
         return ResponseEntity.badRequest().body(
                 ApiResponse.builder()
-                        .code(e.getCode())
+                        .code(Integer.valueOf(e.getCode()))
                         .data(e.getMessage())
                         .build()
         );

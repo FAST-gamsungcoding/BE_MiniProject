@@ -1,14 +1,15 @@
 package com.gamsung.backend.global.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class ApiResponse<T> {
     private final Integer code;        // 사용자 정의 코드
     private final T data;           // API에서 반환되는 데이터
 
+    public static <T> ApiResponse<T> create(int code, T data) {
+        return new ApiResponse<>(code, data);
+    }
 }
