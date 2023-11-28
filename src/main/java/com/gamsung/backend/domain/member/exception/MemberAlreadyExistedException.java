@@ -1,7 +1,10 @@
 package com.gamsung.backend.domain.member.exception;
 
-public class MemberAlreadyExistedException extends IllegalArgumentException {
+import com.gamsung.backend.global.exception.BaseException;
+import com.gamsung.backend.global.exception.ErrorCode;
+
+public class MemberAlreadyExistedException extends BaseException {
     public MemberAlreadyExistedException() {
-        super("이미 존재하는 회원 아이디입니다.");
+        super(ErrorCode.MEMBER_ALREADY_EXISTED);
     }
 }

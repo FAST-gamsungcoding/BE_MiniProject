@@ -44,6 +44,8 @@ public class Accomodation {
     @Column(nullable = false)
     Long price;
 
+    String contentId;
+
     @OneToMany(
         fetch = FetchType.LAZY, mappedBy = "accomodation",
         cascade = CascadeType.PERSIST, orphanRemoval = true
@@ -57,7 +59,8 @@ public class Accomodation {
         Long location,
         String address,
         Long limitPeople,
-        Long price
+        Long price,
+        String contentId
     ) {
         this.name = name;
         this.description = description;
@@ -65,6 +68,7 @@ public class Accomodation {
         this.address = address;
         this.limitPeople = limitPeople;
         this.price = price;
+        this.contentId = contentId;
     }
 
     public void addImage(Image image) {
