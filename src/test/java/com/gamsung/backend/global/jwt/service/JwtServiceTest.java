@@ -1,5 +1,6 @@
 package com.gamsung.backend.global.jwt.service;
 
+import com.gamsung.backend.global.common.BaseRedisContainerTest;
 import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
@@ -8,16 +9,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
 import java.util.Date;
 
-
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-class JwtServiceTest {
+class JwtServiceTest extends BaseRedisContainerTest {
     private static final Long TEST_ID = 1234L;
     private static final String TEST_EMAIL = "test@test.com";
 

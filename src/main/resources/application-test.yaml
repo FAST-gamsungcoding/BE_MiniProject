@@ -5,4 +5,5 @@ spring:
       ddl-auto: create
 
   datasource:
-    url: jdbc:mysql://localhost:${LOCAL_MYSQL_TEST_PORT}/fc_mini?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
+    url: jdbc:tc:mysql:8.0://fc_mini?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver

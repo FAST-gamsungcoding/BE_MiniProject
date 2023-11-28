@@ -1,5 +1,6 @@
 package com.gamsung.backend.global.jwt.repository;
 
+import com.gamsung.backend.global.common.BaseRedisContainerTest;
 import com.gamsung.backend.global.jwt.JwtProvider;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.entity.JwtRedisEntity;
@@ -7,12 +8,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ActiveProfiles("test")
-class JwtRedisRepositoryTest {
+class JwtRedisRepositoryTest extends BaseRedisContainerTest {
 
     @Autowired
     private JwtRedisRepository jwtRedisRepository;
