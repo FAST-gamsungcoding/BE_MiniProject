@@ -2,17 +2,16 @@ package com.gamsung.backend.domain.order.service;
 
 import com.gamsung.backend.domain.order.dto.request.OrderAccommodationRequest;
 import com.gamsung.backend.domain.order.dto.response.BookDateAvailableResponse;
-import com.gamsung.backend.domain.order.dto.response.SoldOutOrder;
-import com.gamsung.backend.domain.order.exception.BookDateUnavailableException;
 import com.gamsung.backend.domain.order.dto.response.OrderAccommodationResponse;
 import com.gamsung.backend.domain.order.dto.response.OrderResponse;
+import com.gamsung.backend.domain.order.dto.response.SoldOutOrder;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
