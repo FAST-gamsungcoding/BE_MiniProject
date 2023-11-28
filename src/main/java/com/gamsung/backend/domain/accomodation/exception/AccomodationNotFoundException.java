@@ -1,7 +1,8 @@
 package com.gamsung.backend.domain.accomodation.exception;
 
-import com.gamsung.backend.global.common.BaseException;
-import com.gamsung.backend.global.common.ErrorCode;
+
+import com.gamsung.backend.global.exception.BaseException;
+import com.gamsung.backend.global.exception.ErrorCode;
 
 public class AccomodationNotFoundException extends BaseException {
 

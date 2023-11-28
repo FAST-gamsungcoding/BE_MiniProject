@@ -7,7 +7,6 @@ import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ENTRY_D
 import com.gamsung.backend.domain.accomodation.dto.response.AccomodationDetailResponse;
 import com.gamsung.backend.domain.accomodation.service.AccomodationService;
 import com.gamsung.backend.global.common.ApiResponse;
-import com.gamsung.backend.global.common.ControllerResponse;
 import com.gamsung.backend.global.openapi.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -107,9 +106,9 @@ public class AccomodationController {
 //                }
 //                   }
 //                """);
-            ApiResponse.create(
+        return ResponseEntity.ok(ApiResponse.create(
                 3001
-                ,accomodationService.findAccomodationDetailById(accomodation_id)
+                , accomodationService.findAccomodationDetailById(accomodation_id)
             )
         );
     }
