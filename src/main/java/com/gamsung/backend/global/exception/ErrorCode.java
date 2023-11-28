@@ -22,7 +22,7 @@ public enum ErrorCode {
     ORDER_SOLD_OUT("2005", "결제가 실패했습니다. 예약이 불가능한 날짜가 있습니다."),
 
     // 숙박
-    ACCOMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
+    ACCOMMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
 
     // 공통
     JWT_INVALID_ACCESS_TOKEN("5000", "액세스 토큰이 유효하지 않습니다."),

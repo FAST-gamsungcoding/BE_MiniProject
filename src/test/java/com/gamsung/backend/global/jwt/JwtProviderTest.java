@@ -1,5 +1,6 @@
 package com.gamsung.backend.global.jwt;
 
+import com.gamsung.backend.global.common.BaseIntegrationTest;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.exception.JwtExpiredAccessTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
@@ -9,15 +10,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
 import java.util.Date;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-class JwtProviderTest {
+class JwtProviderTest extends BaseIntegrationTest {
 
     private static final String TEST_EMAIL = "test@test.com";
 

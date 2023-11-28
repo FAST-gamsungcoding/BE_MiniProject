@@ -1,4 +1,4 @@
-package com.gamsung.backend.domain.accomodation.entity;
+package com.gamsung.backend.domain.accommodation.entity;
 
 public enum Location {
     SEOUL(1, "서울"),

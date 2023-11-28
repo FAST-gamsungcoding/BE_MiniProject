@@ -1,6 +1,6 @@
 package com.gamsung.backend.global.openapi;
 
-import static com.gamsung.backend.global.openapi.UrlConstants.ACCOMODATION_PATH;
+import static com.gamsung.backend.global.openapi.UrlConstants.ACCOMMODATION_PATH;
 import static com.gamsung.backend.global.openapi.UrlConstants.ARRANGE;
 import static com.gamsung.backend.global.openapi.UrlConstants.CONTENT_TYPE_ID;
 import static com.gamsung.backend.global.openapi.UrlConstants.DEFAULT_NUM_OF_ROWS;
@@ -13,8 +13,8 @@ import static com.gamsung.backend.global.openapi.UrlConstants.TYPE;
 import static com.gamsung.backend.global.openapi.UrlConstants.YES;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.gamsung.backend.domain.accomodation.entity.Accommodation;
-import com.gamsung.backend.domain.accomodation.repository.AccomodationRepository;
+import com.gamsung.backend.domain.accommodation.entity.Accommodation;
+import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
 import com.gamsung.backend.domain.image.entity.Image;
 import com.gamsung.backend.domain.image.repository.ImageRepository;
 import java.util.ArrayList;
@@ -34,13 +34,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class OpenApiService {
 
-    private final AccomodationRepository accomodationRepository;
+    private final AccommodationRepository accomodationRepository;
     private final ImageRepository imageRepository;
 
     @Value("${open-api.key}")
     private String decodeApiKey;
 
-    public void getAccomodationInfo() {
+    public void getAccommodationInfo() {
         processAccomodationInfo();
     }
 
@@ -68,8 +68,8 @@ public class OpenApiService {
     }
 
     private void processAccomodationInfo() {
-        String accomodationInfoUrl = buildApiUrl(
-            END_POINT + ACCOMODATION_PATH
+        String accommodationInfoUrl = buildApiUrl(
+            END_POINT + ACCOMMODATION_PATH
             , "numOfRows", DEFAULT_NUM_OF_ROWS
             , "mobileOS", MOBILE_OS
             , "MobileApp", MOBILE_APP
@@ -77,7 +77,7 @@ public class OpenApiService {
             , "arrange", ARRANGE
             , "serviceKey", decodeApiKey
         );
-        Optional<JsonNode> responseNode = makeApiCall(accomodationInfoUrl);
+        Optional<JsonNode> responseNode = makeApiCall(accommodationInfoUrl);
         if (responseNode.isPresent()) {
             JsonNode items = responseNode.get().path("response").path("body").path("items");
 
@@ -97,18 +97,18 @@ public class OpenApiService {
                         continue;
                     }
 
-                    Image accomodationImage = Image.builder().imgType(1).url(firstImage).build();
-                    processAccommodationDescription(contentId, accomodationImage, name, address,
+                    Image accommodationImage = Image.builder().imgType(1).url(firstImage).build();
+                    processAccommodationDescription(contentId, accommodationImage, name, address,
                         location);
                 }
             }
         }
     }
 
-    private void processAccommodationDescription(String contentId, Image accomodationImage,
+    private void processAccommodationDescription(String contentId, Image accommodationImage,
         String name,
         String address, String location) {
-        String accomodationDescriptionUrl = buildApiUrl(
+        String accommodationDescriptionUrl = buildApiUrl(
             END_POINT + DESCRIPTION_PATH
             , "numOfRows", DEFAULT_NUM_OF_ROWS
             , "mobileOS", MOBILE_OS
@@ -119,7 +119,7 @@ public class OpenApiService {
             , "_type", TYPE
             , "serviceKey", decodeApiKey
         );
-        Optional<JsonNode> responseNode = makeApiCall(accomodationDescriptionUrl);
+        Optional<JsonNode> responseNode = makeApiCall(accommodationDescriptionUrl);
 
         if (responseNode.isPresent()) {
             JsonNode items = responseNode.get().path("response").path("body").path("items");
@@ -135,14 +135,14 @@ public class OpenApiService {
                         return;
                     }
 
-                    processRoomInfo(contentId, accomodationImage, name, address, location,
+                    processRoomInfo(contentId, accommodationImage, name, address, location,
                         description);
                 }
             }
         }
     }
 
-    private void processRoomInfo(String contentId, Image accomodationImage, String name,
+    private void processRoomInfo(String contentId, Image accommodationImage, String name,
         String address, String location, String description) {
         String roomInfoUrl = buildApiUrl(
             END_POINT + ROOM_PATH
@@ -160,11 +160,11 @@ public class OpenApiService {
             if (!items.isEmpty()) {
                 JsonNode itemList = items.path("item");
                 if (itemList.get(0) != null) {
-                    String accomodationPrice =
+                    String accommodationPrice =
                         itemList.get(0).path("roomoffseasonminfee1").asText();
                     String limitPeople = itemList.get(0).path("roommaxcount").asText();
 
-                    if (accomodationPrice.equals("0") || limitPeople.equals("0")) {
+                    if (accommodationPrice.equals("0") || limitPeople.equals("0")) {
                         return;
                     }
 
@@ -178,9 +178,9 @@ public class OpenApiService {
                             }
                         }
 
-                        saveAccomodationAndImages(accomodationImage,
+                        saveAccommodationAndImages(accommodationImage,
                             roomImages, name,
-                            address, location, description, accomodationPrice, limitPeople,contentId);
+                            address, location, description, accommodationPrice, limitPeople,contentId);
                     }
                 }
             }
@@ -188,7 +188,7 @@ public class OpenApiService {
     }
 
     @Transactional
-    public void saveAccomodationAndImages(Image accomodationImage,
+    public void saveAccommodationAndImages(Image accomodationImage,
         List<Image> roomImages, String name,
         String address, String location, String description, String accomodationPrice,
         String limitPeople, String contentId
@@ -219,7 +219,7 @@ public class OpenApiService {
             accommodation.addImage(roomImage);
         }
 
-//        printProductInfo(accomodation);
+//        printProductInfo(accommodation);
     }
 
     private boolean endsWithJpgOrJpeg(String url) {
@@ -231,15 +231,15 @@ public class OpenApiService {
         return extension.equals("jpg") || extension.equals("jpeg");
     }
 
-    private void printProductInfo(Accommodation accommodation) {
-        System.out.println("Address: " + accommodation.getAddress());
-        System.out.println("AreaCode: " + accommodation.getLocation());
-        System.out.println("Title: " + accommodation.getName());
-        System.out.println("RoomFee: " + accommodation.getPrice());
-        System.out.println("MaxCount: " + accommodation.getLimitPeople());
-        System.out.println("description: " + accommodation.getDescription());
+    private void printProductInfo(Accommodation accomodation) {
+        System.out.println("Address: " + accomodation.getAddress());
+        System.out.println("AreaCode: " + accomodation.getLocation());
+        System.out.println("Title: " + accomodation.getName());
+        System.out.println("RoomFee: " + accomodation.getPrice());
+        System.out.println("MaxCount: " + accomodation.getLimitPeople());
+        System.out.println("description: " + accomodation.getDescription());
         System.out.println("Image: ");
-        accommodation.getImages().stream()
+        accomodation.getImages().stream()
             .forEach(image1 -> System.out.println(
                 "Type: " + image1.getImgType() + ", URL: "
                     + image1.getUrl()));

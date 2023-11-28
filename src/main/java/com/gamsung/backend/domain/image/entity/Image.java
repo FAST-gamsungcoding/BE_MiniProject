@@ -1,6 +1,6 @@
 package com.gamsung.backend.domain.image.entity;
 
-import com.gamsung.backend.domain.accomodation.entity.Accommodation;
+import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "accomodation_image")
+@Table(name = "accommodation_image")
 @Getter
 public class Image {
 
@@ -29,7 +29,7 @@ public class Image {
     Integer imgType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accomodation_id")
+    @JoinColumn(name = "accommodation_id")
     Accommodation accommodation;
 
     @Column(nullable = false)
