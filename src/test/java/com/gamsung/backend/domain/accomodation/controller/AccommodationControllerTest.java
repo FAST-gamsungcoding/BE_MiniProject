@@ -21,24 +21,17 @@ public class AccommodationControllerTest extends BaseIntegrationTest {
 
     @Test
     @DisplayName("상품 상세 조회")
-    void getAccomodation() {
+    void getAccommodation() {
         // given
         Long id = -1L;
 
-        Accommodation accommodation = Accommodation.builder()
-            .name("test")
-            .address("서울특별시 송파구 ㅁㅁㅁㅁ")
-            .price(30000L)
-            .description("test 입니다.")
-            .limitPeople(4L)
-            .build();
+        Accommodation accommodation
 
         accommodationRepository.save(accommodation);
 
         String url = "/v1/accommodations/" + id;
 
         // when
-        ExtractableResponse<Response>
 
         // then
     }
