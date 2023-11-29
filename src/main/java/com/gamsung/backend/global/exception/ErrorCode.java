@@ -19,7 +19,7 @@ public enum ErrorCode {
 
     // 주문
     BOOK_DATE_UNAVAILABLE("2002", "예약이 불가능한 날짜입니다."),
-    ORDER_SOLD_OUT("2005", "결제가 실패했습니다. 예약이 불가능한 날짜가 있습니다."),
+    ORDER_SOLD_OUT("2004", "결제가 실패했습니다. 예약이 불가능한 날짜가 있습니다."),
 
     // 숙박
     ACCOMMODATION_NO_EXIST("3002","해당 상품의 정보가 없습니다."),
