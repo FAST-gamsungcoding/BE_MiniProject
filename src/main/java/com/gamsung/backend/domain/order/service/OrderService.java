@@ -11,10 +11,10 @@ import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
 import com.gamsung.backend.domain.order.repository.OrderRepository;
 import com.gamsung.backend.global.exception.BookDateUnavailableException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class OrderService {
         return OrderAccommodationResponse.create();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public BookDateAvailableResponse checkBookDate(long id, LocalDate startDate, LocalDate endDate) {
         accommodationService.findById(id);
         Optional<Order> soldOrder = orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(id, endDate, startDate);
@@ -81,6 +81,7 @@ public class OrderService {
         return BookDateAvailableResponse.create();
     }
 
+    @Transactional(readOnly = true)
     public List<OrderResponse> getMemberOrdersList(Pageable pageable, long id) {
         List<Order> orderList = orderRepository.findByMemberIdOrderByCreatedAtDesc(id, pageable);
 
