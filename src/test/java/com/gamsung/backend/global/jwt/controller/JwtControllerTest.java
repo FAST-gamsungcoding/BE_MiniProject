@@ -2,7 +2,6 @@ package com.gamsung.backend.global.jwt.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gamsung.backend.global.jwt.JwtPair;
-import com.gamsung.backend.global.jwt.controller.request.RefreshAccessTokenControllerRequest;
 import com.gamsung.backend.global.jwt.controller.request.RefreshAccessTokenRequest;
 import com.gamsung.backend.global.jwt.service.JwtService;
 import com.gamsung.backend.global.security.WithMockCustomMember;
@@ -57,8 +56,7 @@ class JwtControllerTest {
                     .accessToken("fake-refreshed-access-token")
                     .refreshToken("fake-refresh-token")
                     .build();
-            RefreshAccessTokenControllerRequest refreshAccessTokenControllerRequest
-                    = new RefreshAccessTokenControllerRequest(new RefreshAccessTokenRequest(testToken.getRefreshToken()));
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
 
             given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class)))
                     .willReturn(refreshedTestToken);
@@ -67,7 +65,7 @@ class JwtControllerTest {
             ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/refresh")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(refreshAccessTokenControllerRequest)));
+                    .content(objectMapper.writeValueAsString(refreshAccessTokenRequest)));
 
             // then
             resultActions

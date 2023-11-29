@@ -1,7 +1,7 @@
 package com.gamsung.backend.global.jwt.security;
 
-import com.gamsung.backend.global.jwt.JwtProvider;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
+import com.gamsung.backend.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String accessToken = (String) authentication.getCredentials();
-        JwtPayload jwtPayload = jwtProvider.verifyToken(accessToken);
+        JwtPayload jwtPayload = jwtService.verifyToken(accessToken);
         return JwtAuthenticationToken.authenticated(jwtPayload.getId(), jwtPayload.getEmail());
     }
 
