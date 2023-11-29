@@ -15,6 +15,8 @@ import com.gamsung.backend.global.jwt.util.JwtUtil;
 import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,10 +63,11 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "로그아웃 API", description = "로그인된 사용자만이 로그아웃을 할 수 있습니다. 로그인을 하지 않으면 에러가 발생합니다.")
+    @Operation(summary = "로그아웃 API", description = "로그인된 사용자만이 로그아웃을 할 수 있습니다. 로그인을 하지 않으면 에러가 발생합니다."
+    ,security = @SecurityRequirement(name = "bearer-jwt"))
     public ResponseEntity<ApiResponse<MemberLogoutResponse>> memberLogout(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
-            @MemberAuth AuthContext authContext
+            @Parameter(hidden = true) @MemberAuth AuthContext authContext
     ) {
         MemberLogoutResponse response = memberService.logout(authContext.email(),
                 JwtUtil.extractAccessToken(authorization)

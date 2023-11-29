@@ -10,6 +10,7 @@ import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @Operation(summary = "숙소 리스트 결제 API", description = "숙소들을 결제하여 예약합니다.")
+    @Operation(summary = "숙소 리스트 결제 API", description = "숙소들을 결제하여 예약합니다."
+            ,security = @SecurityRequirement(name = "bearer-jwt"))
     public ResponseEntity<ApiResponse<OrderAccommodationResponse>> orderAccommodation(@RequestBody @Valid List<OrderAccommodationRequest> orderAccommodationRequestList,
                                                                                       @Parameter(hidden = true) @MemberAuth AuthContext authContext
     ){
@@ -47,7 +49,8 @@ public class OrderController {
     }
 
     @GetMapping("/me")
-    @Operation(summary = "예약 조회 API", description = "결제가 완료된 예약 리스트를 조회합니다.")
+    @Operation(summary = "예약 조회 API", description = "결제가 완료된 예약 리스트를 조회합니다."
+    ,security = @SecurityRequirement(name = "bearer-jwt"))
     public ResponseEntity<ApiResponse<List<OrderResponse>>> getUserOrderList(@Parameter(hidden = true) @PageableDefault(
             size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         List<OrderResponse> response = orderService.getMemberOrdersList(pageable, authContext.id());
