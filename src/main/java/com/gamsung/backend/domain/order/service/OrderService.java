@@ -7,9 +7,9 @@ import com.gamsung.backend.domain.order.dto.response.OrderAccommodationResponse;
 import com.gamsung.backend.domain.order.dto.response.OrderResponse;
 import com.gamsung.backend.domain.order.dto.response.SoldOutOrder;
 import com.gamsung.backend.domain.order.entity.Order;
+import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
 import com.gamsung.backend.domain.order.repository.OrderRepository;
 import com.gamsung.backend.global.exception.BookDateUnavailableException;
-import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ public class OrderService {
 
     private static final int ID_ZERO = 0;
     private final OrderRepository orderRepository;
-//    private final CartRepository cartRepository;
+    private final CartRepository cartRepository;
 
     @Transactional
     public OrderAccommodationResponse orderAccommodation(List<OrderAccommodationRequest> orderAccommodationRequestList,
@@ -58,15 +58,13 @@ public class OrderService {
             deleteCartIdList.add(orderRequest.getCartId());
         }
 
-        //
         if(!soldOutOrders.isEmpty()){
             throw new OrderSoldOutException(soldOutOrders);
         }
 
         orderRepository.saveAll(orderList);
-//      cartRepository.deleteAllById(cartIdList); 장바구니 도메인 들어오면 사용. id리스트로 장바구니 삭제
+        cartRepository.deleteAllByIdInBatch(deleteCartIdList);
 
-        //
         return OrderAccommodationResponse.create();
     }
 
@@ -102,26 +100,5 @@ public class OrderService {
     private boolean isFromCart(long cartId) {
         return cartId == ID_ZERO;
     }
-
-    //엔티티 변환하는 함수 따로 만들어서 빼야 하나? ..그러면 cart_id 0 판별은 어떻게?
-//    private List<Orders> orderRequestListToOrdersList(List<OrderAccommodationRequest> orderAccommodationRequestList) {
-//        List<Orders> ordersList = new ArrayList<>();
-//
-//        for (OrderAccommodationRequest orderAccommodationRequest : orderAccommodationRequestList) {
-//            Orders orders = Orders.of(
-//                    1, // 추후 수정
-//                    orderAccommodationRequest.getAccommodationId(),
-//                    orderAccommodationRequest.getPeopleNumber(),
-//                    orderAccommodationRequest.getStartDate(),
-//                    orderAccommodationRequest.getEndDate(),
-//                    orderAccommodationRequest.getRepresentativeName(),
-//                    orderAccommodationRequest.getRepresentativeEmail(),
-//                    orderAccommodationRequest.getOrderPrice()
-//            );
-//            ordersList.add(orders);
-//        }
-//
-//        return ordersList;
-//    }
 
 }
