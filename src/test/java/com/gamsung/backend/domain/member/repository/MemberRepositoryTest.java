@@ -25,7 +25,7 @@ class MemberRepositoryTest {
     @Mock
     private MemberRepository memberRepository;
 
-    @DisplayName("멤버를 이메일로 조회할 수 있다.")
+    @DisplayName("멤버 레포지토리 유닛 테스트 - 멤버를 이메일로 조회할 수 있다.")
     @Test
     void successToFindByMemberEmail() {
         // given

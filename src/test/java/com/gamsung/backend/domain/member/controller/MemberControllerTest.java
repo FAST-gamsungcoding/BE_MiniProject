@@ -54,7 +54,7 @@ class MemberControllerTest {
     @MockBean
     private MemberService memberService;
 
-    @DisplayName("멤버 로그인")
+    @DisplayName("멤버 로그인 컨트롤러 유닛 테스트")
     @WithMockUser
     @Nested
     class LoginMemberUnitTest {
@@ -89,7 +89,7 @@ class MemberControllerTest {
         }
     }
 
-    @DisplayName("멤버 회원가입")
+    @DisplayName("멤버 회원가입 컨트롤러 유닛 테스트")
     @WithMockUser
     @Nested
     class RegisterMemberUnitTest {
@@ -144,7 +144,7 @@ class MemberControllerTest {
     }
 
 
-    @DisplayName("멤버 로그아웃")
+    @DisplayName("멤버 로그아웃 컨트롤러 유닛 테스트")
     @Nested
     class LogoutMemberUnitTest {
 
