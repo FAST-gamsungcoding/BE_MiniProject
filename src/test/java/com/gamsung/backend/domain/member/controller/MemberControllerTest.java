@@ -70,7 +70,8 @@ class MemberControllerTest {
                     .build();
             MemberControllerLoginRequest memberControllerLoginRequest
                     = new MemberControllerLoginRequest(testMember.getEmail(), testMember.getEmail());
-            MemberLoginResponse memberLoginResponse = MemberLoginResponse.from(testToken);
+            MemberLoginResponse memberLoginResponse
+                    = MemberLoginResponse.from(testToken, testMember.getName(), testMember.getEmail());
             given(memberService.login(any(MemberLoginRequest.class)))
                     .willReturn(memberLoginResponse);
 
@@ -85,7 +86,9 @@ class MemberControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1000))
                     .andExpect(jsonPath("$.data.access_token").value(memberLoginResponse.accessToken()))
-                    .andExpect(jsonPath("$.data.refresh_token").value(memberLoginResponse.refreshToken()));
+                    .andExpect(jsonPath("$.data.refresh_token").value(memberLoginResponse.refreshToken()))
+                    .andExpect(jsonPath("$.data.name").value(memberLoginResponse.name()))
+                    .andExpect(jsonPath("$.data.email").value(memberLoginResponse.email()));
         }
     }
 
