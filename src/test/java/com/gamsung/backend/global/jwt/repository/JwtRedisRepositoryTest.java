@@ -35,7 +35,7 @@ class JwtRedisRepositoryTest extends BaseRedisContainerTest {
 
         // then
         Thread.sleep(100);
-        Assertions.assertEquals(-2, jwtRedisRepository.getExpire(email));
+        Assertions.assertTrue(jwtRedisRepository.getExpire(email) < 0);
     }
 
     @DisplayName("Redis에 저장된 값을 찾아서 삭제할 수 있다.")

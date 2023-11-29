@@ -32,7 +32,6 @@ public class Image extends BaseTime {
     Integer imgType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-
     @JoinColumn(name = "accommodation_id")
     @JsonIgnore
     Accommodation accommodation;

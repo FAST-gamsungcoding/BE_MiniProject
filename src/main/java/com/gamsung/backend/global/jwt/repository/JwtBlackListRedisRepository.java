@@ -1,6 +1,6 @@
 package com.gamsung.backend.global.jwt.repository;
 
-import com.gamsung.backend.global.jwt.entity.JwtRedisEntity;
+import com.gamsung.backend.global.jwt.entity.JwtBlackListRedisEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,16 +11,16 @@ import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Repository
-public class JwtRedisRepository implements RedisRepository<JwtRedisEntity> {
+public class JwtBlackListRedisRepository implements RedisRepository<JwtBlackListRedisEntity> {
 
-    private final static String JWT_KEY_PREFIX = "jwt:refresh:";
+    private final static String JWT_KEY_PREFIX = "jwt:black:";
 
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void save(JwtRedisEntity entity) {
-        String key = JWT_KEY_PREFIX + entity.getMemberEmail();
-        String value = entity.getRefreshToken();
+    public void save(JwtBlackListRedisEntity entity) {
+        String key = JWT_KEY_PREFIX + entity.getAccessToken();
+        String value = entity.getStatus();
         long expire = entity.getExpiration();
         redisTemplate.opsForValue().set(key, value, expire, TimeUnit.MILLISECONDS);
     }
