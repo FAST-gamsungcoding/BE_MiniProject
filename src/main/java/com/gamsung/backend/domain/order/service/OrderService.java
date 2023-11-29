@@ -99,7 +99,7 @@ public class OrderService {
             orderResponses.add(orderResponse);
         }
 
-        return new FindOrderListResponse(orderResponses, orderPages.getTotalPages());
+        return new FindOrderListResponse(orderResponses, orderPages.getTotalPages(), orderPages.getNumber() + 1);
     }
 
     private boolean isFromCart(long cartId) {
