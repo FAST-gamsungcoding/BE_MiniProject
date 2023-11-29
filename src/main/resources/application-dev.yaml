@@ -3,6 +3,10 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 logging:
   level:

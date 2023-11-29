@@ -25,6 +25,9 @@ spring:
     redis:
       host: localhost
       port: ${LOCAL_REDIS_PORT}
+    web:
+      pageable:
+        one-indexed-parameters: true
 
 service:
   jwt:
