@@ -24,7 +24,7 @@ public class QCart extends EntityPathBase<Cart> {
 
     public final com.gamsung.backend.global.common.QBaseTime _super = new com.gamsung.backend.global.common.QBaseTime(this);
 
-    public final com.gamsung.backend.domain.accomodation.entity.QAccomodation accomodation;
+    public final com.gamsung.backend.domain.accommodation.entity.QAccommodation accommodation;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -64,7 +64,7 @@ public class QCart extends EntityPathBase<Cart> {
 
     public QCart(Class<? extends Cart> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.accomodation = inits.isInitialized("accomodation") ? new com.gamsung.backend.domain.accomodation.entity.QAccomodation(forProperty("accomodation")) : null;
+        this.accommodation = inits.isInitialized("accommodation") ? new com.gamsung.backend.domain.accommodation.entity.QAccommodation(forProperty("accommodation")) : null;
         this.member = inits.isInitialized("member") ? new com.gamsung.backend.domain.member.entity.QMember(forProperty("member")) : null;
     }
 

@@ -2,11 +2,8 @@ package com.gamsung.backend.domain.image.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gamsung.backend.domain.accomodation.entity.Accomodation;
-
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.global.common.BaseTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,9 +33,9 @@ public class Image extends BaseTime {
 
     @ManyToOne(fetch = FetchType.LAZY)
 
-    @JoinColumn(name = "accomodation_id")
+    @JoinColumn(name = "accommodation_id")
     @JsonIgnore
-    Accomodation accomodation;
+    Accommodation accommodation;
 
     @Column(nullable = false)
     String url;
