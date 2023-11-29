@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.ACCESS_TOKEN;
 
 
 @RestController
@@ -24,7 +23,7 @@ public class JwtController {
     private final JwtService jwtService;
 
     @PostMapping("/refresh")
-    @Operation(summary = "access 토큰 재발급 API", description = ACCESS_TOKEN)
+    @Operation(summary = "access 토큰 재발급 API", description = "상우님이 작성해주시면 됩니다")
     public ResponseEntity<ApiResponse<JwtPair>> refreshAccessToken(
             @Valid @RequestBody RefreshAccessTokenControllerRequest request
     ) {
