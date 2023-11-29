@@ -154,7 +154,7 @@ class MemberControllerTest {
         void successToLogoutMember() throws Exception {
             // given
             MemberLogoutResponse memberLogoutResponse = MemberLogoutResponse.create();
-            given(memberService.logout(anyString())).willReturn(memberLogoutResponse);
+            given(memberService.logout(anyString(), anyString())).willReturn(memberLogoutResponse);
 
             // when
             ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/logout")

@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -63,8 +62,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberLogoutResponse logout(String email) {
-        jwtService.deleteRefreshToken(email);
+    public MemberLogoutResponse logout(String email, String accessToken) {
+        jwtService.deleteRefreshTokenAndAddAccessTokenToBlackList(email, accessToken);
         return MemberLogoutResponse.create();
     }
 

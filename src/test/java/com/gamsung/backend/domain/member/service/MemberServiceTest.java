@@ -125,11 +125,15 @@ class MemberServiceTest {
         public void successToLogoutMember() {
             // given
             Member member = MemberTestFactory.createMemberWithRandomValues(false);
+            JwtPair testToken = JwtPair.builder()
+                    .accessToken("fake-access-token")
+                    .refreshToken("fake-refresh-token")
+                    .build();
 
-            doNothing().when(jwtService).deleteRefreshToken(anyString());
+            doNothing().when(jwtService).deleteRefreshTokenAndAddAccessTokenToBlackList(anyString(), anyString());
 
             // when
-            MemberLogoutResponse memberLogoutResponse = memberService.logout(member.getEmail());
+            MemberLogoutResponse memberLogoutResponse = memberService.logout(member.getEmail(), testToken.getAccessToken());
 
             // then
             Assertions.assertEquals(memberLogoutResponse.message(), "로그아웃에 성공했습니다.");

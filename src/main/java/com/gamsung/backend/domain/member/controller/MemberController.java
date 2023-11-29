@@ -11,17 +11,17 @@ import com.gamsung.backend.domain.member.dto.response.MemberRegisterEmailCheckRe
 import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.service.MemberService;
 import com.gamsung.backend.global.common.ApiResponse;
+import com.gamsung.backend.global.jwt.util.JwtUtil;
 import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 
-import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.*;
 
 @RestController
 @RequestMapping("/v1/member")
@@ -31,7 +31,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/login")
-    @Operation(summary = "로그인 API", description = MEMBER_LOGIN)
+    @Operation(summary = "로그인 API", description = "상우님이 작성해주시면 됩니다")
     public ResponseEntity<ApiResponse<MemberLoginResponse>> memberLogin(
             @Valid @RequestBody MemberControllerLoginRequest loginRequest
     ) {
@@ -40,7 +40,7 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    @Operation(summary = "회원가입 API", description = MEMBER_RIGISTER)
+    @Operation(summary = "회원가입 API", description = "상우님이 작성해주시면 됩니다")
     public ResponseEntity<ApiResponse<MemberRegisterResponse>> memberRegister(
             @Valid @RequestBody MemberControllerRegisterRequest registerRequest
     ) {
@@ -49,7 +49,7 @@ public class MemberController {
     }
 
     @GetMapping("/register/check")
-    @Operation(summary = "이메일 중복체크 API", description = MEMBER_REGISTER_EMAIL_CHECK)
+    @Operation(summary = "이메일 중복체크 API", description = "상우님이 작성해주시면 됩니다")
     public ResponseEntity<ApiResponse<MemberRegisterEmailCheckResponse>> memberRegisterEmailCheck(
             @Valid MemberControllerRegisterEmailCheckRequest emailCheckRequest
     ) {
@@ -58,11 +58,14 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
+    @Operation(summary = "로그아웃 API", description = "상우님이 작성해주시면 됩니다")
     public ResponseEntity<ApiResponse<MemberLogoutResponse>> memberLogout(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @MemberAuth AuthContext authContext
     ) {
-        MemberLogoutResponse response = memberService.logout(authContext.email());
+        MemberLogoutResponse response = memberService.logout(authContext.email(),
+                JwtUtil.extractAccessToken(authorization)
+        );
         return ResponseEntity.ok(ApiResponse.create(1011, response));
     }
 }

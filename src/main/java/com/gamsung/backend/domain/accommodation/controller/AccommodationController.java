@@ -34,7 +34,7 @@ public class AccommodationController {
     }
 
     @GetMapping
-    @Operation(summary = "메인 페이지 숙소 정보 가져오는 API", description = "지역의 번호를 사용해 원하는 지역에 위치하는 숙소 정보를 가져옵니다.")
+    @Operation(summary = "메인 페이지 숙소 정보 가져오는 API", description = "지역의 번호를 사용해 원하는 지역에 위치하는 숙소 정보를 가져옵니다.")  
     public ResponseEntity<ApiResponse<List<AccommodationSummaryResponse>>> accommodationsAllEntry(
         @RequestParam Long location,
         @Parameter(hidden = true) @PageableDefault(page = 0, size = 16) Pageable pageable
@@ -46,7 +46,6 @@ public class AccommodationController {
         );
     }
 
-    // 작업중
     @GetMapping("/{accommodationId}")
     @Operation(summary = "상세 페이지 숙소 정보 가져오는 API", description = "숙소 id를 이용해 해당 숙소의 상세 정보를 가져옵니다.")
     public ResponseEntity<ApiResponse<AccommodationDetailResponse>> accommodationsEntry(
