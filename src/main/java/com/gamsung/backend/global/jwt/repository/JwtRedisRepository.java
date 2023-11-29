@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -21,9 +22,6 @@ public class JwtRedisRepository implements RedisRepository<JwtRedisEntity> {
         String key = JWT_KEY_PREFIX + entity.getMemberEmail();
         String value = entity.getRefreshToken();
         long expire = entity.getExpiration();
-        if (redisTemplate.opsForValue().get(key) != null) {
-            redisTemplate.delete(key);
-        }
         redisTemplate.opsForValue().set(key, value, expire, TimeUnit.MILLISECONDS);
     }
 
@@ -34,11 +32,18 @@ public class JwtRedisRepository implements RedisRepository<JwtRedisEntity> {
 
     @Override
     public Long getExpire(String key) {
-        return redisTemplate.getExpire(JWT_KEY_PREFIX + key);
+        Long expireTime = redisTemplate.getExpire(JWT_KEY_PREFIX + key);
+        if (expireTime == null) {
+            return -1L;
+        }
+        else {
+            return Objects.requireNonNull(redisTemplate.getExpire(JWT_KEY_PREFIX + key)) * 1000;
+        }
     }
 
     @Override
     public Boolean deleteByKey(String key) {
+        redisTemplate.expire(JWT_KEY_PREFIX + key, 1L, TimeUnit.MILLISECONDS);
         return redisTemplate.delete(JWT_KEY_PREFIX + key);
     }
 }

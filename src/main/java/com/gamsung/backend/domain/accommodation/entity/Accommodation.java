@@ -1,5 +1,7 @@
 package com.gamsung.backend.domain.accommodation.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gamsung.backend.domain.image.entity.Image;
 import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.CascadeType;

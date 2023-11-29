@@ -1,22 +1,22 @@
 package com.gamsung.backend.domain.order.repository;
 
 import com.gamsung.backend.domain.order.entity.Order;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Page<Order> findByMemberIdOrderByCreatedAtDesc(long memberId, Pageable pageable);
-    boolean existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
-            long accommodationId, LocalDate endDate, LocalDate startDate);
+    List<Order> findByMemberIdOrderByCreatedAtDesc(long memberId, Pageable pageable);
 
-    //SQL문
-//    SELECT * FROM orders a WHERE a.accommodation_id = id
-//    AND a.start_date < endDate
-//    AND a.end_date > startDate
-//    LIMIT 1 해서 있는지 체크
-
+    @Query("SELECT o FROM Order o WHERE o.accommodationId = ?1 AND o.startDate < ?2 AND o.endDate > ?3  ")
+    Optional<Order> existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
+            @Param("accommodationId") long accommodationId,
+            @Param("endDate") LocalDate endDate,
+            @Param("startDate") LocalDate startDate);
 
 }

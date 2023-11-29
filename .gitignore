@@ -40,3 +40,4 @@ out/
 
 .env
 src/**/application-*.yaml
+src/main/generated/**
