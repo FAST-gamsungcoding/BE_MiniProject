@@ -1,5 +1,9 @@
 package com.gamsung.backend.domain.cart.service;
 
+import static com.gamsung.backend.global.exception.ErrorCode.ACCOMMODATION_NO_EXIST;
+import static com.gamsung.backend.global.exception.ErrorCode.CART_ID_NO_EXIST;
+import static com.gamsung.backend.global.exception.ErrorCode.CART_LIMIT_OVER;
+
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
@@ -9,21 +13,17 @@ import com.gamsung.backend.domain.cart.entity.Cart;
 import com.gamsung.backend.domain.cart.exception.CartException;
 import com.gamsung.backend.domain.cart.repository.CartRepository;
 import com.gamsung.backend.domain.member.entity.Member;
-import com.gamsung.backend.domain.member.exception.MemberNotFoundException;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.repository.OrderRepositorySupport;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.gamsung.backend.global.exception.ErrorCode.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -37,7 +37,8 @@ public class CartService {
     @Transactional
     public void entryMyCart(CartEntryRequest cartEntryRequest,Long memberId){
 
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        Member member = findMember.get();
 
         Accommodation accommodation = accommodationRepository.findById(cartEntryRequest.getAccommodationId())
                 .orElseThrow(() -> new CartException(ACCOMMODATION_NO_EXIST));
