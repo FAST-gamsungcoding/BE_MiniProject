@@ -1,0 +1,9 @@
+###로그아웃 요청
+POST http://localhost:8080/v1/member/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJjbGllbnRfaWQiOiIxIiwiZW1haWwiOiJoaUBuYXZlci5jb20iLCJpc3MiOiJmY19taW5pIiwiaWF0IjoxNzAxMTc2MzkwLCJleHAiOjE3MDEyMTIzOTB9.milh13Am7_nv3e2SeRsPdAtD67bZYi4e7ZVi9n9RbU1WrI4-xbDZWO0-EeUQ21wpd-ciJAWwYckGkl8QH5d77Q
+
+{
+  "email" : "hi@naver.com",
+  "password" : "1234qwer!"
+}

@@ -1,5 +1,7 @@
 package com.gamsung.backend.global.exception;
 
+
+import com.gamsung.backend.domain.cart.exception.CartException;
 import com.gamsung.backend.global.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(
                 ApiResponse.create(Integer.parseInt(validationError.getCode()),
                         ErrorMessage.create(validationError.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(CartException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleCartException(CartException e) {
+        // ErrorResponse 클래스는 예외를 클라이언트에게 전달할 때 사용될 구조입니다.
+        return ResponseEntity.badRequest().body(
+                ApiResponse.create(Integer.parseInt(e.getCode()),
+                        ErrorMessage.create(e.getMessage()))
         );
     }
 }

@@ -78,30 +78,29 @@ public class OpenApiService {
             , "serviceKey", decodeApiKey
         );
         Optional<JsonNode> responseNode = makeApiCall(accommodationInfoUrl);
-        if (responseNode.isPresent()) {
-            JsonNode items = responseNode.get().path("response").path("body").path("items");
+        try {
+            JsonNode items =
+                responseNode.get().path("response").path("body").path("items").path("item");
 
-            if (!items.isEmpty()) {
-                JsonNode itemList = items.path("item");
+            for (JsonNode item : items) {
+                String location = item.path("areacode").asText();
+                String address = item.path("addr1").asText();
+                String contentId = item.path("contentid").asText();
+                String firstImage = item.path("firstimage").asText();
+                String name = item.path("title").asText();
 
-                for (JsonNode item : itemList) {
-                    String location = item.path("areacode").asText();
-                    String address = item.path("addr1").asText();
-                    String contentId = item.path("contentid").asText();
-                    String firstImage = item.path("firstimage").asText();
-                    String name = item.path("title").asText();
-
-                    if (location.isEmpty() || address.isEmpty() || contentId.isEmpty()
-                        || firstImage.isEmpty() || name.isEmpty() || !endsWithJpgOrJpeg(
-                        firstImage)) {
-                        continue;
-                    }
-
-                    Image accommodationImage = Image.builder().imgType(1).url(firstImage).build();
-                    processAccommodationDescription(contentId, accommodationImage, name, address,
-                        location);
+                if (location.isEmpty() || address.isEmpty() || contentId.isEmpty()
+                    || firstImage.isEmpty() || name.isEmpty() || !endsWithJpgOrJpeg(
+                    firstImage)) {
+                    continue;
                 }
+
+                Image accommodationImage = Image.builder().imgType(1).url(firstImage).build();
+                processAccommodationDescription(contentId, accommodationImage, name, address,
+                    location);
             }
+        } catch (Exception e) {
+            System.out.println("AccommodationInfo Error : " + e.getMessage());
         }
     }
 
@@ -120,25 +119,19 @@ public class OpenApiService {
             , "serviceKey", decodeApiKey
         );
         Optional<JsonNode> responseNode = makeApiCall(accommodationDescriptionUrl);
+        try {
+            JsonNode items =
+                responseNode.get().path("response").path("body").path("items").path("item");
 
-        if (responseNode.isPresent()) {
-            JsonNode items = responseNode.get().path("response").path("body").path("items");
-
-            if (!items.isEmpty()) {
-                JsonNode itemList = items.path("item");
-
-                // 여러 객실 중 첫 번째 객실만 사용한다.
-                if (itemList.get(0) != null) {
-                    String description = itemList.get(0).path("overview").asText();
-
-                    if (description.isEmpty()) {
-                        return;
-                    }
-
-                    processRoomInfo(contentId, accommodationImage, name, address, location,
-                        description);
-                }
+            // 여러 객실 중 첫 번째 객실만 사용한다.
+            String description = items.get(0).path("overview").asText();
+            if (description.isEmpty()) {
+                return;
             }
+
+            processRoomInfo(contentId, accommodationImage, name, address, location, description);
+        } catch (Exception e) {
+            System.out.println("Accommodation Description Error : " + e.getMessage());
         }
     }
 
@@ -155,43 +148,40 @@ public class OpenApiService {
         );
 
         Optional<JsonNode> responseNode = makeApiCall(roomInfoUrl);
-        if (responseNode.isPresent()) {
-            JsonNode items = responseNode.get().path("response").path("body").path("items");
-            if (!items.isEmpty()) {
-                JsonNode itemList = items.path("item");
-                if (itemList.get(0) != null) {
-                    String accommodationPrice =
-                        itemList.get(0).path("roomoffseasonminfee1").asText();
-                    String limitPeople = itemList.get(0).path("roommaxcount").asText();
+        try {
+            JsonNode items =
+                responseNode.get().path("response").path("body").path("items").path("item");
 
-                    if (accommodationPrice.equals("0") || limitPeople.equals("0")) {
-                        return;
-                    }
+            String accommodationPrice = items.get(0).path("roomoffseasonminfee1").asText();
+            String limitPeople = items.get(0).path("roommaxcount").asText();
 
-                    if (!itemList.get(0).path("roomimg1").asText().isEmpty()) {
-                        List<Image> roomImages = new ArrayList<>();
-                        for (int i = 1; i <= 5; i++) {
-                            String imageUrl = itemList.get(0).path("roomimg" + i).asText();
-                            if (!imageUrl.isEmpty() && endsWithJpgOrJpeg(imageUrl)) {
-                                Image roomImage = Image.builder().imgType(2).url(imageUrl).build();
-                                roomImages.add(roomImage);
-                            }
-                        }
+            if (accommodationPrice.equals("0") || limitPeople.equals("0")) {
+                return;
+            }
 
-                        saveAccommodationAndImages(accommodationImage,
-                            roomImages, name,
-                            address, location, description, accommodationPrice, limitPeople,contentId);
-                    }
+            List<Image> roomImages = new ArrayList<>();
+            for (int i = 1; i <= 5; i++) {
+                String imageUrl = items.get(0).path("roomimg" + i).asText();
+                if (!imageUrl.isEmpty() && endsWithJpgOrJpeg(imageUrl)) {
+                    Image roomImage = Image.builder().imgType(2).url(imageUrl).build();
+                    roomImages.add(roomImage);
                 }
             }
+
+            saveAccommodationAndImages(accommodationImage,
+                roomImages, name,
+                address, location, description, accommodationPrice, limitPeople);
+
+        } catch (Exception e) {
+            System.out.println("RoomInfo Error : " + e.getMessage());
         }
     }
 
     @Transactional
     public void saveAccommodationAndImages(Image accomodationImage,
         List<Image> roomImages, String name,
-        String address, String location, String description, String accomodationPrice,
-        String limitPeople, String contentId
+        String address, String location, String description, String accommodationPrice,
+        String limitPeople
     ) {
 
         Accommodation accommodation = Accommodation.builder()
@@ -200,8 +190,7 @@ public class OpenApiService {
             .address(address)
             .location(Long.valueOf(location))
             .limitPeople(Long.valueOf(limitPeople))
-            .price(Long.valueOf(accomodationPrice))
-            .contentId(contentId)
+            .price(Long.valueOf(accommodationPrice))
             .build();
 
         // Accomodation Info 저장
@@ -219,7 +208,7 @@ public class OpenApiService {
             accommodation.addImage(roomImage);
         }
 
-//        printProductInfo(accommodation);
+//        printSaveAccommodationInfo(accommodation);
     }
 
     private boolean endsWithJpgOrJpeg(String url) {
@@ -231,15 +220,15 @@ public class OpenApiService {
         return extension.equals("jpg") || extension.equals("jpeg");
     }
 
-    private void printProductInfo(Accommodation accomodation) {
-        System.out.println("Address: " + accomodation.getAddress());
-        System.out.println("AreaCode: " + accomodation.getLocation());
-        System.out.println("Title: " + accomodation.getName());
-        System.out.println("RoomFee: " + accomodation.getPrice());
-        System.out.println("MaxCount: " + accomodation.getLimitPeople());
-        System.out.println("description: " + accomodation.getDescription());
+    private void printSaveAccommodationInfo(Accommodation accommodation) {
+        System.out.println("Address: " + accommodation.getAddress());
+        System.out.println("AreaCode: " + accommodation.getLocation());
+        System.out.println("Title: " + accommodation.getName());
+        System.out.println("RoomFee: " + accommodation.getPrice());
+        System.out.println("MaxCount: " + accommodation.getLimitPeople());
+        System.out.println("description: " + accommodation.getDescription());
         System.out.println("Image: ");
-        accomodation.getImages().stream()
+        accommodation.getImages().stream()
             .forEach(image1 -> System.out.println(
                 "Type: " + image1.getImgType() + ", URL: "
                     + image1.getUrl()));
