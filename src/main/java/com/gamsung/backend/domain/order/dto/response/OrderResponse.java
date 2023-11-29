@@ -1,7 +1,6 @@
 package com.gamsung.backend.domain.order.dto.response;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record OrderResponse(
         LocalDate orderDatetime,
