@@ -9,6 +9,7 @@ import com.gamsung.backend.global.common.ApiResponse;
 import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "숙소 리스트 결제 API", description = "숙소들을 결제하여 예약합니다.")
     public ResponseEntity<ApiResponse<OrderAccommodationResponse>> orderAccommodation(@RequestBody @Valid List<OrderAccommodationRequest> orderAccommodationRequestList,
-                                                                                      @MemberAuth AuthContext authContext
+                                                                                      @Parameter(hidden = true) @MemberAuth AuthContext authContext
     ){
         OrderAccommodationResponse response = orderService.orderAccommodation(orderAccommodationRequestList, authContext.id());
         return ResponseEntity.ok(ApiResponse.create(2003, response));
@@ -46,8 +47,8 @@ public class OrderController {
 
     @GetMapping("/me")
     @Operation(summary = "예약 조회 API", description = "결제가 완료된 예약 리스트를 조회합니다.")
-    public ResponseEntity<ApiResponse<List<OrderResponse>>> getUserOrderList(@PageableDefault(
-            page = 0, size = 8) Pageable pageable, @MemberAuth AuthContext authContext) {
+    public ResponseEntity<ApiResponse<List<OrderResponse>>> getUserOrderList(@Parameter(hidden = true) @PageableDefault(
+            size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         List<OrderResponse> response = orderService.getMemberOrdersList(pageable, authContext.id());
         return ResponseEntity.ok(ApiResponse.create(2000, response));
     }
