@@ -29,6 +29,6 @@ public class JwtController {
             @Valid @RequestBody RefreshAccessTokenControllerRequest request
     ) {
         JwtPair jwtPair = jwtService.refreshAccessToken(request.data());
-        return ResponseEntity.ok(ApiResponse.create(1011, jwtPair));
+        return ResponseEntity.ok(ApiResponse.create(1008, jwtPair));
     }
 }
