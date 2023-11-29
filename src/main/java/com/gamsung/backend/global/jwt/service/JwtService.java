@@ -65,4 +65,8 @@ public class JwtService {
                 .refreshToken(request.refreshToken())
                 .build();
     }
+
+    public void deleteRefreshToken(String email) {
+        jwtRedisRepository.deleteByKey(email);
+    }
 }

@@ -12,7 +12,6 @@ import com.gamsung.backend.domain.member.exception.MemberLoginWrongPasswordExcep
 import com.gamsung.backend.domain.member.exception.MemberNotFoundException;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
-import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
 import com.gamsung.backend.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final JwtRedisRepository jwtRedisRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
@@ -66,7 +64,7 @@ public class MemberService {
 
     @Transactional
     public MemberLogoutResponse logout(String email) {
-        jwtRedisRepository.deleteByKey(email);
+        jwtService.deleteRefreshToken(email);
         return MemberLogoutResponse.create();
     }
 
