@@ -41,7 +41,7 @@ public class CartFindResponse {
                 .endDate(cart.getEndDate())
                 .peopleNumber(cart.getReservationPeople())
                 .cartPrice(cart.getPrice())
-                .accommodationImg(String.valueOf(cart.getAccommodation().getImages().get(0)))
+                .accommodationImg(String.valueOf(cart.getAccommodation().getImages().get(0).getUrl()))
                 .accommodationSoldOut(cart.getIsDeleted())
                 .build();
     }
