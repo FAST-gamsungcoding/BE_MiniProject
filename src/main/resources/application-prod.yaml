@@ -2,13 +2,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: ${PROD_DDL_AUTO:validate}
-
-logging:
-  file:
-    name: gamsung-backend.log
-  pattern:
-    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
-  logback:
-    rollingpolicy:
-      max-file-size: 100MB
-      max-history: 30
