@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record OrderResponse(
-        LocalDateTime orderDate,
+        LocalDate orderDatetime,
         long accommodationId,
         String accommodationName,
         String accommodationImg,
@@ -14,7 +14,7 @@ public record OrderResponse(
         String representativeName,
         long orderPrice
 ) {
-   public static OrderResponse from(LocalDateTime orderDate, long accommodationId, String accommodationName,
+   public static OrderResponse from(LocalDate orderDate, long accommodationId, String accommodationName,
                                     String accommodationImg, int peopleNumber, LocalDate startDate,
                                     LocalDate endDate, String representativeName, long orderPrice) {
       return new OrderResponse(orderDate, accommodationId, accommodationName,
