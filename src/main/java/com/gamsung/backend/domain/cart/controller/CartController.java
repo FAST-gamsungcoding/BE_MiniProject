@@ -2,6 +2,8 @@ package com.gamsung.backend.domain.cart.controller;
 
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
+import com.gamsung.backend.domain.cart.dto.response.CartDeleteResponse;
+import com.gamsung.backend.domain.cart.dto.response.CartEntryResponse;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.cart.service.CartService;
 import com.gamsung.backend.global.common.ApiResponse;
@@ -30,11 +32,12 @@ public class CartController {
 
     @PostMapping
     @Operation(summary = "장바구니에 상품 추가 API", description = ENTRY_MY_CART)
-    public ResponseEntity<ApiResponse<String>> entryMyCart(@Valid @RequestBody CartEntryRequest cartEntryRequest
-    ,@MemberAuth AuthContext authContext) {
+    public ResponseEntity<ApiResponse<CartEntryResponse>> entryMyCart(@Valid @RequestBody CartEntryRequest cartEntryRequest
+    , @MemberAuth AuthContext authContext) {
         Long memberId = authContext.id();
         cartService.entryMyCart(cartEntryRequest,memberId);
-        return ResponseEntity.ok(ApiResponse.create(4001,"장바구니에 추가되었습니다."));
+        CartEntryResponse responseData = CartEntryResponse.create();
+        return ResponseEntity.ok(ApiResponse.create(4001,responseData));
     }
 
 
@@ -48,11 +51,12 @@ public class CartController {
 
     @DeleteMapping
     @Operation(summary = "장바구니 삭제 API", description = DELETE_MY_CART)
-    public ResponseEntity<ApiResponse<String>> deleteMyCart(@Valid @RequestBody CartDeleteRequest cartDeleteRequest,
-                                                            @MemberAuth AuthContext authContext) {
+    public ResponseEntity<ApiResponse<CartDeleteResponse>> deleteMyCart(@Valid @RequestBody CartDeleteRequest cartDeleteRequest,
+                                                                        @MemberAuth AuthContext authContext) {
         Long memberId = authContext.id();
         System.out.println(cartDeleteRequest.getDeleteId());
         cartService.deleteMyCart(cartDeleteRequest,memberId);
-        return ResponseEntity.ok(ApiResponse.create(4003,"선택한 항목들이 삭제되었습니다."));
+        CartDeleteResponse responseData = CartDeleteResponse.create();
+        return ResponseEntity.ok(ApiResponse.create(4003,responseData));
     }
 }
