@@ -52,7 +52,7 @@ public class OrderController {
     @Operation(summary = "예약 조회 API", description = "결제가 완료된 예약 리스트를 조회합니다."
     ,security = @SecurityRequirement(name = "bearer-jwt"))
     public ResponseEntity<ApiResponse<FindOrderListResponse>> getUserOrderList(@Parameter(hidden = true) @PageableDefault(
-            size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
+            page = 1, size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         FindOrderListResponse response = orderService.getMemberOrdersList(pageable, authContext.id());
         return ResponseEntity.ok(ApiResponse.create(2000, response));
     }
