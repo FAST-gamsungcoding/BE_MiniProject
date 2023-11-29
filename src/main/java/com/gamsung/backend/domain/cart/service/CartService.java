@@ -78,6 +78,7 @@ public class CartService {
             // 만약 해당 상품이 품절이면 isDeleted를 true로 설정하고, 그렇지 않으면 false로 설정
         }
 
+
         return myCartList.stream()
                 .map(CartFindResponse::fromEntity)
                 .collect(Collectors.toList());
