@@ -11,9 +11,7 @@ import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +29,7 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "숙소 리스트 결제 API", description = "숙소들을 결제하여 예약합니다.")
     public ResponseEntity<ApiResponse<OrderAccommodationResponse>> orderAccommodation(@RequestBody @Validated List<OrderAccommodationRequest> orderAccommodationRequestList,
-                                                          @MemberAuth AuthContext authContext
+                                                                                      @MemberAuth AuthContext authContext
     ){
         OrderAccommodationResponse response = orderService.orderAccommodation(orderAccommodationRequestList, authContext.id());
         return ResponseEntity.ok(ApiResponse.create(2004, response));

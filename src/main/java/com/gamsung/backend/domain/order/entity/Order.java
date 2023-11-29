@@ -1,6 +1,6 @@
 package com.gamsung.backend.domain.order.entity;
 
-import com.gamsung.backend.domain.accomodation.entity.Accommodation;
+import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Table(name = "orders")
-@NoArgsConstructor//(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Order extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

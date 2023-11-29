@@ -11,6 +11,7 @@ import com.gamsung.backend.domain.order.repository.OrderRepository;
 import com.gamsung.backend.global.exception.BookDateUnavailableException;
 import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
     private static final int ID_ZERO = 0;
-    OrderRepository orderRepository;
-    CartRepository cartRepository;
+    private final OrderRepository orderRepository;
+//    private final CartRepository cartRepository;
 
     @Transactional
     public OrderAccommodationResponse orderAccommodation(List<OrderAccommodationRequest> orderAccommodationRequestList,
@@ -41,13 +43,13 @@ public class OrderService {
                     orderRequest.getOrderPrice()
             );
 
-            if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
-                    order.getAccommodation().getId(), order.getEndDate(), order.getStartDate())
-            ) {
-                soldOutOrders.add(SoldOutOrder.from(order.getAccommodation().getId(),
-                        order.getStartDate(), order.getEndDate()));
-                continue;
-            }
+//            if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
+//                    order.getAccommodationId(), order.getEndDate(), order.getStartDate())
+//            ) {
+//                soldOutOrders.add(SoldOutOrder.from(order.getAccommodationId(),
+//                        order.getStartDate(), order.getEndDate()));
+//                continue;
+//            }
 
             orderList.add(order);
 
@@ -69,7 +71,7 @@ public class OrderService {
 
     @Transactional
     public BookDateAvailableResponse checkBookDate(long id, LocalDate startDate, LocalDate endDate) {
-        if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(id, startDate, endDate)) {
+        if (orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(id, startDate, endDate)) {
             throw new BookDateUnavailableException();
         }
         return BookDateAvailableResponse.create();
