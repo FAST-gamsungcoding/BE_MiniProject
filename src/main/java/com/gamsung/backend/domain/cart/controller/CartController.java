@@ -11,14 +11,16 @@ import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Name;
 import java.util.List;
 
-
+@Tag(name = "장바구니")
 @RestController
 @RequestMapping("/v1/cart")
 @RequiredArgsConstructor
