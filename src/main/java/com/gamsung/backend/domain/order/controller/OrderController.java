@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.gamsung.backend.global.config.SwaggerDescriptionConfig.*;
-
 @RestController
 @RequestMapping("/v1/order")
 @RequiredArgsConstructor
