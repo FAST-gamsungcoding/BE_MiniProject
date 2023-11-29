@@ -57,6 +57,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> handleOrderSoldOutException(OrderSoldOutException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 ApiResponse.create(Integer.parseInt(e.getCode()), ErrorMessage.create(e.getMessage()))
+        );
+    }
 
     @ExceptionHandler(CartException.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleCartException(CartException e) {
