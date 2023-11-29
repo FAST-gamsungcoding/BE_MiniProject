@@ -4,5 +4,7 @@ Authorization: Bearer <put-access-token>
 Content-Type: application/json
 
 {
-  "refreshToken": "<put-refresh-token>"
+  "data": {
+    "refresh_token": "<put-refresh-token>"
+  }
 }
