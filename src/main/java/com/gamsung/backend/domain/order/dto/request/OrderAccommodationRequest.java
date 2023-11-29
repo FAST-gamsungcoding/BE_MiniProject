@@ -28,10 +28,8 @@ public class OrderAccommodationRequest {
     @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     LocalDate endDate;
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-    @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     String representativeName;
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-    @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     String representativeEmail;
     @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     int orderPrice;

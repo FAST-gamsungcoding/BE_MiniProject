@@ -19,10 +19,8 @@ public class CartEntryRequest {
     @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     private Long accommodationId;
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-    @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     private String name;
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-    @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     private String address;
     @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     private LocalDate startDate;
@@ -33,6 +31,5 @@ public class CartEntryRequest {
     @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     private Long cartPrice;
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-    @NotNull(message = "데이터 형식이 올바르지 않습니다.")
     private String accommodationImg;
 }

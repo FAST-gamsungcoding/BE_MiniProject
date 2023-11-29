@@ -6,10 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record MemberLoginRequest(
         @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-        @NotNull(message = "데이터 형식이 올바르지 않습니다.")
         String email,
         @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
-        @NotNull(message = "데이터 형식이 올바르지 않습니다.")
         String password
 ) {
     public static MemberLoginRequest from(MemberControllerLoginRequest controllerLoginRequest) {

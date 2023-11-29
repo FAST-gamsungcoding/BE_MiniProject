@@ -107,27 +107,4 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<ErrorMessage>> handleBindValidationError(MethodArgumentNotValidException e) {
-        FieldError fieldError = e.getBindingResult().getFieldError();
-        String errorMessage = (fieldError != null) ? fieldError.getDefaultMessage() : null;
-
-        BaseException baseException;
-
-        if (errorMessage != null) {
-            if (ValidationCode.DATA_NOT_ALLOW_TYPE.getMessage().equals(errorMessage)) {
-                baseException = new BaseException(ErrorCode.DATA_NOT_ALLOW_TYPE);
-            }
-            else {
-                baseException = new BaseException(ErrorCode.SERVICE_ERREOR);
-            }
-        }
-        else {
-            baseException = new BaseException(ErrorCode.SERVICE_ERREOR);
-        }
-        return ResponseEntity.badRequest().body(
-                ApiResponse.create(Integer.parseInt(baseException.getCode()),
-                        ErrorMessage.create(baseException.getMessage()))
-        );
-    }
 }
