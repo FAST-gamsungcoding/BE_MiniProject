@@ -1,0 +1,9 @@
+###회원가입 요청1
+POST http://localhost:8080/v1/member/register
+Content-Type: application/json
+
+{
+  "email" : "hi@naver.com",
+  "password" : "1234qwer!",
+  "name" : "김민희"
+}
