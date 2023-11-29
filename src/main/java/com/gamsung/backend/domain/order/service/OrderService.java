@@ -88,7 +88,7 @@ public class OrderService {
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Order order : orderList) {
             OrderResponse orderResponse = OrderResponse.from(
-                    order.getCreatedAt(),
+                    order.getCreatedAt().toLocalDate(),
                     order.getAccommodationId(),
                     order.getAccommodation().getName(),
                     order.getAccommodation().getImages().get(0).getUrl(),
