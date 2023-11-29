@@ -13,4 +13,5 @@ import java.util.List;
 public class FindOrderListResponse {
     List<OrderResponse> orderList;
     int totalPage;
+    int pageNumber;
 }
