@@ -48,7 +48,7 @@ public class OrderController {
     @GetMapping("/me")
     @Operation(summary = "예약 조회 API", description = "결제가 완료된 예약 리스트를 조회합니다.")
     public ResponseEntity<ApiResponse<List<OrderResponse>>> getUserOrderList(@Parameter(hidden = true) @PageableDefault(
-            page = 0, size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
+            size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         List<OrderResponse> response = orderService.getMemberOrdersList(pageable, authContext.id());
         return ResponseEntity.ok(ApiResponse.create(2000, response));
     }
