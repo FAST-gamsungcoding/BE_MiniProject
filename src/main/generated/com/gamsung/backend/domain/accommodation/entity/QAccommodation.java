@@ -1,4 +1,4 @@
-package com.gamsung.backend.domain.accomodation.entity;
+package com.gamsung.backend.domain.accommodation.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -11,18 +11,21 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QAccomodation is a Querydsl query type for Accomodation
+ * QAccommodation is a Querydsl query type for Accommodation
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QAccomodation extends EntityPathBase<Accomodation> {
+public class QAccommodation extends EntityPathBase<Accommodation> {
 
-    private static final long serialVersionUID = 233581954L;
+    private static final long serialVersionUID = -2088461082L;
 
-    public static final QAccomodation accomodation = new QAccomodation("accomodation");
+    public static final QAccommodation accommodation = new QAccommodation("accommodation");
+
+    public final com.gamsung.backend.global.common.QBaseTime _super = new com.gamsung.backend.global.common.QBaseTime(this);
 
     public final StringPath address = createString("address");
 
-    public final StringPath contentId = createString("contentId");
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath description = createString("description");
 
@@ -34,20 +37,23 @@ public class QAccomodation extends EntityPathBase<Accomodation> {
 
     public final NumberPath<Long> location = createNumber("location", Long.class);
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
+
     public final StringPath name = createString("name");
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
 
-    public QAccomodation(String variable) {
-        super(Accomodation.class, forVariable(variable));
+    public QAccommodation(String variable) {
+        super(Accommodation.class, forVariable(variable));
     }
 
-    public QAccomodation(Path<? extends Accomodation> path) {
+    public QAccommodation(Path<? extends Accommodation> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QAccomodation(PathMetadata metadata) {
-        super(Accomodation.class, metadata);
+    public QAccommodation(PathMetadata metadata) {
+        super(Accommodation.class, metadata);
     }
 
 }
