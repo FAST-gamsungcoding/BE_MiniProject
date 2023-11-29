@@ -11,6 +11,7 @@ import com.gamsung.backend.global.config.UserDetailsConfig;
 import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CartController {
     @PostMapping
     @Operation(summary = "장바구니에 상품 추가 API", description = ENTRY_MY_CART)
     public ResponseEntity<ApiResponse<CartEntryResponse>> entryMyCart(@Valid @RequestBody CartEntryRequest cartEntryRequest
-    , @MemberAuth AuthContext authContext) {
+    , @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         Long memberId = authContext.id();
         cartService.entryMyCart(cartEntryRequest,memberId);
         CartEntryResponse responseData = CartEntryResponse.create();
@@ -43,7 +44,7 @@ public class CartController {
 
     @GetMapping
     @Operation(summary = "장바구니 목록 확인 API", description = FIND_MY_CART)
-    public ResponseEntity<ApiResponse<List<CartFindResponse>>> findMyCart(@MemberAuth AuthContext authContext) {
+    public ResponseEntity<ApiResponse<List<CartFindResponse>>> findMyCart(@Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         Long memberId = authContext.id();
         List<CartFindResponse> myCartList = cartService.findMyCart(memberId);
         return ResponseEntity.ok(ApiResponse.create(4000,myCartList));
@@ -52,7 +53,7 @@ public class CartController {
     @DeleteMapping
     @Operation(summary = "장바구니 삭제 API", description = DELETE_MY_CART)
     public ResponseEntity<ApiResponse<CartDeleteResponse>> deleteMyCart(@Valid @RequestBody CartDeleteRequest cartDeleteRequest,
-                                                                        @MemberAuth AuthContext authContext) {
+                                                                        @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
         Long memberId = authContext.id();
         System.out.println(cartDeleteRequest.getDeleteId());
         cartService.deleteMyCart(cartDeleteRequest,memberId);
