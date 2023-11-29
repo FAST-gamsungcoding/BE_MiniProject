@@ -26,7 +26,7 @@ public class CartFindResponse {
     private LocalDate endDate;
     private Long peopleNumber;
     private Long cartPrice;
-    private List<Image> accommodationImg;
+    private String accommodationImg;
     private Boolean accommodationSoldOut;
 
 
@@ -41,7 +41,7 @@ public class CartFindResponse {
                 .endDate(cart.getEndDate())
                 .peopleNumber(cart.getReservationPeople())
                 .cartPrice(cart.getPrice())
-                .accommodationImg(cart.getAccommodation().getImages())
+                .accommodationImg(String.valueOf(cart.getAccommodation().getImages().get(0)))
                 .accommodationSoldOut(cart.getIsDeleted())
                 .build();
     }
