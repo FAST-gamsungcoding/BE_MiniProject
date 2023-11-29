@@ -1,7 +1,12 @@
 package com.gamsung.backend.domain.image.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gamsung.backend.domain.accomodation.entity.Accomodation;
+
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.global.common.BaseTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,8 +35,10 @@ public class Image extends BaseTime {
     Integer imgType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id")
-    Accommodation accommodation;
+
+    @JoinColumn(name = "accomodation_id")
+    @JsonIgnore
+    Accomodation accomodation;
 
     @Column(nullable = false)
     String url;

@@ -27,6 +27,9 @@ public enum ErrorCode {
     // 이미지
     IMAGE_NO_EXIST("6001","해당 숙소의 이미지 정보가 없습니다."),
 
+    //장바구니
+    CART_LIMIT_OVER("4002","장바구니가 최대 개수인 10개를 초과했습니다."),
+    CART_ID_NO_EXIST("4004","삭제하고자 하는 제품이 존재하지 않습니다."),
     // 공통
     JWT_INVALID_ACCESS_TOKEN("5000", "액세스 토큰이 유효하지 않습니다."),
     JWT_EXPIRED_ACCESS_TOKEN("5001", "액세스 토큰이 만료되었습니다."),

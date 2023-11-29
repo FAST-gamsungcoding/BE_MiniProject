@@ -1,6 +1,8 @@
 package com.gamsung.backend.global.exception;
 
+
 import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
+import com.gamsung.backend.domain.cart.exception.CartException;
 import com.gamsung.backend.global.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+
     @ExceptionHandler(BookDateUnavailableException.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleBookDateUnavailableException(BookDateUnavailableException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -54,6 +57,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<ErrorMessage>> handleOrderSoldOutException(OrderSoldOutException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 ApiResponse.create(Integer.parseInt(e.getCode()), ErrorMessage.create(e.getMessage()))
+
+    @ExceptionHandler(CartException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleCartException(CartException e) {
+        // ErrorResponse 클래스는 예외를 클라이언트에게 전달할 때 사용될 구조입니다.
+        return ResponseEntity.badRequest().body(
+                ApiResponse.create(Integer.parseInt(e.getCode()),
+                        ErrorMessage.create(e.getMessage()))
         );
     }
 }
