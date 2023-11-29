@@ -3,15 +3,13 @@ package com.gamsung.backend.domain.order.service;
 import com.gamsung.backend.domain.accommodation.service.AccommodationService;
 import com.gamsung.backend.domain.cart.repository.CartRepository;
 import com.gamsung.backend.domain.order.dto.request.OrderAccommodationRequest;
-import com.gamsung.backend.domain.order.dto.response.BookDateAvailableResponse;
-import com.gamsung.backend.domain.order.dto.response.OrderAccommodationResponse;
-import com.gamsung.backend.domain.order.dto.response.OrderResponse;
-import com.gamsung.backend.domain.order.dto.response.SoldOutOrder;
+import com.gamsung.backend.domain.order.dto.response.*;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
 import com.gamsung.backend.domain.order.repository.OrderRepository;
 import com.gamsung.backend.global.exception.BookDateUnavailableException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,8 +80,9 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderResponse> getMemberOrdersList(Pageable pageable, long id) {
-        List<Order> orderList = orderRepository.findByMemberIdOrderByCreatedAtDesc(id, pageable);
+    public FindOrderListResponse getMemberOrdersList(Pageable pageable, long id) {
+        Page<Order> orderPages = orderRepository.findByMemberIdOrderByCreatedAtDesc(id, pageable);
+        List<Order> orderList = orderPages.getContent();
 
         List<OrderResponse> orderResponses = new ArrayList<>();
         for (Order order : orderList) {
@@ -99,7 +98,8 @@ public class OrderService {
                     order.getOrderPrice());
             orderResponses.add(orderResponse);
         }
-        return orderResponses;
+
+        return new FindOrderListResponse(orderResponses, orderPages.getTotalPages(), orderPages.getNumber() + 1);
     }
 
     private boolean isFromCart(long cartId) {

@@ -1,13 +1,12 @@
 package com.gamsung.backend.domain.accommodation.service;
 
 import com.gamsung.backend.domain.accommodation.dto.response.AccommodationDetailResponse;
+import com.gamsung.backend.domain.accommodation.dto.response.AccommodationSummaryListResponse;
 import com.gamsung.backend.domain.accommodation.dto.response.AccommodationSummaryResponse;
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.exception.AccommodationNotFoundException;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
 import com.gamsung.backend.domain.image.entity.Image;
-import com.gamsung.backend.domain.image.service.ImageService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,18 +36,25 @@ public class AccommodationService {
     }
 
     @Transactional(readOnly = true)
-    public List<AccommodationSummaryResponse> getAccommodationInfoByLocation(Long location,
+    public AccommodationSummaryListResponse getAccommodationInfoByLocation(Long location,
         Pageable pageable) {
         Page<Accommodation> accommodationPage =
             accommodationRepository.findAccommodationByLocation(location, pageable);
 
-        return accommodationPage.getContent().stream()
-            .map(accommodation -> AccommodationSummaryResponse.from(
-                    accommodation,
-                    accommodation.getImages().get(0).getUrl()
+        List<AccommodationSummaryResponse> summaryResponses =
+            accommodationPage.getContent().stream()
+                .map(accommodation -> AccommodationSummaryResponse.from(
+                        accommodation,
+                        accommodation.getImages().get(0).getUrl()
+                    )
                 )
-            )
-            .collect(Collectors.toList());
+                .collect(Collectors.toList());
+
+        return AccommodationSummaryListResponse.from(
+            summaryResponses,
+            accommodationPage.getTotalPages(),
+            accommodationPage.getNumber()
+        );
     }
 
     @Transactional(readOnly = true)
