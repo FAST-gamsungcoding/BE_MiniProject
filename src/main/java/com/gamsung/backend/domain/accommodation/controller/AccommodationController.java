@@ -6,6 +6,8 @@ import com.gamsung.backend.global.common.ApiResponse;
 import com.gamsung.backend.global.openapi.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Tag(name = "숙소")
 @RestController
 @RequestMapping("/v1/accommodations")
 @RequiredArgsConstructor
