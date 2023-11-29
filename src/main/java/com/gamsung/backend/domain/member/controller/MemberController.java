@@ -11,11 +11,13 @@ import com.gamsung.backend.domain.member.dto.response.MemberRegisterEmailCheckRe
 import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.service.MemberService;
 import com.gamsung.backend.global.common.ApiResponse;
+import com.gamsung.backend.global.jwt.util.JwtUtil;
 import com.gamsung.backend.global.resolver.AuthContext;
 import com.gamsung.backend.global.resolver.MemberAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,9 +62,12 @@ public class MemberController {
     @PostMapping("/logout")
     @Operation(summary = "로그아웃 API", description = MEMBER_LOGOUT)
     public ResponseEntity<ApiResponse<MemberLogoutResponse>> memberLogout(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
             @MemberAuth AuthContext authContext
     ) {
-        MemberLogoutResponse response = memberService.logout(authContext.email());
+        MemberLogoutResponse response = memberService.logout(authContext.email(),
+                JwtUtil.extractAccessToken(authorization)
+        );
         return ResponseEntity.ok(ApiResponse.create(1011, response));
     }
 }
