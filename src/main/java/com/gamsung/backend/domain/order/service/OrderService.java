@@ -1,5 +1,6 @@
 package com.gamsung.backend.domain.order.service;
 
+import com.gamsung.backend.domain.accommodation.service.AccommodationService;
 import com.gamsung.backend.domain.cart.repository.CartRepository;
 import com.gamsung.backend.domain.order.dto.request.OrderAccommodationRequest;
 import com.gamsung.backend.domain.order.dto.response.BookDateAvailableResponse;
@@ -27,6 +28,7 @@ public class OrderService {
     private static final int ID_ZERO = 0;
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
+    private final AccommodationService accommodationService;
 
     @Transactional
     public OrderAccommodationResponse orderAccommodation(List<OrderAccommodationRequest> orderAccommodationRequestList,
@@ -36,6 +38,7 @@ public class OrderService {
         List<SoldOutOrder> soldOutOrders = new ArrayList<>();
 
         for (OrderAccommodationRequest orderRequest : orderAccommodationRequestList) {
+            accommodationService.findById(orderRequest.getAccommodationId());
             Order order = Order.of(
                     userId,
                     orderRequest.getAccommodationId(), orderRequest.getPeopleNumber(),
