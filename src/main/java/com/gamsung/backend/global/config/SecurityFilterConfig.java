@@ -1,5 +1,6 @@
 package com.gamsung.backend.global.config;
 
+import com.gamsung.backend.global.jwt.security.JwtExceptionFilter;
 import com.gamsung.backend.global.jwt.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.cors.CorsUtils;
 @RequiredArgsConstructor
 public class SecurityFilterConfig {
 
+    private final JwtExceptionFilter jwtExceptionFilter;
     private final JwtFilter jwtFilter;
 
     @Bean
@@ -46,6 +48,7 @@ public class SecurityFilterConfig {
                 );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtFilter.class);
 
         return http.build();
     }
