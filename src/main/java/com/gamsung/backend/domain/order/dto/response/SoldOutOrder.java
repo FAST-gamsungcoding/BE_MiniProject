@@ -1,7 +1,5 @@
 package com.gamsung.backend.domain.order.dto.response;
 
-import lombok.Builder;
-
 import java.time.LocalDate;
 
 public record SoldOutOrder(
