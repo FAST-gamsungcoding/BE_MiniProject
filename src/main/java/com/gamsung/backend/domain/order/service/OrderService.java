@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,13 +44,13 @@ public class OrderService {
                     orderRequest.getOrderPrice()
             );
 
-//            if (!orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
-//                    order.getAccommodationId(), order.getEndDate(), order.getStartDate())
-//            ) {
-//                soldOutOrders.add(SoldOutOrder.from(order.getAccommodationId(),
-//                        order.getStartDate(), order.getEndDate()));
-//                continue;
-//            }
+            if (orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(
+                    order.getAccommodationId(), order.getEndDate(), order.getStartDate()).isPresent()
+            ) {
+                soldOutOrders.add(SoldOutOrder.from(order.getAccommodationId(),
+                        order.getStartDate(), order.getEndDate()));
+                continue;
+            }
 
             orderList.add(order);
 
@@ -71,7 +72,8 @@ public class OrderService {
 
     @Transactional
     public BookDateAvailableResponse checkBookDate(long id, LocalDate startDate, LocalDate endDate) {
-        if (orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(id, startDate, endDate)) {
+        Optional<Order> soldOrder = orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(id, startDate, endDate);
+        if (soldOrder.isPresent()) {
             throw new BookDateUnavailableException();
         }
         return BookDateAvailableResponse.create();
