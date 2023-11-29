@@ -2,8 +2,8 @@ package com.gamsung.backend.domain.order.controller;
 
 import com.gamsung.backend.domain.order.dto.request.OrderAccommodationRequest;
 import com.gamsung.backend.domain.order.dto.response.BookDateAvailableResponse;
+import com.gamsung.backend.domain.order.dto.response.FindOrderListResponse;
 import com.gamsung.backend.domain.order.dto.response.OrderAccommodationResponse;
-import com.gamsung.backend.domain.order.dto.response.OrderResponse;
 import com.gamsung.backend.domain.order.service.OrderService;
 import com.gamsung.backend.global.common.ApiResponse;
 import com.gamsung.backend.global.resolver.AuthContext;
@@ -51,9 +51,9 @@ public class OrderController {
     @GetMapping("/me")
     @Operation(summary = "예약 조회 API", description = "결제가 완료된 예약 리스트를 조회합니다."
     ,security = @SecurityRequirement(name = "bearer-jwt"))
-    public ResponseEntity<ApiResponse<List<OrderResponse>>> getUserOrderList(@Parameter(hidden = true) @PageableDefault(
+    public ResponseEntity<ApiResponse<FindOrderListResponse>> getUserOrderList(@Parameter(hidden = true) @PageableDefault(
             size = 8) Pageable pageable, @Parameter(hidden = true) @MemberAuth AuthContext authContext) {
-        List<OrderResponse> response = orderService.getMemberOrdersList(pageable, authContext.id());
+        FindOrderListResponse response = orderService.getMemberOrdersList(pageable, authContext.id());
         return ResponseEntity.ok(ApiResponse.create(2000, response));
     }
 
