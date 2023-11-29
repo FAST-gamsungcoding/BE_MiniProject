@@ -34,9 +34,10 @@ public class MemberService {
             throw new MemberLoginWrongPasswordException();
         }
 
-        return MemberLoginResponse.from(jwtService.createTokenPair(
-                JwtPayload.from(storedMember.getId(), storedMember.getEmail())
-        ));
+        return MemberLoginResponse.from(
+                jwtService.createTokenPair(JwtPayload.from(storedMember.getId(), storedMember.getEmail())),
+                storedMember.getName(),
+                storedMember.getEmail());
     }
 
     @Transactional
