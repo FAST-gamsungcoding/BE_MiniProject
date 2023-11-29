@@ -1,13 +1,8 @@
 package com.gamsung.backend.domain.cart.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.gamsung.backend.domain.accomodation.entity.Accomodation;
-import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
+import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.*;
@@ -17,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -31,9 +25,9 @@ public class Cart extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "accomodation_id")
+    @JoinColumn(name = "accommodation_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Accomodation accomodation;
+    private Accommodation accommodation;
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
