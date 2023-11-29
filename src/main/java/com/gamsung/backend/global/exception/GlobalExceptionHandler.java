@@ -1,5 +1,7 @@
 package com.gamsung.backend.global.exception;
 
+
+import com.gamsung.backend.domain.order.exception.OrderSoldOutException;
 import com.gamsung.backend.domain.cart.exception.CartException;
 import com.gamsung.backend.global.common.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,19 @@ public class GlobalExceptionHandler {
                         ErrorMessage.create(validationError.getMessage()))
         );
     }
+
+
+    @ExceptionHandler(BookDateUnavailableException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleBookDateUnavailableException(BookDateUnavailableException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ApiResponse.create(Integer.parseInt(e.getCode()), ErrorMessage.create(e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(OrderSoldOutException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleOrderSoldOutException(OrderSoldOutException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                ApiResponse.create(Integer.parseInt(e.getCode()), ErrorMessage.create(e.getMessage()))
 
     @ExceptionHandler(CartException.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleCartException(CartException e) {

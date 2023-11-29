@@ -4,9 +4,13 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 
-@Builder
-public class SoldOutOrder {
-    long accommodationId;
-    LocalDate startDate;
-    LocalDate endDate;
+public record SoldOutOrder(
+    long accommodationId,
+    LocalDate startDate,
+    LocalDate endDate
+){
+    public static SoldOutOrder from(long accommodationId,
+                                    LocalDate startDate, LocalDate endDate){
+        return new SoldOutOrder(accommodationId,startDate,endDate);
+    }
 }

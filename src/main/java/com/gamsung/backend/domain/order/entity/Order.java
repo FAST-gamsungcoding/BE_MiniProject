@@ -1,5 +1,7 @@
 package com.gamsung.backend.domain.order.entity;
 
+import com.gamsung.backend.domain.accommodation.entity.Accommodation;
+import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,16 +12,24 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Table(name = "orders")
-@NoArgsConstructor//(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Order extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "member_id",nullable = false)
-    private long  memberId;
+    @ManyToOne(targetEntity = Member.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", insertable = false, updatable = false)
+    private Member member;
 
-    @Column(name = "accommodation_id",nullable = false)
-    private long accommodationId;
+    @Column(name = "member_id")
+    private Long memberId;
+
+    @ManyToOne(targetEntity = Accommodation.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_id", insertable = false, updatable = false)
+    private Accommodation accommodation;
+
+    @Column(name = "accommodation_id")
+    private Long accommodationId;
 
     @Column(name = "people_number",nullable = false)
     private int peopleNumber;
@@ -39,7 +49,7 @@ public class Order extends BaseTime {
     @Column(name = "order_price",nullable = false)
     private long orderPrice;
 
-    private Order(long memberId, long accommodationId, int peopleNumber,
+    private Order(Long memberId, Long accommodationId, int peopleNumber,
                   LocalDate startDate, LocalDate endDate, String representativeName,
                   String representativeEmail, long orderPrice) {
         this.memberId = memberId;
@@ -52,7 +62,7 @@ public class Order extends BaseTime {
         this.orderPrice = orderPrice;
     }
 
-    public static Order of(long memberId, long accommodationId, int peopleNumber,
+    public static Order of(Long memberId, Long accommodationId, int peopleNumber,
                            LocalDate startDate, LocalDate endDate, String representativeName,
                            String representativeEmail, long orderPrice) {
         return new Order(memberId, accommodationId, peopleNumber,
