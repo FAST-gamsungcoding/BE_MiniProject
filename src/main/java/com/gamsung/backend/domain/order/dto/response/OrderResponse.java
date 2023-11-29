@@ -1,10 +1,13 @@
 package com.gamsung.backend.domain.order.dto.response;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+import java.time.LocalDate;
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record OrderResponse(
-        LocalDateTime orderDate,
+        LocalDate orderDate,
         long accommodationId,
         String accommodationName,
         String accommodationImg,
@@ -14,7 +17,7 @@ public record OrderResponse(
         String representativeName,
         long orderPrice
 ) {
-   public static OrderResponse from(LocalDateTime orderDate, long accommodationId, String accommodationName,
+   public static OrderResponse from(LocalDate orderDate, long accommodationId, String accommodationName,
                                     String accommodationImg, int peopleNumber, LocalDate startDate,
                                     LocalDate endDate, String representativeName, long orderPrice) {
       return new OrderResponse(orderDate, accommodationId, accommodationName,
