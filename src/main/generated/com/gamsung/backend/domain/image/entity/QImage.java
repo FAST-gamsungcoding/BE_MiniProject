@@ -22,11 +22,19 @@ public class QImage extends EntityPathBase<Image> {
 
     public static final QImage image = new QImage("image");
 
-    public final com.gamsung.backend.domain.accomodation.entity.QAccomodation accomodation;
+    public final com.gamsung.backend.global.common.QBaseTime _super = new com.gamsung.backend.global.common.QBaseTime(this);
+
+    public final com.gamsung.backend.domain.accommodation.entity.QAccommodation accommodation;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final NumberPath<Integer> imgType = createNumber("imgType", Integer.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final StringPath url = createString("url");
 
@@ -48,7 +56,7 @@ public class QImage extends EntityPathBase<Image> {
 
     public QImage(Class<? extends Image> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.accomodation = inits.isInitialized("accomodation") ? new com.gamsung.backend.domain.accomodation.entity.QAccomodation(forProperty("accomodation")) : null;
+        this.accommodation = inits.isInitialized("accommodation") ? new com.gamsung.backend.domain.accommodation.entity.QAccommodation(forProperty("accommodation")) : null;
     }
 
 }

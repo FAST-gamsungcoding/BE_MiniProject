@@ -38,14 +38,14 @@ public class CartFindResponse {
 
         return CartFindResponse.builder()
                 .cartId(cart.getId())
-                .accommodationId(cart.getAccomodation().getId())
-                .accommodationName(cart.getAccomodation().getName())
-                .address(cart.getAccomodation().getAddress())
+                .accommodationId(cart.getAccommodation().getId())
+                .accommodationName(cart.getAccommodation().getName())
+                .address(cart.getAccommodation().getAddress())
                 .startDate(cart.getStartDate())
                 .endDate(cart.getEndDate())
                 .peopleNumber(cart.getReservationPeople())
                 .cartPrice(cart.getPrice())
-                .accommodationImg(cart.getAccomodation().getImages())
+                .accommodationImg(cart.getAccommodation().getImages())
                 .accommodationSoldOut(cart.getIsDeleted())
                 .build();
     }
