@@ -5,6 +5,7 @@ import com.gamsung.backend.domain.accommodation.dto.response.AccommodationSummar
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.exception.AccommodationNotFoundException;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
+import com.gamsung.backend.domain.image.entity.Image;
 import com.gamsung.backend.domain.image.service.ImageService;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +21,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
-    private final ImageService imageService;
 
     @Transactional(readOnly = true)
     public AccommodationDetailResponse findAccommodationDetailById(Long id) {
         Accommodation accommodation = findById(id);
-        String accommodationImage = imageService.getAccommodationImageWithAccommodationId(id);
-        List<String> roomImages = imageService.getRoomImagesWithAccommodationId(id);
+
+        String accommodationImage = accommodation.getImages().get(0).getUrl();
+
+        List<String> roomImages = accommodation.getImages().stream()
+            .skip(1) // 첫 번째 이미지를 제외하고 나머지 이미지들을 가져옴
+            .map(Image::getUrl)
+            .collect(Collectors.toList());
+
         return AccommodationDetailResponse.from(accommodation, accommodationImage, roomImages);
     }
 
@@ -39,7 +45,7 @@ public class AccommodationService {
         return accommodationPage.getContent().stream()
             .map(accommodation -> AccommodationSummaryResponse.from(
                     accommodation,
-                    imageService.getAccommodationImageWithAccommodationId(accommodation.getId())
+                    accommodation.getImages().get(0).getUrl()
                 )
             )
             .collect(Collectors.toList());
