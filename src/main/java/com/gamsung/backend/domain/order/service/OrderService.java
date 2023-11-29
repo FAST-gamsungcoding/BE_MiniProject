@@ -73,6 +73,7 @@ public class OrderService {
 
     @Transactional
     public BookDateAvailableResponse checkBookDate(long id, LocalDate startDate, LocalDate endDate) {
+        accommodationService.findById(id);
         Optional<Order> soldOrder = orderRepository.existsByAccommodationIdAndStartDateBeforeAndEndDateAfter(id, endDate, startDate);
         if (soldOrder.isPresent()) {
             throw new BookDateUnavailableException();
