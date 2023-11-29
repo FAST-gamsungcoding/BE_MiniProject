@@ -8,6 +8,7 @@ import static com.gamsung.backend.global.openapi.UrlConstants.DESCRIPTION_PATH;
 import static com.gamsung.backend.global.openapi.UrlConstants.END_POINT;
 import static com.gamsung.backend.global.openapi.UrlConstants.MOBILE_APP;
 import static com.gamsung.backend.global.openapi.UrlConstants.MOBILE_OS;
+import static com.gamsung.backend.global.openapi.UrlConstants.PAGE_NO;
 import static com.gamsung.backend.global.openapi.UrlConstants.ROOM_PATH;
 import static com.gamsung.backend.global.openapi.UrlConstants.TYPE;
 import static com.gamsung.backend.global.openapi.UrlConstants.YES;
@@ -18,11 +19,15 @@ import com.gamsung.backend.domain.accommodation.repository.AccommodationReposito
 import com.gamsung.backend.domain.image.entity.Image;
 import com.gamsung.backend.domain.image.repository.ImageRepository;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,18 +46,25 @@ public class OpenApiService {
     private String decodeApiKey;
 
     public void getAccommodationInfo() {
-        processAccomodationInfo();
+        processAccommodationInfo();
     }
 
     private Optional<JsonNode> makeApiCall(String url) {
         RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        // Content-Type을 application/json으로 설정
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
         try {
             ResponseEntity<JsonNode> responseEntity =
-                restTemplate.exchange(url, HttpMethod.GET, null, JsonNode.class);
+                restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class);
             return Optional.ofNullable(responseEntity.getBody());
         } catch (UnknownContentTypeException e) {
             System.out.println(url);
-            System.out.println("응답이 xml타입 입니다.");
+            System.out.println(e.getMessage());
             return Optional.empty();
         }
     }
@@ -67,10 +79,11 @@ public class OpenApiService {
         return builder.build().toUriString();
     }
 
-    private void processAccomodationInfo() {
+    private void processAccommodationInfo() {
         String accommodationInfoUrl = buildApiUrl(
             END_POINT + ACCOMMODATION_PATH
             , "numOfRows", DEFAULT_NUM_OF_ROWS
+            , "pageNo", PAGE_NO
             , "mobileOS", MOBILE_OS
             , "MobileApp", MOBILE_APP
             , "_type", TYPE
