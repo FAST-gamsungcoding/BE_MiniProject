@@ -50,8 +50,11 @@ public class AccommodationService {
                 )
                 .collect(Collectors.toList());
 
-        return AccommodationSummaryListResponse.from(summaryResponses,
-            accommodationPage.getTotalPages());
+        return AccommodationSummaryListResponse.from(
+            summaryResponses,
+            accommodationPage.getTotalPages(),
+            accommodationPage.getNumber()
+        );
     }
 
     @Transactional(readOnly = true)
