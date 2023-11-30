@@ -41,7 +41,7 @@ class JwtProviderTest extends BaseIntegrationTest {
             String jwtToken = jwtProvider.createToken(jwtPayload, accessTokenExpiration);
 
             // then
-            JwtPayload verifiedJwtPayload = jwtProvider.verifyToken(jwtToken);
+            JwtPayload verifiedJwtPayload = jwtProvider.verifyAccessToken(jwtToken);
             Assertions.assertEquals(TEST_EMAIL, verifiedJwtPayload.getEmail());
             Assertions.assertEquals(issuedAt.getTime() / 1000, verifiedJwtPayload.getIssuedAt().getTime() / 1000);
         }
@@ -68,7 +68,7 @@ class JwtProviderTest extends BaseIntegrationTest {
             String jwtToken = jwtProvider.createToken(jwtPayload, shortExpirationTime);
 
             // then
-            Assertions.assertThrows(JwtExpiredAccessTokenException.class, () -> jwtProvider.verifyToken(jwtToken));
+            Assertions.assertThrows(JwtExpiredAccessTokenException.class, () -> jwtProvider.verifyAccessToken(jwtToken));
         }
 
         @DisplayName("다른 Secret Key로 검증할 때 JwtInvalidTokenException 발생")
@@ -86,7 +86,7 @@ class JwtProviderTest extends BaseIntegrationTest {
             String wrongToken = otherJwtProvider.createToken(jwtPayload, accessTokenExpiration);
 
             // then
-            Assertions.assertThrows(JwtInvalidAccessTokenException.class, () -> jwtProvider.verifyToken(wrongToken));
+            Assertions.assertThrows(JwtInvalidAccessTokenException.class, () -> jwtProvider.verifyAccessToken(wrongToken));
         }
     }
 }

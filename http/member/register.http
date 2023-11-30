@@ -3,7 +3,7 @@ POST http://localhost:8080/v1/member/register
 Content-Type: application/json
 
 {
-  "email": "pgw111111@naver.com",
-  "password": "a123456",
-  "name": "박건우"
+  "email": "test@test.com",
+  "password": "test1234",
+  "name": "테스트"
 }

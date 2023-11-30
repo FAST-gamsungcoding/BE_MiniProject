@@ -27,7 +27,7 @@ public class JwtController {
 
     @PostMapping("/refresh")
     @Operation(summary = "access 토큰 재발급 API", description = "로그인한 사용자는 자신의 JWT 액세스 토큰이 만료되면 요청하여 액세스 토큰을 재발급 받습니다."
-    ,security = @SecurityRequirement(name = "bearer-jwt"))
+            ,security = @SecurityRequirement(name = "bearer-jwt"))
     public ResponseEntity<ApiResponse<JwtPair>> refreshAccessToken(
             @Valid @RequestBody RefreshAccessTokenRequest request
     ) {

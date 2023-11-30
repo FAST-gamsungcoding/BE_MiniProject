@@ -1,8 +1,0 @@
-###로그인 요청
-POST http://localhost:8080/v1/member/login
-Content-Type: application/json
-
-{
-  "email" : "mytest1@naver.com",
-  "password" : "1234qwer!"
-}
