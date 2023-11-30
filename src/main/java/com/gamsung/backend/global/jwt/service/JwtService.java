@@ -10,15 +10,17 @@ import com.gamsung.backend.global.jwt.exception.JwtExpiredRefreshTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidRefreshTokenException;
 import com.gamsung.backend.global.jwt.repository.JwtBlackListRedisRepository;
-import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
+import com.gamsung.backend.global.jwt.repository.JwtRefreshTokenRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-    private final JwtRedisRepository jwtRedisRepository;
+    private final JwtRefreshTokenRedisRepository jwtRefreshTokenRedisRepository;
     private final JwtBlackListRedisRepository jwtBlackListRedisRepository;
     private final JwtProvider jwtProvider;
 
@@ -32,7 +34,7 @@ public class JwtService {
         String accessToken = jwtProvider.createToken(jwtPayload, accessExpiration);
         String refreshToken = jwtProvider.createToken(jwtPayload, refreshExpiration);
 
-        jwtRedisRepository.save(JwtRedisEntity.builder()
+        jwtRefreshTokenRedisRepository.save(JwtRedisEntity.builder()
                 .memberEmail(jwtPayload.getEmail())
                 .refreshToken(refreshToken)
                 .expiration(refreshExpiration)
@@ -44,18 +46,10 @@ public class JwtService {
                 .build();
     }
 
-    public JwtPayload verifyToken(String jwtToken) {
-        JwtPayload jwtPayload = jwtProvider.verifyToken(jwtToken);
-        if (jwtBlackListRedisRepository.findByKey(jwtToken).isPresent()) {
-            throw new JwtInvalidAccessTokenException();
-        }
-        return jwtPayload;
-    }
-
     public JwtPayload verifyAccessToken(String jwtAccessToken) {
         JwtPayload jwtPayload = jwtProvider.getExpiredTokenPayload(jwtAccessToken);
         if (jwtPayload == null) {
-            jwtPayload = jwtProvider.verifyToken(jwtAccessToken);
+            jwtPayload = jwtProvider.verifyAccessToken(jwtAccessToken);
         }
         if (jwtBlackListRedisRepository.findByKey(jwtAccessToken).isPresent()) {
             throw new JwtInvalidAccessTokenException();
@@ -63,21 +57,27 @@ public class JwtService {
         return jwtPayload;
     }
 
-    public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
-        JwtPayload jwtPayload = verifyToken(request.refreshToken());
+    public JwtPayload verifyRefreshToken(String jwtToken) {
+        return jwtProvider.verifyRefreshToken(jwtToken);
+    }
 
-        jwtRedisRepository.findByKey(jwtPayload.getEmail())
-                .ifPresentOrElse(refreshToken -> {
-                    if (!request.refreshToken().equals(refreshToken)) {
-                        throw new JwtInvalidRefreshTokenException();
-                    }
-                }, () -> {
-                    throw new JwtExpiredRefreshTokenException();
-                });
+    public JwtPair refreshAccessToken(RefreshAccessTokenRequest request, String email, String originAccessToken) {
+        JwtPayload jwtPayload = verifyRefreshToken(request.refreshToken());
+
+        Optional<String> storedRefreshToken = jwtRefreshTokenRedisRepository.findByKey(jwtPayload.getEmail());
+
+        if (storedRefreshToken.isEmpty()) {
+            throw new JwtExpiredRefreshTokenException();
+        }
+
+        if (!request.refreshToken().equals(storedRefreshToken.get())) {
+            throw new JwtInvalidRefreshTokenException();
+        }
 
         JwtPayload newJwtPayload = JwtPayload.from(Long.parseLong(jwtPayload.getId()), jwtPayload.getEmail());
-
         String newAccessToken = jwtProvider.createToken(newJwtPayload, accessExpiration);
+
+        addAccessTokenToBlackList(email, originAccessToken);
 
         return JwtPair.builder()
                 .accessToken(newAccessToken)
@@ -86,9 +86,14 @@ public class JwtService {
     }
 
     public void deleteRefreshTokenAndAddAccessTokenToBlackList(String email, String accessToken) {
-        long refreshTokenExpiredTime = jwtRedisRepository.getExpire(email);
+        addAccessTokenToBlackList(email, accessToken);
+        jwtRefreshTokenRedisRepository.deleteByKey(email);
+    }
 
-        jwtRedisRepository.deleteByKey(email);
+    private void addAccessTokenToBlackList(String email, String accessToken) {
+        long refreshTokenExpiredTime = jwtRefreshTokenRedisRepository.getExpire(email);
+
+        jwtRefreshTokenRedisRepository.deleteByKey(email);
         jwtBlackListRedisRepository.save(JwtBlackListRedisEntity.builder()
                 .accessToken(accessToken)
                 .status("black")
