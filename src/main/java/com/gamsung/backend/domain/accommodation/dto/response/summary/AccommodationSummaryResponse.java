@@ -1,9 +1,7 @@
-package com.gamsung.backend.domain.accommodation.dto.response;
+package com.gamsung.backend.domain.accommodation.dto.response.summary;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import lombok.Builder;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @Builder
 public record AccommodationSummaryResponse(
