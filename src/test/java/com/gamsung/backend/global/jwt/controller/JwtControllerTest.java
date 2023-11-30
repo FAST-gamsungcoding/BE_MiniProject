@@ -15,14 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -61,16 +59,15 @@ class JwtControllerTest {
                     .accessToken("fake-refreshed-access-token")
                     .refreshToken("fake-refresh-token")
                     .build();
-            RefreshAccessTokenRequest refreshAccessTokenRequest = new RefreshAccessTokenRequest(testToken.getRefreshToken());
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
 
-            given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class), anyString(), anyString()))
+            given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class)))
                     .willReturn(refreshedTestToken);
 
             // when
             ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/refresh")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, testToken.getAccessToken())
                     .content(objectMapper.writeValueAsString(refreshAccessTokenRequest)));
 
             // then
@@ -90,9 +87,9 @@ class JwtControllerTest {
                     .accessToken("fake-access-token")
                     .refreshToken("fake-refresh-token")
                     .build();
-            RefreshAccessTokenRequest refreshAccessTokenRequest = new RefreshAccessTokenRequest(testToken.getRefreshToken());
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
 
-            given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class), anyString(), anyString())).will(
+            given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class))).will(
                     invocation -> {
                         throw new JwtExpiredRefreshTokenException();
                     }
@@ -102,7 +99,6 @@ class JwtControllerTest {
             ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/refresh")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, testToken.getAccessToken())
                     .content(objectMapper.writeValueAsString(refreshAccessTokenRequest)));
 
             // then
@@ -121,9 +117,9 @@ class JwtControllerTest {
                     .accessToken("fake-access-token")
                     .refreshToken("fake-refresh-token")
                     .build();
-            RefreshAccessTokenRequest refreshAccessTokenRequest = new RefreshAccessTokenRequest(testToken.getRefreshToken());
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
 
-            given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class), anyString(), anyString())).will(
+            given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class))).will(
                     invocation -> {
                         throw new JwtInvalidRefreshTokenException();
                     }
@@ -133,7 +129,6 @@ class JwtControllerTest {
             ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/refresh")
                     .with(csrf())
                     .contentType(MediaType.APPLICATION_JSON)
-                    .header(HttpHeaders.AUTHORIZATION, testToken.getAccessToken())
                     .content(objectMapper.writeValueAsString(refreshAccessTokenRequest)));
 
             // then
