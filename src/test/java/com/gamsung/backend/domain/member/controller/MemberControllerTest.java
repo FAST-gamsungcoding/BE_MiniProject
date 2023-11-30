@@ -10,7 +10,11 @@ import com.gamsung.backend.domain.member.dto.response.MemberLogoutResponse;
 import com.gamsung.backend.domain.member.dto.response.MemberRegisterEmailCheckResponse;
 import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.entity.Member;
+import com.gamsung.backend.domain.member.exception.MemberAlreadyExistedException;
+import com.gamsung.backend.domain.member.exception.MemberLoginWrongPasswordException;
+import com.gamsung.backend.domain.member.exception.MemberNotFoundException;
 import com.gamsung.backend.domain.member.service.MemberService;
+import com.gamsung.backend.global.exception.ErrorCode;
 import com.gamsung.backend.global.factory.MemberTestFactory;
 import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.security.WithMockCustomMember;
@@ -90,6 +94,58 @@ class MemberControllerTest {
                     .andExpect(jsonPath("$.data.name").value(memberLoginResponse.name()))
                     .andExpect(jsonPath("$.data.email").value(memberLoginResponse.email()));
         }
+
+        @DisplayName("1001 : 로그인 실패 - 회원 아이디가 존재하지 않을 경우")
+        @Test
+        void failToLoginMemberWhenMemberNotFound() throws Exception {
+            // given
+            Member testMember = MemberTestFactory.createMemberWithRandomValues(false);
+            MemberControllerLoginRequest memberControllerLoginRequest
+                    = new MemberControllerLoginRequest("wrong@email.com", testMember.getPassword());
+            given(memberService.login(any(MemberLoginRequest.class))).will(
+                    invocation -> {
+                        throw new MemberNotFoundException();
+                    }
+            );
+
+            // when
+            ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/login")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(memberControllerLoginRequest)));
+
+            // then
+            resultActions
+                    .andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.code").value(ErrorCode.MEMBER_NOT_FOUND.getCode()))
+                    .andExpect(jsonPath("$.data.message").value(ErrorCode.MEMBER_NOT_FOUND.getMessage()));
+        }
+
+        @DisplayName("1002 : 로그인 실패 - 비밀번호가 올바르지 않을 경우")
+        @Test
+        void failToLoginMemberWhenInvalidPassword() throws Exception {
+            // given
+            Member testMember = MemberTestFactory.createMemberWithRandomValues(false);
+            MemberControllerLoginRequest memberControllerLoginRequest
+                    = new MemberControllerLoginRequest(testMember.getEmail(), "wrong-password");
+            given(memberService.login(any(MemberLoginRequest.class))).will(
+                    invocation -> {
+                        throw new MemberLoginWrongPasswordException();
+                    }
+            );
+
+            // when
+            ResultActions resultActions = mockMvc.perform(post(BASE_URL + "/login")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(memberControllerLoginRequest)));
+
+            // then
+            resultActions
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.code").value(ErrorCode.MEMBER_LOGIN_WRONG_PASSWORD.getCode()))
+                    .andExpect(jsonPath("$.data.message").value(ErrorCode.MEMBER_LOGIN_WRONG_PASSWORD.getMessage()));
+        }
     }
 
     @DisplayName("멤버 회원가입 컨트롤러 유닛 테스트")
@@ -143,6 +199,29 @@ class MemberControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1006))
                     .andExpect(jsonPath("$.data.message").value(memberRegisterEmailCheckResponse.message()));
+        }
+
+        @DisplayName("1007 : 이메일 중복체크 - 가입 불가능한 이메일(중복임)")
+        @Test
+        void successToRegisterEmailcheckMemberWhenDuplicated() throws Exception {
+            // given
+            Member testMember = MemberTestFactory.createMemberWithRandomValues(false);
+            given(memberService.emailCheck(anyString())).will(
+                    invocation -> {
+                        throw new MemberAlreadyExistedException();
+                    }
+            );
+
+            // when
+            ResultActions resultActions = mockMvc.perform(get(BASE_URL + "/register/check")
+                    .param("email", testMember.getEmail())
+                    .with(csrf()));
+
+            // then
+            resultActions
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.code").value(ErrorCode.MEMBER_ALREADY_EXISTED.getCode()))
+                    .andExpect(jsonPath("$.data.message").value(ErrorCode.MEMBER_ALREADY_EXISTED.getMessage()));
         }
     }
 
