@@ -52,6 +52,17 @@ public class JwtService {
         return jwtPayload;
     }
 
+    public JwtPayload verifyAccessToken(String jwtAccessToken) {
+        JwtPayload jwtPayload = jwtProvider.getExpiredTokenPayload(jwtAccessToken);
+        if (jwtPayload == null) {
+            jwtPayload = jwtProvider.verifyToken(jwtAccessToken);
+        }
+        if (jwtBlackListRedisRepository.findByKey(jwtAccessToken).isPresent()) {
+            throw new JwtInvalidAccessTokenException();
+        }
+        return jwtPayload;
+    }
+
     public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
         JwtPayload jwtPayload = verifyToken(request.refreshToken());
 
