@@ -1,10 +1,10 @@
 package com.gamsung.backend.domain.accommodation.controller;
 
-import com.gamsung.backend.domain.accommodation.dto.response.AccommodationDetailResponse;
-import com.gamsung.backend.domain.accommodation.dto.response.AccommodationSummaryListResponse;
+import com.gamsung.backend.domain.accommodation.dto.response.detail.AccommodationDetailResponse;
+import com.gamsung.backend.domain.accommodation.dto.response.summary.AccommodationSummaryListResponse;
 import com.gamsung.backend.domain.accommodation.service.AccommodationService;
 import com.gamsung.backend.global.common.ApiResponse;
-import com.gamsung.backend.global.openapi.OpenApiService;
+import com.gamsung.backend.global.openapi.service.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
