@@ -32,4 +32,6 @@ public class CartEntryRequest {
     private Long cartPrice;
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")
     private String accommodationImg;
+
+
 }
