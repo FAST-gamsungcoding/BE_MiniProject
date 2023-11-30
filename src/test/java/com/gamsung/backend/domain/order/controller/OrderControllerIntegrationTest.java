@@ -1,8 +1,17 @@
 package com.gamsung.backend.domain.order.controller;
 
-import com.gamsung.backend.global.common.BaseIntegrationTest;
+import com.gamsung.backend.domain.member.dto.request.MemberLoginRequest;
+import com.gamsung.backend.domain.member.dto.request.MemberRegisterRequest;
+import com.gamsung.backend.domain.member.dto.response.MemberLoginResponse;
+import com.gamsung.backend.domain.member.entity.Member;
+import com.gamsung.backend.domain.member.service.MemberService;
+import com.gamsung.backend.global.common.BaseRedisContainerTest;
+import com.gamsung.backend.global.factory.MemberTestFactory;
+import com.gamsung.backend.global.jwt.JwtPair;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -12,7 +21,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @DisplayName("OrderController 통합 테스트")
-public class OrderControllerIntegrationTest extends BaseIntegrationTest {
+public class OrderControllerIntegrationTest extends BaseRedisContainerTest {
+
+    private static final String JWT_TOKEN_PREFIX = "Bearer ";
+
+    @Autowired
+    private MemberService memberService;
+
+    private JwtPair jwtPair;
+
+    @BeforeEach
+    public void setUp() {
+        Member member = MemberTestFactory.createMemberWithRandomValues(false);
+        memberService.register(
+                new MemberRegisterRequest(member.getEmail(), member.getPassword(), member.getName())
+        );
+        MemberLoginResponse memberLoginResponse = memberService.login(
+                new MemberLoginRequest(member.getEmail(), member.getPassword())
+        );
+        jwtPair = JwtPair.builder()
+                .accessToken(memberLoginResponse.accessToken())
+                .refreshToken(memberLoginResponse.refreshToken())
+                .build();
+    }
 
     @Test
     @DisplayName("숙소 여러개 예약하기")
@@ -22,30 +53,31 @@ public class OrderControllerIntegrationTest extends BaseIntegrationTest {
         //given
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJjbGllbnRfaWQiOiIxIiwiZW1haWwiOiJteXRlc3QxQG5hdmVyLmNvbSIsImlzcyI6ImZjX21pbmkiLCJpYXQiOjE3MDEzMTQ2NTgsImV4cCI6MTcwMTM1MDY1OH0.LUK5_Go1zrhm5AWqojnKIYLvIfZnHzNTj8EOPiUepWKznGmbpq-1Hfnmom0Y6U_gFXUT8BlPmoNZgYsVKOyEig");
+        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.getAccessToken());
 
-        String jsonPayload = "[\n" +
-                "  {\n" +
-                "    \"accommodation_id\": 2,\n" +
-                "    \"people_number\": 2,\n" +
-                "    \"start_date\": \"2023-12-03\",\n" +
-                "    \"end_date\": \"2023-12-04\",\n" +
-                "    \"representative_name\": \"홍길동\",\n" +
-                "    \"representative_email\": \"rlfehd@naver.com\",\n" +
-                "    \"order_price\": 120000,\n" +
-                "    \"cart_id\": 0\n" +
-                "  },\n" +
-                "  {\n" +
-                "    \"accommodation_id\": 1,\n" +
-                "    \"people_number\": 2,\n" +
-                "    \"start_date\": \"2023-12-02\",\n" +
-                "    \"end_date\": \"2023-12-03\",\n" +
-                "    \"representative_name\": \"홍길동\",\n" +
-                "    \"representative_email\": \"rlfehd@naver.com\",\n" +
-                "    \"order_price\": 120000,\n" +
-                "    \"cart_id\": 0\n" +
-                "  }\n" +
-                "]";
+        String jsonPayload = """
+                [
+                  {
+                    "accommodation_id": 2,
+                    "people_number": 2,
+                    "start_date": "2023-12-03",
+                    "end_date": "2023-12-04",
+                    "representative_name": "홍길동",
+                    "representative_email": "rlfehd@naver.com",
+                    "order_price": 120000,
+                    "cart_id": 0
+                  },
+                  {
+                    "accommodation_id": 1,
+                    "people_number": 2,
+                    "start_date": "2023-12-02",
+                    "end_date": "2023-12-03",
+                    "representative_name": "홍길동",
+                    "representative_email": "rlfehd@naver.com",
+                    "order_price": 120000,
+                    "cart_id": 0
+                  }
+                ]""";
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/order")
@@ -67,7 +99,7 @@ public class OrderControllerIntegrationTest extends BaseIntegrationTest {
         //given
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJjbGllbnRfaWQiOiIxIiwiZW1haWwiOiJteXRlc3QxQG5hdmVyLmNvbSIsImlzcyI6ImZjX21pbmkiLCJpYXQiOjE3MDEzMTQ2NTgsImV4cCI6MTcwMTM1MDY1OH0.LUK5_Go1zrhm5AWqojnKIYLvIfZnHzNTj8EOPiUepWKznGmbpq-1Hfnmom0Y6U_gFXUT8BlPmoNZgYsVKOyEig");
+        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.getAccessToken());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/order/check")
@@ -90,7 +122,7 @@ public class OrderControllerIntegrationTest extends BaseIntegrationTest {
         //given
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJjbGllbnRfaWQiOiIxIiwiZW1haWwiOiJteXRlc3QxQG5hdmVyLmNvbSIsImlzcyI6ImZjX21pbmkiLCJpYXQiOjE3MDEzMTQ2NTgsImV4cCI6MTcwMTM1MDY1OH0.LUK5_Go1zrhm5AWqojnKIYLvIfZnHzNTj8EOPiUepWKznGmbpq-1Hfnmom0Y6U_gFXUT8BlPmoNZgYsVKOyEig");
+        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.getAccessToken());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/order/me")
