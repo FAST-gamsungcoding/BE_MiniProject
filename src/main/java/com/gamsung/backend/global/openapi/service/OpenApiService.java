@@ -24,9 +24,17 @@ import com.gamsung.backend.global.openapi.dto.AccommodationInfoDto.Response.Body
 import com.gamsung.backend.global.openapi.dto.RoomInfoDto;
 import com.gamsung.backend.global.openapi.dto.RoomInfoDto.Response;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -42,6 +50,7 @@ public class OpenApiService {
     @Value("${open-api.key}")
     private String decodeApiKey;
 
+    @Transactional
     public void getAccommodationInfo() {
         processAccommodationInfo();
     }
@@ -140,8 +149,7 @@ public class OpenApiService {
         }
     }
 
-    @Transactional
-    public void saveAccommodationAndImages(
+    private void saveAccommodationAndImages(
         Item accommodationInfoItem,
         Body.Item accommodationDescriptionItem,
         Response.Body.Item roomInfoItem
@@ -179,12 +187,14 @@ public class OpenApiService {
             .toList();
 
         for (String url : nonEmptyImageUrls) {
-            Image roomImage = Image.builder()
-                .url(url)
-                .accommodation(accommodation)
-                .imgType(2)
-                .build();
-            imageRepository.save(roomImage);
+            if (!endsWithJpgOrJpeg(url)) {
+                Image roomImage = Image.builder()
+                    .url(url)
+                    .accommodation(accommodation)
+                    .imgType(2)
+                    .build();
+                imageRepository.save(roomImage);
+            }
         }
 
 //        printSaveAccommodationInfo(accommodation);
@@ -195,7 +205,30 @@ public class OpenApiService {
     }
 
     private <T> T performApiRequest(String url, Class<T> responseType) {
-        return new RestTemplate().getForObject(url, responseType);
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(clientHttpRequestFactory());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        try {
+            ResponseEntity<T> responseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, entity, responseType);
+            return responseEntity.getBody();
+        } catch (Exception e) {
+            System.out.println(url);
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private ClientHttpRequestFactory clientHttpRequestFactory() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10000);
+        factory.setReadTimeout(10000);
+        return factory;
     }
 
     private String buildApiUrl(String baseUrl, String... queryParams) {

@@ -37,8 +37,7 @@ public class Image extends BaseTime {
     @JsonIgnore
     Accommodation accommodation;
 
-    @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
     String url;
 
     @Builder
