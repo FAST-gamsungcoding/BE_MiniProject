@@ -5,10 +5,11 @@ import com.gamsung.backend.global.jwt.exception.JwtExpiredAccessTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -54,8 +55,27 @@ public class JwtProvider {
                     .build();
         } catch (ExpiredJwtException e) {
             throw new JwtExpiredAccessTokenException();
-        } catch (JwtException e) {
+        } catch (IllegalArgumentException | SignatureException | MalformedJwtException e) {
             throw new JwtInvalidAccessTokenException();
         }
+    }
+
+    public JwtPayload getExpiredTokenPayload(String jwtToken) {
+        try {
+            Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(jwtToken)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            return JwtPayload.builder()
+                    .id(e.getClaims().get(USER_ID_KEY, String.class))
+                    .email(e.getClaims().get(USER_EMAIL_KEY, String.class))
+                    .issuedAt(e.getClaims().getIssuedAt())
+                    .build();
+        } catch (IllegalArgumentException | SignatureException | MalformedJwtException e) {
+            throw new JwtInvalidAccessTokenException();
+        }
+        return null;
     }
 }
