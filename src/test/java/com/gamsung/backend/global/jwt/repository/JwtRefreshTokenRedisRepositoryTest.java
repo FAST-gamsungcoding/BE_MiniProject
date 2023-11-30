@@ -9,10 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class JwtRedisRepositoryTest extends BaseRedisContainerTest {
+class JwtRefreshTokenRedisRepositoryTest extends BaseRedisContainerTest {
 
     @Autowired
-    private JwtRedisRepository jwtRedisRepository;
+    private JwtRefreshTokenRedisRepository jwtRefreshTokenRedisRepository;
 
     @Autowired
     private JwtProvider jwtProvider;
@@ -31,11 +31,11 @@ class JwtRedisRepositoryTest extends BaseRedisContainerTest {
                 .build();
 
         // when
-        jwtRedisRepository.save(jwtRedisEntity);
+        jwtRefreshTokenRedisRepository.save(jwtRedisEntity);
 
         // then
         Thread.sleep(100);
-        Assertions.assertTrue(jwtRedisRepository.getExpire(email) < 0);
+        Assertions.assertTrue(jwtRefreshTokenRedisRepository.getExpire(email) < 0);
     }
 
     @DisplayName("Redis에 저장된 값을 찾아서 삭제할 수 있다.")
@@ -50,12 +50,12 @@ class JwtRedisRepositoryTest extends BaseRedisContainerTest {
                 .refreshToken(jwtProvider.createToken(jwtPayload, 10000))
                 .expiration(10000)
                 .build();
-        jwtRedisRepository.save(jwtRedisEntity);
+        jwtRefreshTokenRedisRepository.save(jwtRedisEntity);
 
         // when
-        jwtRedisRepository.deleteByKey(email);
+        jwtRefreshTokenRedisRepository.deleteByKey(email);
 
         // then
-        Assertions.assertTrue(jwtRedisRepository.findByKey(email).isEmpty());
+        Assertions.assertTrue(jwtRefreshTokenRedisRepository.findByKey(email).isEmpty());
     }
 }

@@ -3,7 +3,7 @@ package com.gamsung.backend.global.jwt.service;
 import com.gamsung.backend.global.common.BaseRedisContainerTest;
 import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
-import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
+import com.gamsung.backend.global.jwt.repository.JwtRefreshTokenRedisRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,7 +21,7 @@ class JwtServiceTest extends BaseRedisContainerTest {
     private JwtService jwtService;
 
     @Autowired
-    private JwtRedisRepository jwtRedisRepository;
+    private JwtRefreshTokenRedisRepository jwtRefreshTokenRedisRepository;
 
     @DisplayName("TokenPair를 발급할 때")
     @Nested
@@ -40,14 +40,14 @@ class JwtServiceTest extends BaseRedisContainerTest {
 
             // when
             JwtPair jwtPair = jwtService.createTokenPair(jwtPayload);
-            String storedRefreshToken = jwtRedisRepository.findByKey(TEST_EMAIL)
+            String storedRefreshToken = jwtRefreshTokenRedisRepository.findByKey(TEST_EMAIL)
                     .orElse(null);
 
             // then
 
             // jwtPair Check
-            JwtPayload verifiedJwtAccessTokenPayload = jwtService.verifyToken(jwtPair.getAccessToken());
-            JwtPayload verifiedJwtRefreshTokenPayload = jwtService.verifyToken(jwtPair.getRefreshToken());
+            JwtPayload verifiedJwtAccessTokenPayload = jwtService.verifyAccessToken(jwtPair.getAccessToken());
+            JwtPayload verifiedJwtRefreshTokenPayload = jwtService.verifyRefreshToken(jwtPair.getRefreshToken());
 
             Assertions.assertEquals(TEST_EMAIL, verifiedJwtAccessTokenPayload.getEmail());
             Assertions.assertEquals(TEST_EMAIL, verifiedJwtRefreshTokenPayload.getEmail());
@@ -57,7 +57,7 @@ class JwtServiceTest extends BaseRedisContainerTest {
 
             // Redis Save Check
             Assertions.assertEquals(jwtPair.getRefreshToken(), storedRefreshToken);
-            Assertions.assertTrue(jwtRedisRepository.getExpire(TEST_EMAIL) > -1);
+            Assertions.assertTrue(jwtRefreshTokenRedisRepository.getExpire(TEST_EMAIL) > -1);
         }
     }
 }

@@ -2,7 +2,9 @@ package com.gamsung.backend.global.jwt;
 
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.exception.JwtExpiredAccessTokenException;
+import com.gamsung.backend.global.jwt.exception.JwtExpiredRefreshTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
+import com.gamsung.backend.global.jwt.exception.JwtInvalidRefreshTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -41,22 +43,36 @@ public class JwtProvider {
                 .compact();
     }
 
-    public JwtPayload verifyToken(String jwtToken) {
+    private JwtPayload verifyToken(String jwtToken) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(jwtToken)
+                .getPayload();
+        return JwtPayload.builder()
+                .id(claims.get(USER_ID_KEY, String.class))
+                .email(claims.get(USER_EMAIL_KEY, String.class))
+                .issuedAt(claims.getIssuedAt())
+                .build();
+    }
+
+    public JwtPayload verifyAccessToken(String jwtToken) {
         try {
-            Claims claims = Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(jwtToken)
-                    .getPayload();
-            return JwtPayload.builder()
-                    .id(claims.get(USER_ID_KEY, String.class))
-                    .email(claims.get(USER_EMAIL_KEY, String.class))
-                    .issuedAt(claims.getIssuedAt())
-                    .build();
+            return verifyToken(jwtToken);
         } catch (ExpiredJwtException e) {
             throw new JwtExpiredAccessTokenException();
         } catch (IllegalArgumentException | SignatureException | MalformedJwtException e) {
             throw new JwtInvalidAccessTokenException();
+        }
+    }
+
+    public JwtPayload verifyRefreshToken(String jwtToken) {
+        try {
+            return verifyToken(jwtToken);
+        } catch (ExpiredJwtException e) {
+            throw new JwtExpiredRefreshTokenException();
+        } catch (IllegalArgumentException | SignatureException | MalformedJwtException e) {
+            throw new JwtInvalidRefreshTokenException();
         }
     }
 
