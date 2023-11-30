@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Private Files ###
+
+.env
+src/**/application-*.yaml
+src/main/generated/**
