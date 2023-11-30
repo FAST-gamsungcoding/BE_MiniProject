@@ -4,19 +4,17 @@ import com.gamsung.backend.domain.accommodation.dto.response.detail.Accommodatio
 import com.gamsung.backend.domain.accommodation.dto.response.summary.AccommodationSummaryListResponse;
 import com.gamsung.backend.domain.accommodation.service.AccommodationService;
 import com.gamsung.backend.global.common.ApiResponse;
+import com.gamsung.backend.global.exception.ErrorMessage;
 import com.gamsung.backend.global.openapi.service.OpenApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "숙소")
 @RestController
@@ -24,14 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AccommodationController {
 
+    private final Environment environment;
     private final AccommodationService accommodationService;
     private final OpenApiService openApiService;
 
     @GetMapping("/data")
     @Operation(summary = "open api를 활용하여 숙박 정보를 저장시키는 API", description = "공공데이터를 이용해 숙소 정보를 가져옵니다.")
-    public ResponseEntity<Void> registerAccommodationInfo() {
-        openApiService.getAccommodationInfo();
-        return null;
+    public ResponseEntity<ApiResponse<ErrorMessage>> registerAccommodationInfo() {
+        if (environment.matchesProfiles("prod")) {
+            return ResponseEntity.ok(ApiResponse.create(5002,
+                    ErrorMessage.create("본 서버에서 이용하실 수 없는 기능입니다.")));
+        } else {
+            openApiService.getAccommodationInfo();
+            return ResponseEntity.ok(ApiResponse.create(0,
+                    ErrorMessage.create("open api 데이터 저장 완료")));
+        }
     }
 
     @GetMapping

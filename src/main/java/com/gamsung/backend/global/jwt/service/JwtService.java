@@ -10,7 +10,7 @@ import com.gamsung.backend.global.jwt.exception.JwtExpiredRefreshTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidAccessTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidRefreshTokenException;
 import com.gamsung.backend.global.jwt.repository.JwtBlackListRedisRepository;
-import com.gamsung.backend.global.jwt.repository.JwtRedisRepository;
+import com.gamsung.backend.global.jwt.repository.JwtRefreshTokenRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-    private final JwtRedisRepository jwtRedisRepository;
+    private final JwtRefreshTokenRedisRepository jwtRefreshTokenRedisRepository;
     private final JwtBlackListRedisRepository jwtBlackListRedisRepository;
     private final JwtProvider jwtProvider;
 
@@ -32,7 +32,7 @@ public class JwtService {
         String accessToken = jwtProvider.createToken(jwtPayload, accessExpiration);
         String refreshToken = jwtProvider.createToken(jwtPayload, refreshExpiration);
 
-        jwtRedisRepository.save(JwtRedisEntity.builder()
+        jwtRefreshTokenRedisRepository.save(JwtRedisEntity.builder()
                 .memberEmail(jwtPayload.getEmail())
                 .refreshToken(refreshToken)
                 .expiration(refreshExpiration)
@@ -44,18 +44,25 @@ public class JwtService {
                 .build();
     }
 
-    public JwtPayload verifyToken(String jwtToken) {
-        JwtPayload jwtPayload = jwtProvider.verifyToken(jwtToken);
-        if (jwtBlackListRedisRepository.findByKey(jwtToken).isPresent()) {
+    public JwtPayload verifyAccessToken(String jwtAccessToken) {
+        JwtPayload jwtPayload = jwtProvider.getExpiredTokenPayload(jwtAccessToken);
+        if (jwtPayload == null) {
+            jwtPayload = jwtProvider.verifyAccessToken(jwtAccessToken);
+        }
+        if (jwtBlackListRedisRepository.findByKey(jwtAccessToken).isPresent()) {
             throw new JwtInvalidAccessTokenException();
         }
         return jwtPayload;
     }
 
-    public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
-        JwtPayload jwtPayload = verifyToken(request.refreshToken());
+    public JwtPayload verifyRefreshToken(String jwtToken) {
+        return jwtProvider.verifyRefreshToken(jwtToken);
+    }
 
-        jwtRedisRepository.findByKey(jwtPayload.getEmail())
+    public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
+        JwtPayload jwtPayload = verifyRefreshToken(request.refreshToken());
+
+        jwtRefreshTokenRedisRepository.findByKey(jwtPayload.getEmail())
                 .ifPresentOrElse(refreshToken -> {
                     if (!request.refreshToken().equals(refreshToken)) {
                         throw new JwtInvalidRefreshTokenException();
@@ -75,9 +82,9 @@ public class JwtService {
     }
 
     public void deleteRefreshTokenAndAddAccessTokenToBlackList(String email, String accessToken) {
-        long refreshTokenExpiredTime = jwtRedisRepository.getExpire(email);
+        long refreshTokenExpiredTime = jwtRefreshTokenRedisRepository.getExpire(email);
 
-        jwtRedisRepository.deleteByKey(email);
+        jwtRefreshTokenRedisRepository.deleteByKey(email);
         jwtBlackListRedisRepository.save(JwtBlackListRedisEntity.builder()
                 .accessToken(accessToken)
                 .status("black")

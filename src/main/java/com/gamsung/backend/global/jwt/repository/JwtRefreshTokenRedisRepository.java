@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Repository
-public class JwtRedisRepository implements RedisRepository<JwtRedisEntity> {
+public class JwtRefreshTokenRedisRepository implements RedisRepository<JwtRedisEntity> {
 
     private final static String JWT_KEY_PREFIX = "jwt:refresh:";
 
