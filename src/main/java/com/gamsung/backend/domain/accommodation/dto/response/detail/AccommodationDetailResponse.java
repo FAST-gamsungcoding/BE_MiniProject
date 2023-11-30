@@ -1,4 +1,4 @@
-package com.gamsung.backend.domain.accommodation.dto.response;
+package com.gamsung.backend.domain.accommodation.dto.response.detail;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import java.util.List;

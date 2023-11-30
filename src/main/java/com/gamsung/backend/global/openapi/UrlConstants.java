@@ -10,8 +10,8 @@ public class UrlConstants {
     public static final String MOBILE_APP = "app";
     public static final String TYPE = "json";
     public static final String CONTENT_TYPE_ID = "32";
-    public static final String DEFAULT_NUM_OF_ROWS = "600";
+    public static final String DEFAULT_NUM_OF_ROWS = "100";
     public static final String ARRANGE = "R";
     public static final String YES = "Y";
-    public static final String PAGE_NO = "1";
+    public static final String PAGE_NO = "6";
 }

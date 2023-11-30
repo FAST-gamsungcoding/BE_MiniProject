@@ -1,4 +1,4 @@
-package com.gamsung.backend.domain.accommodation.dto.response;
+package com.gamsung.backend.domain.accommodation.dto.response.summary;
 
 import java.util.List;
 import lombok.Builder;
