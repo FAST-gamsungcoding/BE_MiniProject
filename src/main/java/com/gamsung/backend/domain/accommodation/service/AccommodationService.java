@@ -36,21 +36,21 @@ public class AccommodationService {
     }
 
     @Transactional(readOnly = true)
-    public AccommodationSummaryListResponse getAccommodationInfoByLocation(Long location,
+    public AccommodationSummaryListResponse getAccommodationInfoByLocation(List<Long> regionIds,
         Pageable pageable) {
         Page<Accommodation> accommodationPage =
-            accommodationRepository.findAccommodationByLocation(location, pageable);
+            accommodationRepository.findByLocationIn(regionIds, pageable);
 
         List<AccommodationSummaryResponse> summaryResponses =
             accommodationPage.getContent().stream()
-                .map(accommodation -> AccommodationSummaryResponse.from(
+                .map(accommodation -> AccommodationSummaryResponse.to(
                         accommodation,
                         accommodation.getImages().get(0).getUrl()
                     )
                 )
                 .collect(Collectors.toList());
 
-        return AccommodationSummaryListResponse.from(
+        return AccommodationSummaryListResponse.to(
             summaryResponses,
             accommodationPage.getTotalPages(),
             accommodationPage.getNumber()

@@ -11,7 +11,7 @@ public record AccommodationSummaryResponse(
         Long accommodationPrice,
         String accommodationImg
 ) {
-    public static AccommodationSummaryResponse from(Accommodation accommodation , String accommodationImg){
+    public static AccommodationSummaryResponse to(Accommodation accommodation , String accommodationImg){
         return AccommodationSummaryResponse.builder()
             .accommodationId(accommodation.getId())
             .accommodationName(accommodation.getName())
