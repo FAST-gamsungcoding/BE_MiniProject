@@ -22,6 +22,9 @@ public record AccommodationSummaryResponse(
     }
 
     private static String makeShortAddress(String address) {
+        if( address == null){
+            return "";
+        }
         String[] parts = address.split(" ");
         return parts.length > 1 ? parts[0] + " " + parts[1] : address;
     }

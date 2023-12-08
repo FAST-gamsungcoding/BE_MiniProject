@@ -27,10 +27,7 @@ public class AccommodationService {
 
         String accommodationImage = accommodation.getImages().get(0).getUrl();
 
-        List<String> roomImages = accommodation.getImages().stream()
-            .skip(1) // 첫 번째 이미지(숙소 사진)를 제외하고 나머지 이미지들을 가져옴
-            .map(Image::getUrl)
-            .collect(Collectors.toList());
+        List<String> roomImages = getRoomImages(accommodation);
 
         return AccommodationDetailResponse.from(accommodation, accommodationImage, roomImages);
     }
@@ -41,20 +38,32 @@ public class AccommodationService {
         Page<Accommodation> accommodationPage =
             accommodationRepository.findByLocationIn(regionIds, pageable);
 
-        List<AccommodationSummaryResponse> summaryResponses =
-            accommodationPage.getContent().stream()
-                .map(accommodation -> AccommodationSummaryResponse.to(
-                        accommodation,
-                        accommodation.getImages().get(0).getUrl()
-                    )
-                )
-                .collect(Collectors.toList());
+        List<AccommodationSummaryResponse>
+            summaryResponses = getAccommodationSummaryResponses(accommodationPage);
 
         return AccommodationSummaryListResponse.to(
             summaryResponses,
             accommodationPage.getTotalPages(),
             accommodationPage.getNumber()
         );
+    }
+
+    private static List<String> getRoomImages(Accommodation accommodation) {
+        return accommodation.getImages().stream()
+            .skip(1)
+            .map(Image::getUrl)
+            .collect(Collectors.toList());
+    }
+
+    private static List<AccommodationSummaryResponse> getAccommodationSummaryResponses(
+        Page<Accommodation> accommodationPage) {
+        return accommodationPage.getContent().stream()
+            .map(accommodation -> AccommodationSummaryResponse.to(
+                    accommodation,
+                    accommodation.getImages().get(0).getUrl()
+                )
+            )
+            .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
