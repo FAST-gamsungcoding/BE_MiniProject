@@ -11,7 +11,7 @@ public record AccommodationSummaryListResponse(
 
 ) {
 
-    public static AccommodationSummaryListResponse from(List<AccommodationSummaryResponse> accommodations,int totalPage,int pageNumber){
+    public static AccommodationSummaryListResponse to(List<AccommodationSummaryResponse> accommodations,int totalPage,int pageNumber){
         return AccommodationSummaryListResponse.builder()
             .accommodations(accommodations)
             .totalPage(totalPage)
