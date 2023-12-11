@@ -30,7 +30,7 @@ public class AccommodationControllerTest extends BaseIntegrationTest {
     @DisplayName("메인 페이지 지역별 조회 - 성공")
     void getCategoryAccommodation() throws Exception {
         // given
-        Long location = 1L; // 예시로 지역 번호 1을 사용
+        List<Long> regionIds = List.of(1L,2L); // 예시로 지역 번호 1을 사용
         List<Accommodation> accommodations = IntStream.range(0, 3)
             .mapToObj(i -> createAccommodationWithImage())
             .toList();
@@ -43,7 +43,7 @@ public class AccommodationControllerTest extends BaseIntegrationTest {
 
         // when
         ResultActions resultActions = mockMvc.perform(get(url)
-            .param("location", String.valueOf(location))
+            .param("regionIds", regionIds.stream().map(String::valueOf).toArray(String[]::new))
             .contentType(MediaType.APPLICATION_JSON));
 
         // then
