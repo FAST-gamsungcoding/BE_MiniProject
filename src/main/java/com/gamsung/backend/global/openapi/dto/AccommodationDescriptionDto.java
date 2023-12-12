@@ -2,7 +2,6 @@ package com.gamsung.backend.global.openapi.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.List;
 
 public record AccommodationDescriptionDto(@JsonProperty("response") Response response) {
@@ -22,6 +21,4 @@ public record AccommodationDescriptionDto(@JsonProperty("response") Response res
             }
         }
     }
-
-
 }

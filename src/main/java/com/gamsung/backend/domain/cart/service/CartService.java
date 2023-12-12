@@ -104,6 +104,9 @@ public class CartService {
         LocalDate startDate = cart.getStartDate();
         LocalDate endDate = cart.getEndDate();
 
+        //장바구니 상품의 예약 시작일이 오늘 이전이면 바로 품절표시
+        if(startDate.isBefore(LocalDate.now())) return true;
+
         Long accommodationId = cart.getAccommodation().getId();
 
         // 주문 테이블에서 해당 숙소에 대한 예약이 있는지 확인
