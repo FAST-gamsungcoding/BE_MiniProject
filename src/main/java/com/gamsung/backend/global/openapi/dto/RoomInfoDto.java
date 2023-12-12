@@ -1,6 +1,7 @@
 package com.gamsung.backend.global.openapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public record RoomInfoDto(@JsonProperty("response") Response response) {

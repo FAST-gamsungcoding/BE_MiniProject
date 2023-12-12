@@ -15,22 +15,19 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class SwaggerConfig {
-
-
+    private final static String DEVELOPMENT_SERVER_URL = "http://localhost:8080";
+    private final static String PRODUCT_SERVER_URL = "https://api.gamsung.xyz";
     private final Environment env;
 
     @Bean
     public OpenAPI customOpenAPI() {
-
-        String serverUrl = "http://localhost:8080";
-        if (env.getActiveProfiles().length > 0) {
-            if (env.getActiveProfiles()[0].equals("prod")) {
-                serverUrl = "https://api.gamsung.xyz";
-            }
-        }
         Server server = new Server();
-        server.setUrl(serverUrl);
-        List<Server> servers = List.of(server);
+
+        if (isProdEnvironment()) {
+            server.setUrl(PRODUCT_SERVER_URL);
+        } else {
+            server.setUrl(DEVELOPMENT_SERVER_URL);
+        }
 
         return new OpenAPI()
                 .info(new Info().title("TRAVELER API")
@@ -44,9 +41,12 @@ public class SwaggerConfig {
                                         .bearerFormat("JWT")
                                         .in(SecurityScheme.In.HEADER)
                                         .name("Authorization")))
-                .servers(servers);
+                .servers(List.of(server));
 
     }
 
+    private boolean isProdEnvironment() {
+        return env.getActiveProfiles().length > 0 && env.getActiveProfiles()[0].equals("prod");
+    }
 
 }

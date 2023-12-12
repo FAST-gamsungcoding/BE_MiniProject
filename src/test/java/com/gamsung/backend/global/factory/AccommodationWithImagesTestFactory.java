@@ -2,6 +2,7 @@ package com.gamsung.backend.global.factory;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.image.entity.Image;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
