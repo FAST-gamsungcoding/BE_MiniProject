@@ -3,12 +3,10 @@ package com.gamsung.backend.domain.cart.dto.response;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.gamsung.backend.domain.cart.entity.Cart;
-import com.gamsung.backend.domain.image.entity.Image;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Builder

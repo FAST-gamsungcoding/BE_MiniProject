@@ -1,7 +1,5 @@
 package com.gamsung.backend.domain.member.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.gamsung.backend.global.common.BaseTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

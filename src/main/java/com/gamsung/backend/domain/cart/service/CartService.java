@@ -1,9 +1,5 @@
 package com.gamsung.backend.domain.cart.service;
 
-import static com.gamsung.backend.global.exception.ErrorCode.ACCOMMODATION_NO_EXIST;
-import static com.gamsung.backend.global.exception.ErrorCode.CART_ID_NO_EXIST;
-import static com.gamsung.backend.global.exception.ErrorCode.CART_LIMIT_OVER;
-
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
@@ -16,14 +12,17 @@ import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.repository.OrderRepositorySupport;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.gamsung.backend.global.exception.ErrorCode.*;
 
 @Service
 @Slf4j
