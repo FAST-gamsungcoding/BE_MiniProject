@@ -1,7 +1,6 @@
 package com.gamsung.backend.global.exception;
 
 
-import com.gamsung.backend.domain.cart.exception.CartException;
 import com.gamsung.backend.global.common.ApiResponse;
 import jakarta.persistence.RollbackException;
 import org.springframework.dao.DataAccessException;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-//    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponse<ErrorMessage>> handleBaseException(BaseException e) {
@@ -47,15 +44,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(
                 ApiResponse.create(Integer.parseInt(validationError.getCode()),
                         ErrorMessage.create(validationError.getMessage()))
-        );
-    }
-
-    @ExceptionHandler(CartException.class)
-    public ResponseEntity<ApiResponse<ErrorMessage>> handleCartException(CartException e) {
-        // ErrorResponse 클래스는 예외를 클라이언트에게 전달할 때 사용될 구조입니다.
-        return ResponseEntity.badRequest().body(
-                ApiResponse.create(Integer.parseInt(e.getCode()),
-                        ErrorMessage.create(e.getMessage()))
         );
     }
 
