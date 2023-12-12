@@ -11,7 +11,7 @@ public class BaseException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return errorCode.getCode();
     }
 
