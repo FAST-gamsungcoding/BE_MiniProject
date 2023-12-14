@@ -12,7 +12,7 @@ public class OrderExceptionHandler {
     @ExceptionHandler(OrderSoldOutException.class)
     public ResponseEntity<ApiResponse<SoldOutErrorResponse>> handleOrderSoldOutException(OrderSoldOutException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                ApiResponse.create(e.getCode(),
+                ApiResponse.create(Integer.parseInt(e.getCode()),
                         SoldOutErrorResponse.create(e.getMessage(), e.getSoldOutOrders())
                 )
         );

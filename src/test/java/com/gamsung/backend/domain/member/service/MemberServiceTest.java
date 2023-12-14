@@ -9,7 +9,7 @@ import com.gamsung.backend.domain.member.dto.response.MemberRegisterResponse;
 import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.global.factory.MemberTestFactory;
-import com.gamsung.backend.global.jwt.dto.JwtPair;
+import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.service.JwtService;
 import org.junit.jupiter.api.Assertions;
@@ -58,8 +58,10 @@ class MemberServiceTest {
         public void successToLoginMember() {
             // given
             Member member = MemberTestFactory.createMemberWithRandomValues(false);
-            JwtPair testToken = JwtPair.from("fake-access-token", "fake-refresh-token");
-
+            JwtPair testToken = JwtPair.builder()
+                    .accessToken("fake-access-token")
+                    .refreshToken("fake-refresh-token")
+                    .build();
             MemberLoginRequest memberLoginRequest = new MemberLoginRequest(
                     member.getEmail(), member.getPassword());
 
@@ -123,12 +125,15 @@ class MemberServiceTest {
         public void successToLogoutMember() {
             // given
             Member member = MemberTestFactory.createMemberWithRandomValues(false);
-            JwtPair testToken = JwtPair.from("fake-access-token", "fake-refresh-token");
+            JwtPair testToken = JwtPair.builder()
+                    .accessToken("fake-access-token")
+                    .refreshToken("fake-refresh-token")
+                    .build();
 
             doNothing().when(jwtService).deleteRefreshTokenAndAddAccessTokenToBlackList(anyString(), anyString());
 
             // when
-            MemberLogoutResponse memberLogoutResponse = memberService.logout(member.getEmail(), testToken.accessToken());
+            MemberLogoutResponse memberLogoutResponse = memberService.logout(member.getEmail(), testToken.getAccessToken());
 
             // then
             Assertions.assertEquals(memberLogoutResponse.message(), "로그아웃에 성공했습니다.");

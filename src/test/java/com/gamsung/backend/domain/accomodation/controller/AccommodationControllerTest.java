@@ -1,23 +1,22 @@
 package com.gamsung.backend.domain.accomodation.controller;
 
-import com.gamsung.backend.domain.accommodation.entity.Accommodation;
-import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
-import com.gamsung.backend.domain.image.repository.ImageRepository;
-import com.gamsung.backend.global.common.BaseIntegrationTest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.List;
-import java.util.stream.IntStream;
-
 import static com.gamsung.backend.global.factory.AccommodationWithImagesTestFactory.createAccommodationWithImage;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.gamsung.backend.domain.accommodation.entity.Accommodation;
+import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
+import com.gamsung.backend.domain.image.repository.ImageRepository;
+import com.gamsung.backend.global.common.BaseIntegrationTest;
+import java.util.List;
+import java.util.stream.IntStream;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
 public class AccommodationControllerTest extends BaseIntegrationTest {
 

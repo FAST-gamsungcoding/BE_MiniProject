@@ -1,9 +1,8 @@
 package com.gamsung.backend.domain.accommodation.dto.response.detail;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
-import lombok.Builder;
-
 import java.util.List;
+import lombok.Builder;
 
 @Builder
 public record AccommodationDetailResponse(

@@ -12,7 +12,7 @@ public class ForbiddenException extends AccessDeniedException {
         this.errorCode = errorCode;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return errorCode.getCode();
     }
 

@@ -1,7 +1,7 @@
 package com.gamsung.backend.domain.member.dto.response;
 
 
-import com.gamsung.backend.global.jwt.dto.JwtPair;
+import com.gamsung.backend.global.jwt.JwtPair;
 
 public record MemberLoginResponse(
         String accessToken,
@@ -10,6 +10,6 @@ public record MemberLoginResponse(
         String email
 ) {
     public static MemberLoginResponse from(JwtPair jwtPair, String name, String email) {
-        return new MemberLoginResponse(jwtPair.accessToken(), jwtPair.refreshToken(), name, email);
+        return new MemberLoginResponse(jwtPair.getAccessToken(), jwtPair.getRefreshToken(), name, email);
     }
 }

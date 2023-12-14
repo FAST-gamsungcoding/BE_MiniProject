@@ -7,7 +7,7 @@ import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.domain.member.service.MemberService;
 import com.gamsung.backend.global.common.BaseRedisContainerTest;
 import com.gamsung.backend.global.factory.MemberTestFactory;
-import com.gamsung.backend.global.jwt.dto.JwtPair;
+import com.gamsung.backend.global.jwt.JwtPair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,10 @@ public class OrderControllerIntegrationTest extends BaseRedisContainerTest {
         MemberLoginResponse memberLoginResponse = memberService.login(
                 new MemberLoginRequest(member.getEmail(), member.getPassword())
         );
-        jwtPair = JwtPair.from(memberLoginResponse.accessToken(), memberLoginResponse.refreshToken());
+        jwtPair = JwtPair.builder()
+                .accessToken(memberLoginResponse.accessToken())
+                .refreshToken(memberLoginResponse.refreshToken())
+                .build();
     }
 
     @Test
@@ -50,7 +53,7 @@ public class OrderControllerIntegrationTest extends BaseRedisContainerTest {
         //given
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.accessToken());
+        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.getAccessToken());
 
         String jsonPayload = """
                 [
@@ -96,7 +99,7 @@ public class OrderControllerIntegrationTest extends BaseRedisContainerTest {
         //given
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.accessToken());
+        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.getAccessToken());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/order/check")
@@ -119,7 +122,7 @@ public class OrderControllerIntegrationTest extends BaseRedisContainerTest {
         //given
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.accessToken());
+        headers.set(HttpHeaders.AUTHORIZATION, JWT_TOKEN_PREFIX + jwtPair.getAccessToken());
 
         // Act & Assert
         mockMvc.perform(MockMvcRequestBuilders.get("/v1/order/me")

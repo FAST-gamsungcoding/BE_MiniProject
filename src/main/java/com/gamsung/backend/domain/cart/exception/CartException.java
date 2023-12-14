@@ -7,6 +7,9 @@ import lombok.Getter;
 @Getter
 public class CartException extends BaseException {
 
+    public CartException() {
+       super();
+    }
     public CartException(ErrorCode errorCode) {
         super(errorCode);
     }

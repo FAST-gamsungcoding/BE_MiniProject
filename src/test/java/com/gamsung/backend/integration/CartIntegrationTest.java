@@ -1,5 +1,6 @@
 package com.gamsung.backend.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
 import com.gamsung.backend.domain.member.controller.request.MemberControllerLoginRequest;
 import com.gamsung.backend.domain.member.entity.Member;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
