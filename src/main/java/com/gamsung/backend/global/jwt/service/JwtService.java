@@ -33,7 +33,7 @@ public class JwtService {
         String refreshToken = jwtProvider.createToken(jwtPayload, refreshExpiration);
 
         jwtRefreshTokenRedisRepository.save(JwtRedisEntity.builder()
-                .memberEmail(jwtPayload.getEmail())
+                .memberEmail(jwtPayload.email())
                 .refreshToken(refreshToken)
                 .expiration(refreshExpiration)
                 .build());
@@ -62,7 +62,7 @@ public class JwtService {
     public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
         JwtPayload jwtPayload = verifyRefreshToken(request.refreshToken());
 
-        jwtRefreshTokenRedisRepository.findByKey(jwtPayload.getEmail())
+        jwtRefreshTokenRedisRepository.findByKey(jwtPayload.email())
                 .ifPresentOrElse(refreshToken -> {
                     if (!request.refreshToken().equals(refreshToken)) {
                         throw new JwtInvalidRefreshTokenException();
@@ -71,7 +71,7 @@ public class JwtService {
                     throw new JwtExpiredRefreshTokenException();
                 });
 
-        JwtPayload newJwtPayload = JwtPayload.from(Long.parseLong(jwtPayload.getId()), jwtPayload.getEmail());
+        JwtPayload newJwtPayload = JwtPayload.from(Long.parseLong(jwtPayload.id()), jwtPayload.email());
 
         String newAccessToken = jwtProvider.createToken(newJwtPayload, accessExpiration);
 

@@ -34,11 +34,11 @@ public class JwtProvider {
 
     public String createToken(JwtPayload jwtPayload, long expiration) {
         return Jwts.builder()
-                .claim(USER_ID_KEY, jwtPayload.getId())
-                .claim(USER_EMAIL_KEY, jwtPayload.getEmail())
+                .claim(USER_ID_KEY, jwtPayload.id())
+                .claim(USER_EMAIL_KEY, jwtPayload.email())
                 .issuer(issuer)
-                .issuedAt(jwtPayload.getIssuedAt())
-                .expiration(new Date(jwtPayload.getIssuedAt().getTime() + expiration))
+                .issuedAt(jwtPayload.issuedAt())
+                .expiration(new Date(jwtPayload.issuedAt().getTime() + expiration))
                 .signWith(secretKey)
                 .compact();
     }
@@ -49,11 +49,11 @@ public class JwtProvider {
                 .build()
                 .parseSignedClaims(jwtToken)
                 .getPayload();
-        return JwtPayload.builder()
-                .id(claims.get(USER_ID_KEY, String.class))
-                .email(claims.get(USER_EMAIL_KEY, String.class))
-                .issuedAt(claims.getIssuedAt())
-                .build();
+        return JwtPayload.from(
+                claims.get(USER_ID_KEY, String.class),
+                claims.get(USER_EMAIL_KEY, String.class),
+                claims.getIssuedAt()
+        );
     }
 
     public JwtPayload verifyAccessToken(String jwtToken) {
@@ -84,11 +84,10 @@ public class JwtProvider {
                     .parseSignedClaims(jwtToken)
                     .getPayload();
         } catch (ExpiredJwtException e) {
-            return JwtPayload.builder()
-                    .id(e.getClaims().get(USER_ID_KEY, String.class))
-                    .email(e.getClaims().get(USER_EMAIL_KEY, String.class))
-                    .issuedAt(e.getClaims().getIssuedAt())
-                    .build();
+            return JwtPayload.from(
+                    e.getClaims().get(USER_ID_KEY, String.class),
+                    e.getClaims().get(USER_EMAIL_KEY, String.class),
+                    e.getClaims().getIssuedAt());
         } catch (IllegalArgumentException | SignatureException | MalformedJwtException e) {
             throw new JwtInvalidAccessTokenException();
         }
