@@ -1,7 +1,7 @@
 package com.gamsung.backend.global.jwt.service;
 
 import com.gamsung.backend.global.common.BaseRedisContainerTest;
-import com.gamsung.backend.global.jwt.JwtPair;
+import com.gamsung.backend.global.jwt.dto.JwtPair;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.repository.JwtRefreshTokenRedisRepository;
 import org.junit.jupiter.api.Assertions;
@@ -38,8 +38,8 @@ class JwtServiceTest extends BaseRedisContainerTest {
             // then
 
             // jwtPair Check
-            JwtPayload verifiedJwtAccessTokenPayload = jwtService.verifyAccessToken(jwtPair.getAccessToken());
-            JwtPayload verifiedJwtRefreshTokenPayload = jwtService.verifyRefreshToken(jwtPair.getRefreshToken());
+            JwtPayload verifiedJwtAccessTokenPayload = jwtService.verifyAccessToken(jwtPair.accessToken());
+            JwtPayload verifiedJwtRefreshTokenPayload = jwtService.verifyRefreshToken(jwtPair.refreshToken());
 
             Assertions.assertEquals(TEST_EMAIL, verifiedJwtAccessTokenPayload.email());
             Assertions.assertEquals(TEST_EMAIL, verifiedJwtRefreshTokenPayload.email());
@@ -48,7 +48,7 @@ class JwtServiceTest extends BaseRedisContainerTest {
             Assertions.assertEquals(jwtPayload.issuedAt().getTime() / 1000, verifiedJwtRefreshTokenPayload.issuedAt().getTime() / 1000);
 
             // Redis Save Check
-            Assertions.assertEquals(jwtPair.getRefreshToken(), storedRefreshToken);
+            Assertions.assertEquals(jwtPair.refreshToken(), storedRefreshToken);
             Assertions.assertTrue(jwtRefreshTokenRedisRepository.getExpire(TEST_EMAIL) > -1);
         }
     }

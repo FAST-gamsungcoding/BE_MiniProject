@@ -16,7 +16,7 @@ import com.gamsung.backend.domain.member.exception.MemberNotFoundException;
 import com.gamsung.backend.domain.member.service.MemberService;
 import com.gamsung.backend.global.exception.ErrorCode;
 import com.gamsung.backend.global.factory.MemberTestFactory;
-import com.gamsung.backend.global.jwt.JwtPair;
+import com.gamsung.backend.global.jwt.dto.JwtPair;
 import com.gamsung.backend.global.security.WithMockCustomMember;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -68,10 +68,8 @@ class MemberControllerTest {
         void successToLoginMember() throws Exception {
             // given
             Member testMember = MemberTestFactory.createMemberWithRandomValues(false);
-            JwtPair testToken = JwtPair.builder()
-                    .accessToken("fake-access-token")
-                    .refreshToken("fake-refresh-token")
-                    .build();
+            JwtPair testToken = JwtPair.from("fake-access-token", "fake-refresh-token");
+
             MemberControllerLoginRequest memberControllerLoginRequest
                     = new MemberControllerLoginRequest(testMember.getEmail(), testMember.getEmail());
             MemberLoginResponse memberLoginResponse
