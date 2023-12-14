@@ -43,13 +43,16 @@ public class Cart extends BaseTime {
     private LocalDate endDate;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @Column(name = "price")
     private Long price;
 
+    @Version
+    private Long version;
 
-    public void setIsDeleted(boolean isDeleted) {
+
+    public void delete(boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
 

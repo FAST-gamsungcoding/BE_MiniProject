@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CartDeleteRequest {
 
     @NotEmpty(message = "데이터 형식이 올바르지 않습니다.")

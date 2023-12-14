@@ -2,8 +2,10 @@ package com.gamsung.backend.domain.cart.service;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
+import com.gamsung.backend.domain.cart.Util.CartMagicNumber;
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
+import com.gamsung.backend.domain.cart.dto.response.CartEntryResponse;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.cart.entity.Cart;
 import com.gamsung.backend.domain.cart.exception.CartException;
@@ -28,9 +30,13 @@ import static com.gamsung.backend.global.exception.ErrorCode.*;
 @Slf4j
 @RequiredArgsConstructor
 public class CartService {
+
     private final CartRepository cartRepository;
+
     private final AccommodationRepository accommodationRepository;
+
     private final MemberRepository memberRepository;
+
     private final OrderRepositorySupport orderRepositorySupport;
 
     @Transactional
@@ -45,7 +51,7 @@ public class CartService {
         int currentCartCount = cartRepository.countByMember(member);
         int newCartCount = currentCartCount + 1;
 
-        if (newCartCount > 10) {
+        if (newCartCount > CartMagicNumber.LIMIT_COUNT_TO_ADD_CART) {
             throw new CartException(CART_LIMIT_OVER);
         }
 
@@ -56,7 +62,6 @@ public class CartService {
                 .endDate(cartEntryRequest.getEndDate())
                 .reservationPeople(cartEntryRequest.getPeople())
                 .price(cartEntryRequest.getCartPrice())
-                .isDeleted(false)
                 .build();
 
 
@@ -73,10 +78,9 @@ public class CartService {
 
         for (Cart cart : myCartList) {
             boolean isSoldOut = isItemSoldOut(cart);
-            cart.setIsDeleted(isSoldOut);
-            // 만약 해당 상품이 품절이면 isDeleted를 true로 설정하고, 그렇지 않으면 false로 설정
+            cart.delete(isSoldOut);
+            // 만약 해당 상품이 품절이면 delete를 true로 설정하고, 그렇지 않으면 false로 설정
         }
-
 
         return myCartList.stream()
                 .map(CartFindResponse::fromEntity)

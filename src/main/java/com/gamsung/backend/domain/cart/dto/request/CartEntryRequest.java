@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CartEntryRequest {
 
     @NotNull(message = "데이터 형식이 올바르지 않습니다.")

@@ -4,6 +4,8 @@ package com.gamsung.backend.global.exception;
 import com.gamsung.backend.global.common.ApiResponse;
 import jakarta.persistence.RollbackException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.BadSqlGrammarException;
@@ -85,5 +87,15 @@ public class GlobalExceptionHandler {
                 ApiResponse.create(validationError.getCode(), ErrorMessage.create(validationError.getMessage()))
         );
     }
+
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    public ResponseEntity<ApiResponse<ErrorMessage>> handleOptimisticLockingException(OptimisticLockingFailureException e) {
+        ErrorCode validationError = ErrorCode.SERVICE_ERREOR;
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                ApiResponse.create(validationError.getCode(), ErrorMessage.create(validationError.getMessage()))
+        );
+    }
+
+
 
 }
