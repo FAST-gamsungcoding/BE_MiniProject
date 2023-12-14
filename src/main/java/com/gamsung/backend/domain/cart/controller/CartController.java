@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Name;
 import java.util.List;
 
 @Tag(name = "장바구니")
@@ -47,8 +46,8 @@ public class CartController {
     public ResponseEntity<ApiResponse<List<CartFindResponse>>> findMyCart(@Parameter(hidden = true) @MemberAuth AuthContext authContext) {
 
         Long memberId = authContext.id();
-        List<CartFindResponse> myCartList = cartService.findMyCart(memberId);
-        return ResponseEntity.ok(ApiResponse.create(4000,myCartList));
+        List<CartFindResponse> myCarts = cartService.findMyCart(memberId);
+        return ResponseEntity.ok(ApiResponse.create(4000,myCarts));
     }
 
     @DeleteMapping

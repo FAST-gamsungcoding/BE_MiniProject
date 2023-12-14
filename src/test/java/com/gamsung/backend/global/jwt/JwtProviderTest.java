@@ -11,9 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.time.Instant;
-import java.util.Date;
-
 class JwtProviderTest extends BaseIntegrationTest {
 
     private static final String TEST_EMAIL = "test@test.com";
@@ -31,19 +28,15 @@ class JwtProviderTest extends BaseIntegrationTest {
         @Test
         void successToCreateJwtToken() {
             // given
-            Date issuedAt = Date.from(Instant.now());
-            JwtPayload jwtPayload = JwtPayload.builder()
-                    .email(TEST_EMAIL)
-                    .issuedAt(issuedAt)
-                    .build();
+            JwtPayload jwtPayload = JwtPayload.from(1L, TEST_EMAIL);
 
             // when
             String jwtToken = jwtProvider.createToken(jwtPayload, accessTokenExpiration);
 
             // then
             JwtPayload verifiedJwtPayload = jwtProvider.verifyAccessToken(jwtToken);
-            Assertions.assertEquals(TEST_EMAIL, verifiedJwtPayload.getEmail());
-            Assertions.assertEquals(issuedAt.getTime() / 1000, verifiedJwtPayload.getIssuedAt().getTime() / 1000);
+            Assertions.assertEquals(TEST_EMAIL, verifiedJwtPayload.email());
+            Assertions.assertEquals(jwtPayload.issuedAt().getTime() / 1000, verifiedJwtPayload.issuedAt().getTime() / 1000);
         }
     }
 
@@ -57,12 +50,8 @@ class JwtProviderTest extends BaseIntegrationTest {
         @Test
         void failToVerifyJwtTokenWhenTokenExpired() {
             // given
-            Date issuedAt = new Date(System.currentTimeMillis());
             long shortExpirationTime = 1;
-            JwtPayload jwtPayload = JwtPayload.builder()
-                    .email(TEST_EMAIL)
-                    .issuedAt(issuedAt)
-                    .build();
+            JwtPayload jwtPayload = JwtPayload.from(1L, TEST_EMAIL);
 
             // when
             String jwtToken = jwtProvider.createToken(jwtPayload, shortExpirationTime);
@@ -75,11 +64,7 @@ class JwtProviderTest extends BaseIntegrationTest {
         @Test
         void failToVerifyJwtTokenWhenWrongSecretKey() {
             // given
-            Date issuedAt = new Date(System.currentTimeMillis());
-            JwtPayload jwtPayload = JwtPayload.builder()
-                    .email(TEST_EMAIL)
-                    .issuedAt(issuedAt)
-                    .build();
+            JwtPayload jwtPayload = JwtPayload.from(1L, TEST_EMAIL);
             JwtProvider otherJwtProvider = new JwtProvider(WRONG_SECRET_KEY);
 
             // when

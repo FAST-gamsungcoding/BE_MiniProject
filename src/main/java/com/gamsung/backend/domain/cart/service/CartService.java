@@ -1,13 +1,11 @@
 package com.gamsung.backend.domain.cart.service;
 
-import static com.gamsung.backend.global.exception.ErrorCode.ACCOMMODATION_NO_EXIST;
-import static com.gamsung.backend.global.exception.ErrorCode.CART_ID_NO_EXIST;
-import static com.gamsung.backend.global.exception.ErrorCode.CART_LIMIT_OVER;
-
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
+import com.gamsung.backend.domain.cart.Util.CartMagicNumber;
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
+import com.gamsung.backend.domain.cart.dto.response.CartEntryResponse;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
 import com.gamsung.backend.domain.cart.entity.Cart;
 import com.gamsung.backend.domain.cart.exception.CartException;
@@ -16,22 +14,29 @@ import com.gamsung.backend.domain.member.entity.Member;
 import com.gamsung.backend.domain.member.repository.MemberRepository;
 import com.gamsung.backend.domain.order.entity.Order;
 import com.gamsung.backend.domain.order.repository.OrderRepositorySupport;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.gamsung.backend.global.exception.ErrorCode.*;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CartService {
+
     private final CartRepository cartRepository;
+
     private final AccommodationRepository accommodationRepository;
+
     private final MemberRepository memberRepository;
+
     private final OrderRepositorySupport orderRepositorySupport;
 
     @Transactional
@@ -46,7 +51,7 @@ public class CartService {
         int currentCartCount = cartRepository.countByMember(member);
         int newCartCount = currentCartCount + 1;
 
-        if (newCartCount > 10) {
+        if (newCartCount > CartMagicNumber.LIMIT_COUNT_TO_ADD_CART) {
             throw new CartException(CART_LIMIT_OVER);
         }
 
@@ -57,7 +62,6 @@ public class CartService {
                 .endDate(cartEntryRequest.getEndDate())
                 .reservationPeople(cartEntryRequest.getPeople())
                 .price(cartEntryRequest.getCartPrice())
-                .isDeleted(false)
                 .build();
 
 
@@ -74,10 +78,9 @@ public class CartService {
 
         for (Cart cart : myCartList) {
             boolean isSoldOut = isItemSoldOut(cart);
-            cart.setIsDeleted(isSoldOut);
-            // 만약 해당 상품이 품절이면 isDeleted를 true로 설정하고, 그렇지 않으면 false로 설정
+            cart.delete(isSoldOut);
+            // 만약 해당 상품이 품절이면 delete를 true로 설정하고, 그렇지 않으면 false로 설정
         }
-
 
         return myCartList.stream()
                 .map(CartFindResponse::fromEntity)

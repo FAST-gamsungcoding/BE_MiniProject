@@ -1,18 +1,5 @@
 package com.gamsung.backend.global.openapi.service;
 
-import static com.gamsung.backend.global.openapi.UrlConstants.ACCOMMODATION_PATH;
-import static com.gamsung.backend.global.openapi.UrlConstants.ARRANGE;
-import static com.gamsung.backend.global.openapi.UrlConstants.CONTENT_TYPE_ID;
-import static com.gamsung.backend.global.openapi.UrlConstants.DEFAULT_NUM_OF_ROWS;
-import static com.gamsung.backend.global.openapi.UrlConstants.DESCRIPTION_PATH;
-import static com.gamsung.backend.global.openapi.UrlConstants.END_POINT;
-import static com.gamsung.backend.global.openapi.UrlConstants.MOBILE_APP;
-import static com.gamsung.backend.global.openapi.UrlConstants.MOBILE_OS;
-import static com.gamsung.backend.global.openapi.UrlConstants.PAGE_NO;
-import static com.gamsung.backend.global.openapi.UrlConstants.ROOM_PATH;
-import static com.gamsung.backend.global.openapi.UrlConstants.TYPE;
-import static com.gamsung.backend.global.openapi.UrlConstants.YES;
-
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
 import com.gamsung.backend.domain.image.entity.Image;
@@ -23,22 +10,21 @@ import com.gamsung.backend.global.openapi.dto.AccommodationInfoDto;
 import com.gamsung.backend.global.openapi.dto.AccommodationInfoDto.Response.Body.Item;
 import com.gamsung.backend.global.openapi.dto.RoomInfoDto;
 import com.gamsung.backend.global.openapi.dto.RoomInfoDto.Response;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static com.gamsung.backend.global.openapi.UrlConstants.*;
 
 @Service
 @RequiredArgsConstructor
