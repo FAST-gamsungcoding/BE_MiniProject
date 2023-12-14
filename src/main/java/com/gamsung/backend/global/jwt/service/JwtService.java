@@ -1,8 +1,8 @@
 package com.gamsung.backend.global.jwt.service;
 
-import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.jwt.JwtProvider;
 import com.gamsung.backend.global.jwt.controller.request.RefreshAccessTokenRequest;
+import com.gamsung.backend.global.jwt.dto.JwtPair;
 import com.gamsung.backend.global.jwt.dto.JwtPayload;
 import com.gamsung.backend.global.jwt.entity.JwtBlackListRedisEntity;
 import com.gamsung.backend.global.jwt.entity.JwtRedisEntity;
@@ -33,15 +33,12 @@ public class JwtService {
         String refreshToken = jwtProvider.createToken(jwtPayload, refreshExpiration);
 
         jwtRefreshTokenRedisRepository.save(JwtRedisEntity.builder()
-                .memberEmail(jwtPayload.getEmail())
+                .memberEmail(jwtPayload.email())
                 .refreshToken(refreshToken)
                 .expiration(refreshExpiration)
                 .build());
 
-        return JwtPair.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        return JwtPair.from(accessToken, refreshToken);
     }
 
     public JwtPayload verifyAccessToken(String jwtAccessToken) {
@@ -62,7 +59,7 @@ public class JwtService {
     public JwtPair refreshAccessToken(RefreshAccessTokenRequest request) {
         JwtPayload jwtPayload = verifyRefreshToken(request.refreshToken());
 
-        jwtRefreshTokenRedisRepository.findByKey(jwtPayload.getEmail())
+        jwtRefreshTokenRedisRepository.findByKey(jwtPayload.email())
                 .ifPresentOrElse(refreshToken -> {
                     if (!request.refreshToken().equals(refreshToken)) {
                         throw new JwtInvalidRefreshTokenException();
@@ -71,14 +68,11 @@ public class JwtService {
                     throw new JwtExpiredRefreshTokenException();
                 });
 
-        JwtPayload newJwtPayload = JwtPayload.from(Long.parseLong(jwtPayload.getId()), jwtPayload.getEmail());
+        JwtPayload newJwtPayload = JwtPayload.from(Long.parseLong(jwtPayload.id()), jwtPayload.email());
 
         String newAccessToken = jwtProvider.createToken(newJwtPayload, accessExpiration);
 
-        return JwtPair.builder()
-                .accessToken(newAccessToken)
-                .refreshToken(request.refreshToken())
-                .build();
+        return JwtPair.from(newAccessToken, request.refreshToken());
     }
 
     public void deleteRefreshTokenAndAddAccessTokenToBlackList(String email, String accessToken) {
