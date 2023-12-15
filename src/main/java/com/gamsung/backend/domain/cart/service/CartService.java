@@ -6,6 +6,7 @@ import static com.gamsung.backend.global.exception.ErrorCode.CART_LIMIT_OVER;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
+import com.gamsung.backend.domain.cart.Util.CartConstantNumber;
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
@@ -46,7 +47,9 @@ public class CartService {
         int currentCartCount = cartRepository.countByMember(member);
         int newCartCount = currentCartCount + 1;
 
-        if (newCartCount > 10) {
+
+        if (newCartCount > CartConstantNumber.LIMIT_COUNT_TO_ADD_CART) {
+
             throw new CartException(CART_LIMIT_OVER);
         }
 
