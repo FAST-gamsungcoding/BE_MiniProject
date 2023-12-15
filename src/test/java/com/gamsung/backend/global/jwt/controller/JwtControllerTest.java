@@ -2,8 +2,8 @@ package com.gamsung.backend.global.jwt.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gamsung.backend.global.exception.ErrorCode;
-import com.gamsung.backend.global.jwt.JwtPair;
 import com.gamsung.backend.global.jwt.controller.request.RefreshAccessTokenRequest;
+import com.gamsung.backend.global.jwt.dto.JwtPair;
 import com.gamsung.backend.global.jwt.exception.JwtExpiredRefreshTokenException;
 import com.gamsung.backend.global.jwt.exception.JwtInvalidRefreshTokenException;
 import com.gamsung.backend.global.jwt.service.JwtService;
@@ -51,15 +51,9 @@ class JwtControllerTest {
         @Test
         void successToRefreshAccessToken() throws Exception {
             // given
-            JwtPair testToken = JwtPair.builder()
-                    .accessToken("fake-access-token")
-                    .refreshToken("fake-refresh-token")
-                    .build();
-            JwtPair refreshedTestToken = JwtPair.builder()
-                    .accessToken("fake-refreshed-access-token")
-                    .refreshToken("fake-refresh-token")
-                    .build();
-            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
+            JwtPair testToken = JwtPair.from("fake-access-token", "fake-refresh-token");
+            JwtPair refreshedTestToken = JwtPair.from("fake-refreshed-access-token", "fake-refresh-token");
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.refreshToken());
 
             given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class)))
                     .willReturn(refreshedTestToken);
@@ -74,8 +68,8 @@ class JwtControllerTest {
             resultActions
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.code").value(1008))
-                    .andExpect(jsonPath("$.data.access_token").value(refreshedTestToken.getAccessToken()))
-                    .andExpect(jsonPath("$.data.refresh_token").value(refreshedTestToken.getRefreshToken()));
+                    .andExpect(jsonPath("$.data.access_token").value(refreshedTestToken.accessToken()))
+                    .andExpect(jsonPath("$.data.refresh_token").value(refreshedTestToken.refreshToken()));
         }
 
         @DisplayName("1009 : 토큰 리프레시 실패 - 리프레시 토큰이 만료된 경우")
@@ -83,11 +77,8 @@ class JwtControllerTest {
         @Test
         void failToRefreshAccessTokenWhenExpiredRefreshToken() throws Exception {
             // given
-            JwtPair testToken = JwtPair.builder()
-                    .accessToken("fake-access-token")
-                    .refreshToken("fake-refresh-token")
-                    .build();
-            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
+            JwtPair testToken = JwtPair.from("fake-access-token", "fake-refresh-token");
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.refreshToken());
 
             given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class))).will(
                     invocation -> {
@@ -113,11 +104,8 @@ class JwtControllerTest {
         @Test
         void failToRefreshAccessTokenWhenInvalidRefreshToken() throws Exception {
             // given
-            JwtPair testToken = JwtPair.builder()
-                    .accessToken("fake-access-token")
-                    .refreshToken("fake-refresh-token")
-                    .build();
-            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.getRefreshToken());
+            JwtPair testToken = JwtPair.from("fake-access-token", "fake-refresh-token");
+            RefreshAccessTokenRequest refreshAccessTokenRequest= new RefreshAccessTokenRequest(testToken.refreshToken());
 
             given(jwtService.refreshAccessToken(any(RefreshAccessTokenRequest.class))).will(
                     invocation -> {

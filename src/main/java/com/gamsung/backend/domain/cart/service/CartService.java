@@ -2,6 +2,7 @@ package com.gamsung.backend.domain.cart.service;
 
 import com.gamsung.backend.domain.accommodation.entity.Accommodation;
 import com.gamsung.backend.domain.accommodation.repository.AccommodationRepository;
+import com.gamsung.backend.domain.cart.Util.CartConstantNumber;
 import com.gamsung.backend.domain.cart.dto.request.CartDeleteRequest;
 import com.gamsung.backend.domain.cart.dto.request.CartEntryRequest;
 import com.gamsung.backend.domain.cart.dto.response.CartFindResponse;
@@ -45,7 +46,9 @@ public class CartService {
         int currentCartCount = cartRepository.countByMember(member);
         int newCartCount = currentCartCount + 1;
 
-        if (newCartCount > 10) {
+
+        if (newCartCount > CartConstantNumber.LIMIT_COUNT_TO_ADD_CART) {
+
             throw new CartException(CART_LIMIT_OVER);
         }
 
@@ -103,6 +106,9 @@ public class CartService {
     private boolean isItemSoldOut(Cart cart) {
         LocalDate startDate = cart.getStartDate();
         LocalDate endDate = cart.getEndDate();
+
+        //장바구니 상품의 예약 시작일이 오늘 이전이면 바로 품절표시
+        if(startDate.isBefore(LocalDate.now())) return true;
 
         Long accommodationId = cart.getAccommodation().getId();
 
