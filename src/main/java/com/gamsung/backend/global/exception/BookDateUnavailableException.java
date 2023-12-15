@@ -1,7 +1,5 @@
-package com.gamsung.backend.domain.order.exception;
+package com.gamsung.backend.global.exception;
 
-import com.gamsung.backend.global.exception.BaseException;
-import com.gamsung.backend.global.exception.ErrorCode;
 import lombok.Getter;
 
 

@@ -12,7 +12,8 @@ public class UnAuthException extends AccessDeniedException {
         this.errorCode = errorCode;
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return errorCode.getCode();
     }
+
 }

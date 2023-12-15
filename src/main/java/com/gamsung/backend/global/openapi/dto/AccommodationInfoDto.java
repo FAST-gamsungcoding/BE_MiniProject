@@ -1,9 +1,8 @@
 package com.gamsung.backend.global.openapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-
 import java.util.List;
+import lombok.Builder;
 
 @Builder
 public record AccommodationInfoDto(@JsonProperty("response") Response response) {
